@@ -11,6 +11,7 @@
  */
 
 register_activation_hook(__FILE__, 'child_plugin_activate');
+include plugin_dir_path(__FILE__) . 'inc/Upload_view.php';
 
 function child_plugin_activate() {
 
@@ -44,7 +45,39 @@ function nr_admin_manu_primary() {
     wp_enqueue_style('_nr_boostrap _select_picker', plugins_url('assests/plugins/select_picker/css/bootstrap-select.min.css', __FILE__));
     wp_enqueue_style('am_admin_bootstrap');
     wp_enqueue_style('_nr_custom_niroroo', plugins_url('assests/plugins/common/css/style.css', __FILE__));
+    wp_enqueue_script('_nr_destination_upload_js', plugins_url("assests/js/uplaod_handler.js", __FILE__), array('jquery'), 1.1, true);
+    wp_localize_script('_nr_destination_upload_js', 'the_ajax_script', array('ajaxurl' => admin_url('admin-ajax.php')));
     $destinations = get_terms('travel_locations');
 
+
     include ('templates/admin/destinations.php');
+}
+
+add_action('wp_ajax_fetch_button', "nr_fis_multi_button");
+
+function nr_fis_multi_button() {
+    $json = array();
+    $return_item = "";
+    $item_name = (isset($_POST['item_name']) ? $_POST['item_name'] : '');
+    $width = (isset($_POST['width']) ? $_POST['width'] : '');
+    $height = (isset($_POST['height']) ? $_POST['height'] : '');
+    $upload_btn = new Upload_view;
+
+    $return_item .= "<div class='col-sm-3'>";
+    $return_item .= $upload_btn->nr_fixel_it_wprss_uploader_multi($item_name, $width, $height);
+    $return_item .= "</div>";
+
+    $json['msg_type'] = "OK";
+    $json['return_array'] = $return_item;
+
+    echo json_encode($json);
+    exit();
+}
+
+add_action('wp_ajax_save_items', "nr_fis_save_destination_values");
+
+function nr_fis_save_destination_values() {
+    echo '<pre>';
+    print_r($_POST);
+    echo '</pre>';
 }

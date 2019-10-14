@@ -1,3 +1,6 @@
+<?php
+$upload_btn = new Upload_view;
+?>
 <div class="row">
     <div class="col-lg-12">
         <h2 class="text-left">Edit Destination <span id="destination-head">Canada</span></h2>
@@ -7,7 +10,7 @@
     </div>
 </div>
 <br>
-<form>
+<form id="frm_save-destination-items">
     <input type="hidden" name='destinationName'>
     <input type="hidden" name="destinationSlug">
 
@@ -30,22 +33,21 @@
             <input type='text' name="sMediaTags" class="form-control" placeholder="Social Media Tags">
         </div>
     </div>
-    <div class="form-group">
-        <label>Key Map Image</label>
-    </div>
+
     <div class="form-group row">
-        <div class="col-lg-4">          
-            <div class="image_box">
-
-            </div>
-            <button type="button" class="btn btn-sm btn-primary" id="fact_image">Upload key fact Image - left</button>           
-
+        <div class="col-lg-4">  
+            <label>Keymap Image Left</label>
+            <?php
+            $button_key_map = $upload_btn->nr_fixel_it_wprss_uploader('key_map_left', $width = 100, $height = auto);
+            echo $button_key_map;
+            ?>
         </div>
         <div class="col-lg-4 ml-1">         
-            <div class="image_box">
-
-            </div>
-            <button type="button" class="btn btn-sm btn-primary" id="fact_image" style="float: right">Upload key fact Image - right</button>               
+            <label>Keymap Image Right</label>
+            <?php
+            $button_key_map_right = $upload_btn->nr_fixel_it_wprss_uploader('key_map_right', $width = 100, $height = auto);
+            echo $button_key_map_right;
+            ?>             
         </div>
     </div>
     <div class="form-group row">
@@ -54,22 +56,23 @@
         </div>
     </div>
     <div class="form-group row">
-        <div class="col-lg-3">
-            <button type="button" class="btn btn-sm btn-primary multiple_images">Add Images</button>           
+        <div class="col-lg-4">
+            <button type="button" class="btn btn-sm btn-primary" id="add_new_image_slot">Add Image</button>
         </div>
-        <div class="col-lg-12">
-            <div class="multiple_image_box">
+    </div>
+    <div class="form-group row" id="set_multiple">
 
-            </div>
+    </div>  
+
+    <div class="form-group row"> 
+        <div class="col-lg-4">
+            <button type="button" id="save_buttons_btn-items" class="btn btn-sm btn-primary">Save Items</button>
         </div>
     </div>
 </form>
 
-<form id="">
-    <input type="hidden" name='folder' value="destination/key_map_images">
-    <input type="hidden" name='resize' value="0">
-    <input type="hidden" name='create_thumb' value="false">
-    <input type="hidden" name='resize-size' value="300">
-    <input type="hidden" name='accept' value="jpg|png|jpe">
-    <input type="file" name="key_fact_image" style="opacity: 0" class="userfile" id="key_fact_images"  accept="image/x-png,image/gif,image/jpeg" />
+<form id="wordpress_multiple_uploader">
+    <input type="hidden" name="item_name" id="item_name" value="multi_uploader">
+    <input type="hidden" name="width" id="width" value='100'>
+    <input type="hidden" name="height" id="height" value="auto">
 </form>
