@@ -29,7 +29,11 @@
                                         <td><?php echo $d->slug; ?></td>
                                         <!--<td><?php echo $d->taxonomy; ?></td>-->
                                         <td>
-                                            <button class="btn btn-sm btn-info" type="button">Edit</button>
+                                            <form class="form_items">
+                                                <input type="hidden" class="destination" name="destination" value="<?php echo $d->name; ?>">
+                                            <input type="hidden" class="destination_slug" name="destination_slug" value="<?php echo $d->slug; ?>">
+                                            </form>
+                                            <button class="btn btn-sm btn-info edit_items" type="button">Edit</button>
                                         </td>
                                     </tr>
                                     <?php
@@ -44,8 +48,8 @@
             </div>
         </div>
         <div class="col-lg-7">
-            <?php 
-             include 'load_edit_destination.php';
+            <?php
+            include 'load_edit_destination.php';
             ?>
         </div>
     </div>
