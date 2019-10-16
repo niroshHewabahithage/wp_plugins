@@ -69,6 +69,7 @@
         });
 
         $("#save_buttons_btn-items").click(function () {
+            $(this).attr("disabled", true);
             var data = $("#frm_save-destination-items").serializeArray();
             data.push({
                 name: "action",
@@ -82,8 +83,9 @@
                     Notiflix.Notify.Success(res.msg);
                     setTimeout(function () {
                         location.reload();
-                    }, 2500)
+                    }, 1500)
                 } else {
+                    $(this).attr("disabled", false);
                     Notiflix.Notify.Failure(res.msg);
                 }
             });
@@ -112,7 +114,12 @@
                 if (res.msg_type == "OK") {
                     $("#frm_item_destination_id").val(res.item_id_desti);
                     $("#tgLine").val(res.tgLine);
-                    $("#description").val(res.description);
+                    $("#desCapital").val(res.capital);
+                    $("#desCurrency").val(res.currency);
+                    $("#desPopulation").val(res.population);
+                    $("#desLanguages").val(res.languages);
+                    $("#destiVisa").val(res.visaP);
+                    $("#attractions").val(res.attractions);
                     $("#sMediaTags").val(res.sMediaTags);
                     $(".key_map_left").attr("src", res.key_map_left);
                     $(".key_map_left_down").val(res.key_map_left_id);
@@ -154,6 +161,7 @@
         });
 
         $("#update_buttons_btn-items").click(function () {
+            $(this).attr("disabled", true);
             var data = $("#frm_save-destination-items").serializeArray();
             data.push({
                 name: "action",
@@ -167,8 +175,9 @@
                     Notiflix.Notify.Success(res.msg);
                     setTimeout(function () {
                         location.reload();
-                    }, 2500)
+                    }, 1500)
                 } else {
+                    $(this).attr("disabled", false);
                     Notiflix.Notify.Failure(res.msg);
                 }
             });

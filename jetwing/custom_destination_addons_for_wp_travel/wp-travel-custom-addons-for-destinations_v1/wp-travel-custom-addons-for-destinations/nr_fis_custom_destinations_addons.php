@@ -130,6 +130,7 @@ function nr_fis_fetch_custom_data() {
     $get_the_items_for = $db_class->select_addon_by_slug($destination_slug);
     if (!empty($get_the_items_for)) {
         $searched_array = unserialize($get_the_items_for->custom_addons);
+      
 
         if (!empty($searched_array['multi_uploader'])) {
             for ($i = 0; count($searched_array['multi_uploader']) > $i; $i++) {
@@ -146,7 +147,12 @@ function nr_fis_fetch_custom_data() {
         $json["msg_type"] = "OK";
         $json['item_id_desti'] = $get_the_items_for->id;
         $json['tgLine'] = $searched_array['tgLine'];
-        $json['description'] = $searched_array['description'];
+        $json['capital'] = $searched_array['capital'];
+        $json['currency'] = $searched_array['currency'];
+        $json['population'] = $searched_array['population'];
+        $json['languages'] = $searched_array['languages'];
+        $json['visaP'] = $searched_array['visaP'];
+        $json['attractions'] = $searched_array['attractions'];
         $json['sMediaTags'] = $searched_array['sMediaTags'];
         $json['key_map_left'] = wp_get_attachment_url($searched_array['key_map_left']);
         $json['key_map_left_id'] = $searched_array['key_map_left'];
@@ -167,6 +173,8 @@ function nr_fis_save_destination_values() {
     $valuesArray = (isset($_POST) ? $_POST : '');
 
     $tgLine = $valuesArray['RssFeedIcon_settings']['tgLine'];
+
+
     $db_class = new Db_functions;
     if (isset($tgLine) && $tgLine != "") {
         //$sMediaTags = explode(",", $valuesArray['RssFeedIcon_settings']['sMediaTags']);

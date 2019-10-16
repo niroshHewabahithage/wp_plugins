@@ -1,16 +1,16 @@
 <?php
 $upload_btn = new Upload_view;
 ?>
-<form id="frm_save-destination-items" style="display: none">
-<div class="row">
-    <div class="col-lg-12">
-        <h2 class="text-left">Edit Destination <span id="destination-head">Canada</span></h2>
-        <p>Edit the destinations with custom adons</p>
-        <p id="destination_name">Destination Name - <span></span> </p>
-        <p id="destination_id">Destination Slug - <span></span></p>
+<form id="frm_save-destination-items"  style="display: none">
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="text-left">Edit Destination <span id="destination-head">Canada</span></h2>
+            <p>Edit the destinations with custom adons</p>
+            <p id="destination_name">Destination Name - <span></span> </p>
+            <p id="destination_id">Destination Slug - <span></span></p>
+        </div>
     </div>
-</div>
-<br>
+    <br>
     <input type="hidden" name='destinationName' id='frm_destination_name' value=''>
     <input type="hidden" name="destinationSlug" id="frm_destination_slug" value=''>
     <input type="hidden" name="item_update_link" id="frm_item_destination_id">
@@ -22,9 +22,44 @@ $upload_btn = new Upload_view;
         </div>   
     </div>
     <div class="form-group row">
+        <div class="col-lg-12">
+            <label>Facts</label>
+        </div>
+    </div>
+    <div class="form-group row">
         <div class="col-lg-10">
-            <label>Description(Optional)</label>
-            <textarea class="form-control" name="RssFeedIcon_settings[description]" rows="4" id="description" placeholder="Enter custom description"></textarea>
+            <label>Capital City</label>
+            <input type="text" name="RssFeedIcon_settings[capital]" class='form-control' id="desCapital" value="Enter Capital">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-10">
+            <label>Currency</label>
+            <input type="text" name="RssFeedIcon_settings[currency]" class='form-control' id="desCurrency" value="Enter Currency(USD)">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-10">
+            <label>Population</label>
+            <input type="text" name="RssFeedIcon_settings[population]" class='form-control' id="desPopulation" value="Enter Population">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-10">
+            <label>Languages</label>
+            <input type="text" name="RssFeedIcon_settings[languages]" class='form-control' id="desLanguages" value="Enter Languages (Use Comma to Separate)">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-10">
+            <label>Visa</label>
+            <input type="text" name="RssFeedIcon_settings[visaP]" class='form-control' id="destiVisa" value="Enter Visa Aqquire Procedure">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-lg-10">
+            <label>Mail Attractions</label>
+            <textarea class="form-control" name="RssFeedIcon_settings[attractions]" rows="4" id="attractions" placeholder="Enter Main Attractions"></textarea>
         </div>   
     </div>
     <div class="form-group row">
@@ -53,7 +88,7 @@ $upload_btn = new Upload_view;
     </div>
     <div class="form-group row">
         <div class="col-lg-12">
-            <label>Add multiple images to the Destination</label>
+            <label>Add Gallery Images</label>
         </div>
     </div>
     <div class="form-group row">
