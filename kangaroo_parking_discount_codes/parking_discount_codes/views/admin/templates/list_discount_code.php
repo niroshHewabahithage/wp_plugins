@@ -1,0 +1,1 @@
+<div class="col-lg-9" style="height: 500px;background: #000">Randimal</div> 
