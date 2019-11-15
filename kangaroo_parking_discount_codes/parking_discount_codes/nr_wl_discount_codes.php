@@ -13,6 +13,8 @@ global $me_db_version;
 global $wpdb;
 
 include plugin_dir_path(__FILE__) . 'inc/Db_functions.php';
+include plugin_dir_path(__FILE__) . 'inc/Massage_class.php';
+
 //admin Page Menu 
 function nr_lw_discount_admin_menu() {
 //    add main Menu
@@ -69,9 +71,73 @@ add_action('wp_ajax_validate_discount_code', '_nr_lw_parking_validate_discount_c
 
 function _nr_lw_parking_validate_discount_code() {
     $json = array();
+    $discount_cord = (isset($_POST['discount_code']) ? $_POST['discount_code'] : '');
 
-    print_r($_POST);
-    echo 'nirosh';
+    if (!empty($discount_cord)) {
+        $db_class = new Db_functions;
+        $validate_code = $db_class->get_by("discount_codes", "discount_code", $discount_cord);
+        if (empty($validate_code)) {
+            $json["msg_type"] = "OK";
+        } else {
+            $json["msg_type"] = "ERR";
+            $json["msg"] = "There is already discount code exactly like this try another.";
+        }
+    } else {
+        $json["msg_type"] = "ERR";
+        $json["msg"] = "Something went wrong when processing your request.";
+    }
+    echo json_encode($json);
+    exit();
+}
+
+add_action('wp_ajax_save_discount_code', 'nr_lw_save_discount_code');
+
+function nr_lw_save_discount_code() {
+    $json = array();
+    $msg = new Massage_class();
+    $discount_code = (isset($_POST['discountCode']) ? $_POST['discountCode'] : '');
+    $percentage = (isset($_POST['percentage']) ? $_POST['percentage'] : '');
+    $note = (isset($_POST['note']) ? $_POST['note'] : '');
+    $db_class = new Db_functions;
+    $validate_code = $db_class->get_by("discount_codes", "discount_code", $discount_cord);
+    echo '<pre>';
+    print_r($validate_code);
+    echo '</pre>';
+    if (empty($validate_code)) {
+        if (!empty($discount_code)) {
+            if (!empty($percentage)) {
+                if (is_numeric($percentage)) {
+                    $push_array = array(
+                        "discount_code" => ($discount_code),
+                        "percentage" => ($percentage),
+                        "note" => ($percentage),
+                        "active" => 1,
+                    );
+                    $save_codes = $db_class->insert_data("discount_codes", $push_array);
+                    if (!empty($save_codes)) {
+                        $json["msg_type"] = "OK";
+                        $json["msg"] = "Successfully Created the Discount Code";
+                        $json['return_array'] = $save_codes;
+                    } else {
+                        $json["msg_type"] = "ERR";
+                        $json["msg"] = "Failed to create the Discount Code for some reason, PLease Try Again in a bit.";
+                    }
+                } else {
+                    $json["msg_type"] = "ERR";
+                    $json["msg"] = $msg->validation_errors("numeric", "Discount Percentage");
+                }
+            } else {
+                $json["msg_type"] = "ERR";
+                $json["msg"] = $msg->validation_errors("required", "Discount Percentage");
+            }
+        } else {
+            $json["msg_type"] = "ERR";
+            $json["msg"] = $msg->validation_errors("required", "Discount Code", "Your going to save discount codes so please enter the discount code");
+        }
+    } else {
+        $json["msg_type"] = "ERR";
+        $json["msg"] = "The Discount Code that you entered seems to be in the database please try another.";
+    }
     echo json_encode($json);
     exit();
 }

@@ -8,6 +8,7 @@ class Massage_class {
 
     function validation_errors($errr_param, $item_name, $custom_message) {
         $massage = "";
+        
         if (empty($custom_message)) {
             if ($errr_param == "required") {
                 $massage = "$item_name cannot be Empty";

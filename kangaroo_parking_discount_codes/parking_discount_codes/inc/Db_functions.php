@@ -17,8 +17,25 @@ class Db_functions {
         global $wpdb;
     }
 
-    function validate_code_duplicate() {
-        
+    function get_by($tbl_name, $colmnName, $whereVal, $active_status = false) {
+        global $wpdb;
+        $active = "";
+        if ($active_status === "1") {
+            $active = "AND active=1";
+        } else if ($active_status === "0") {
+            $active = ' AND active=0';
+        }
+        $table_name = $wpdb->prefix . $tbl_name;
+
+        $row = $wpdb->get_row("SELECT * FROM $table_name where $colmnName='$whereVal' $active");
+        return $row;
+    }
+
+    function insert_data($ref_table, $payload_arr) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . $ref_table;
+        $save_items = $wpdb->insert($table_name, $payload_arr);
+        return $wpdb->insert_id;
     }
 
 }
