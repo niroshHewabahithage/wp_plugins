@@ -1,1 +1,10 @@
-<div class="col-lg-9" style="height: 500px;background: #000">Randimal</div> 
+<div class="col-lg-9">
+    <div class="row">
+        <div class="col-lg-12">
+            <h5>List Discount Codes</h5>
+        </div>
+    </div>
+    <?php
+    echo $template;
+    ?>
+</div> 

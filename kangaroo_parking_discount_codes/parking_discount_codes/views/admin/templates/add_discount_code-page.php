@@ -8,7 +8,7 @@
         <input type="hidden" name="item_id" id="itemId">
         <div class="form-group row">
             <div class="col-lg-12">
-                <label>Discount Code</label>
+                <label class="required">Discount Code</label>
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" id="discountCode" name="discountCode" placeholder="Discount Code" aria-label="Recipient's username" aria-describedby="basic-addon2">
                     <div class="input-group-append">
@@ -19,7 +19,7 @@
         </div>
         <div class="form-group row">
             <div class="col-lg-12">
-                <label>Discount Percentage(%)</label>
+                <label class="required">Discount Percentage(%)</label>
                 <input type="text" name="percentage" id="percentage" class="form-control" placeholder="Enter Percentage %"> 
             </div>
         </div>

@@ -3,3 +3,76 @@
     padding: 25px 10px;
 }
 
+.admin_list_button{
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.admin_list_button:hover{
+    color: #2279e6;
+    text-decoration: underline;
+}
+
+.tablenav-pages-navspan{
+    height: 28px;
+}
+
+.fnt_search_value_div{
+    background: #04355d;
+    padding: 5% 5%;
+}
+
+.price_description{
+    text-align: right;
+    font-size: 18px;
+}
+
+.price_value{
+    font-size: 18px;
+    text-align: right;
+}
+
+#price_tbl span{
+    color:#000;   
+}
+
+#price_tbl td{
+    padding: 10px 9px;
+}
+
+.price_show_div{
+    background: #ffffffad;
+    padding: 10px 10px;
+
+}
+.discount_code_input{
+    border: none !important;
+    background: none;
+    width: 100% !important;
+    border-bottom: 1px solid #000 !important;
+    border-radius: 0;
+}
+.discount_code_input:focus{
+    border: none !important;
+    background: none !important;
+    width: 100% !important;
+    border-bottom: 1px solid #000 !important;
+    border-radius: 0;
+    box-shadow: none !important;
+}
+
+#error_code{
+    font-size:13px;
+    text-align: center;
+
+}
+
+
+.success_font{
+    color:#048402 !important;
+}
+.error_font{
+    color:#ff0000 !important;
+}

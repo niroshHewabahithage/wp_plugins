@@ -38,4 +38,49 @@ class Db_functions {
         return $wpdb->insert_id;
     }
 
+    function get_all_list($tble_name, $orderby = '', $order = '', $search_term = '') {
+        global $wpdb;
+        if ($orderby !== "" && $order !== "") {
+            $orderCont = "Order by $orderby $order";
+        } else {
+            $orderCont = "";
+        }
+
+        if ($search_term !== "") {
+            $where = 'WHERE discount_code like "%' . $search_term . '%" OR percentage like "%' . $search_term . '%" OR note="%' . $search_term . '%"';
+        } else {
+            $where = "";
+        }
+        $table_name = $wpdb->prefix . $tble_name;
+        $row = $wpdb->get_results("SELECT * FROM $table_name $where $orderCont");
+        return $row;
+    }
+
+    function update_items($tbl_name, $contd_col, $uniqu_key, $payload) {
+        global $wpdb;
+        if ($uniqu_key != "" && $contd_col != "") {
+            $where = array(
+                $contd_col => $uniqu_key
+            );
+        } else {
+            $where = array();
+        }
+        $table_name = $wpdb->prefix . $tbl_name;
+        $update_data = $wpdb->update($table_name, $payload, $where);
+        return $update_data;
+    }
+
+    function delete_item($tab_name, $refer_column, $param) {
+        global $wpdb;
+        if ($refer_column != "" && $param != "") {
+            $where = array($refer_column => $param);
+        } else {
+            $where = "";
+        }
+        $table_name = $wpdb->prefix . $tab_name;
+
+        $delete_items = $wpdb->delete($table_name, $where);
+        return $delete_items;
+    }
+
 }
