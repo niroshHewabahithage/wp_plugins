@@ -1,13 +1,13 @@
 <?php
 /**
-	Plugin Name: Modern Events Calendar |  VestaThemes.com
-	Plugin URI: http://webnus.net/modern-events-calendar/
+	Plugin Name: Jetwing Holidays Departure Calender
+	Plugin URI: https://www.nine.lk/
 	Description: An awesome plugin for events calendar
-	Author: Webnus Team
-	Version: 4.3.1
-    Text Domain: mec
+	Author: nine.lk
+	Version: 99999999
+    Text Domain: nine
     Domain Path: /languages
-	Author URI: http://webnus.net
+	Author URI: https://www.nine.lk/
 **/
 
 if(!defined('MECEXEC'))

@@ -42,81 +42,118 @@ elseif ($week_start == 1) { // Monday
         $running_day = 1;
 }
 ?>
+<style>
+    .mec-totalcal-box{
+        visibility: hidden !important;
+    }
+</style>
 <dl class="mec-calendar-row">
 
     <?php
-    // print "blank" days until the first of the current week
+    
     for ($x = 0; $x < $running_day; $x++) {
-        echo '<dt class="mec-table-nullday">' . ($days_in_previous_month - ($running_day - 1 - $x)) . '</dt>';
+        echo '<dt class="mec-table-nullday cstom-border">' . ($days_in_previous_month - ($running_day - 1 - $x)) . '</dt>';
         $days_in_this_week++;
     }
 
     $events_str = '';
-    $query = new WP_Query(array('post_type' => 'itineraries', 'meta_key' => 'wp_travel_multiple_trip_dates'));
+    $_year = filter_input(INPUT_POST, 'mec_year');
+    $_month = filter_input(INPUT_POST, 'mec_month');
+    $query = new WP_Query(
+            array(
+        'post_type' => 'itineraries',
+
+            )
+    );
     $posts = $query->posts;
 
     $post_meta_value = array();
     foreach ($posts as $post) {
+
         $post_id = $post->ID;
         $meta_date = (get_post_meta("$post_id", 'wp_travel_multiple_trip_dates', true));
 
         if (!empty($meta_date)) {
             foreach ($meta_date as $date_key => $metaD) {
-                $add_values[$metaD['start_date']] = [
-                    "post_name" => $post->post_title,
-                    "start_date" => strtotime($metaD['start_date']),
-                    "start_date_formatted" => $metaD['start_date'],
-                    "end_date" => strtotime($metaD['end_date']),
-                    "end_date_formatted" => $metaD['end_date']
+
+                $dataKey = $metaD['start_date'];
+                $add_values[$dataKey][] = [
+                    "ID" => $post->ID,
+                    "data" => array(
+                        "ID" => $post->id,
+                        "title" => $post->post_title,
+                        "guid" => $post->guid,
+                        "post" => array(
+                            "post_type" => $post->post_type,
+                            "post_title" => $post->post_title,
+                        ),
+                        "meta" => array(
+                        ),
+                        "dates" => array(
+                            "start" => array(
+                                "date" => $metaD['start_date'],
+                            ),
+                            "end" => array(
+                                "date" => $metaD['end_date'],
+                            )
+                        ),
+                        "time" => array(
+                            "start" => "9.00 am",
+                            "end" => "10.00 pm"
+                        )
+                    ),
                 ];
-                $add_values[$metaD['end_date']] = [
-                    "post_name" => $post->post_title,
-                    "start_date" => strtotime($metaD['start_date']),
-                    "start_date_formatted" => $metaD['start_date'],
-                    "end_date" => strtotime($metaD['end_date']),
-                    "end_date_formatted" => $metaD['end_date']
-                ];
-//                array_push($post_meta_value, $add_values);
+                // $add_values[$metaD['end_date']][] = [
+                //     "ID" => $post->ID,
+                //     "data" => array(
+                //         "ID" => $post->id,
+                //         "title" => $post->post_title,
+                //         "guid" => $post->guid,
+                //         "post" => array(
+                //             "post_type" => $post->post_type,
+                //             "post_title" => $post->post_title,
+                //         ),
+                //         "meta" => array(
+                //         ),
+                //         "dates" => array(
+                //             "start" => array(
+                //                 "date" => $metaD['start_date'],
+                //             ),
+                //             "end" => array(
+                //                 "date" => $metaD['end_date'],
+                //             )
+                //         ),
+                //         "time" => array(
+                //             "start" => "9.00 am",
+                //             "end" => "10.00 pm"
+                //         )
+                //     ),
+                // ];
+
             }
         } else {
             
         }
     }
 
-//    echo '<pre>';
-//    print_r($add_values);
-//    echo '</pre>';
+
     for ($list_day = 1; $list_day <= $days_in_month; $list_day++) {
-
         $time = strtotime($year . '-' . $month . '-' . $list_day);
-//        $time = strtotime($year . '-12-1');
-//        echo $time;
         $date_suffix = (isset($settings['date_suffix']) && $settings['date_suffix'] == '0') ? date_i18n('jS', $time) : date_i18n('j', $time);
-
         $today = date('Y-m-d', $time);
-//        echo $today;
         $day_id = date('Ymd', $time);
-        $selected_day = (str_replace('-', '', $this->active_day) == $day_id) ? ' mec-selected-day' : '';
-
-        // Print events
-//
-//        echo '<pre>';
-//        print_r($add_values[$today]['end_date']);
-//        echo '</pre>';
+        $selected_day = (date("Ymd") == $day_id) ? ' mec-selected-day' : '';
 
         if (isset($add_values[$today]) and count($add_values[$today])) {
+            echo '<dt class="mec-calendar-day mec-has-event' . $selected_day . ' cstom-border " data-mec-cell="' . $day_id . '" data-day="' . $list_day . '" data-month="' . date('Ym', $time) . '"><a href="#" class="mec-has-event-a">' . $list_day . '</a></dt>';
+            $events_str .= '<div class="mec-calendar-events-sec" data-mec-cell="' . $day_id . '" ' . (trim($selected_day) != '' ? ' style="display: block;"' : '') . '><h6 class="mec-table-side-title">' . sprintf(__('Tours for %s', 'mec'), date_i18n('F', $time)) . '</h6><h3 class="mec-color mec-table-side-day"> ' . $date_suffix . '</h3>';
 
-            echo '<dt class="mec-calendar-day mec-has-event' . $selected_day . '" data-mec-cell="' . $day_id . '" data-day="' . $list_day . '" data-month="' . date('Ym', $time) . '"><a href="#" class="mec-has-event-a">' . $list_day . '</a></dt>';
-            $events_str .= '<div class="mec-calendar-events-sec" data-mec-cell="' . $day_id . '" ' . (trim($selected_day) != '' ? ' style="display: block;"' : '') . '><h6 class="mec-table-side-title">' . sprintf(__('Events for %s', 'mec'), date_i18n('F', $time)) . '</h6><h3 class="mec-color mec-table-side-day"> ' . $date_suffix . '</h3>';
+            foreach ($add_values[$today] as $event) {
 
-            foreach ($add_values as $event) {
-//                echo '<pre>';
-//    print_r($event[$today]['start_date']);
-//    echo '</pre>';
-                $location = isset($event->data->locations[$event->data->meta['mec_location_id']]) ? $event->data->locations[$event->data->meta['mec_location_id']] : array();
-                $start_time = (isset($event->data->time) ? $event->data->time['start'] : '');
-                $end_time = (isset($event->data->time) ? $event->data->time['end'] : '');
-                $label_style = '';
+                $location = isset($event->data->locations[$event['meta']['mec_location_id']]) ? $event->data->locations[$event['meta']['mec_location_id']] : array();
+                $start_time = (isset($event['data']['time']) ? $event['data']['time']['start'] : '');
+                $end_time = (isset($event['data']['time']) ? $event['data']['time']['end'] : '');
+
                 if (!empty($event->data->labels)):
                     foreach ($event->data->labels as $label) {
                         if (!isset($label['style']) or ( isset($label['style']) and ! trim($label['style'])))
@@ -141,17 +178,15 @@ elseif ($week_start == 1) { // Monday
                     }
                     $speakers = json_encode($speakers);
                 }
-//                echo '<pre>';
-//    print_r($event->data->meta['start_date_formatted']);
-//    echo '</pre>';
-                $startDate = !empty($event['start_date_formatted']) ? $event['start_date_formatted'] : '';
 
-                $endDate = !empty($event['end_date_formatted']) ? $event['end_date_formatted'] : '';
+                $startDate = !empty($event['data']['date']['start']['date']) ? $event['data']['mec_date']['start']['date'] : '';
+                echo $startDate;
+                $endDate = !empty($event['meta']['date']['end']['date']) ? $event['meta']['mec_date']['end']['date'] : '';
                 $location_name = isset($location['name']) ? $location['name'] : '';
                 $location_image = isset($location['thumbnail']) ? esc_url($location['thumbnail']) : '';
                 $location_address = isset($location['address']) ? $location['address'] : '';
-                $image = !empty($event->data->featured_image['full']) ? esc_html($event->data->featured_image['full']) : '';
-                $price_schema = isset($event->data->meta['mec_cost']) ? $event->data->meta['mec_cost'] : '';
+                $image = home_url('wp-content/uploads/2019/07/jetwing-symbol-m.png');
+                $price_schema = isset($event['meta']['mec_cost']) ? $event['meta']['mec_cost'] : '';
                 $currency_schema = isset($settings['currency']) ? $settings['currency'] : '';
                 $events_str .= '
                     <script type="application/ld+json">
@@ -163,9 +198,9 @@ elseif ($week_start == 1) { // Monday
                         "location" 		:
                         {
                             "@type" 	: "Place",
-                            "name" 		: "Nirosh Randimal",
+                            "name" 		: "' . $location_name . '",
                             "image"		: "' . $location_image . '",
-                            "address"	: "No 136 Isuru Uyana Stage One"
+                            "address"	: "' . $location_address . '"
                         },
                         "offers": {
                             "url": "' . $event->data->permalink . '",
@@ -180,20 +215,18 @@ elseif ($week_start == 1) { // Monday
                     }
                     </script>
                     ';
-
                 $events_str .= '<article data-style="' . $label_style . '" class="mec-event-article ' . $this->get_event_classes($event) . '">';
-                $events_str .= '<div class="mec-event-image">' . $event->data->thumbnails['thumblist'] . '</div>';
+                // $events_str .= '<div class="mec-event-image"><img src="' . $image . '" width="80%"></div>';
                 if (trim($start_time))
-                    $events_str .= '<div class="mec-event-time mec-color"><i class="mec-sl-clock-o"></i> ' . $start_time . (trim($end_time) ? ' - ' . $end_time : '') . '</div>';
-                $event_color = isset($event->data->meta['mec_color']) ? '<span class="event-color" style="background: #' . $event->data->meta['mec_color'] . '"></span>' : '';
-                $events_str .= '<h4 class="mec-event-title"><a class="mec-color-hover" data-event-id="' . $event->data->ID . '" href="' . $this->main->get_event_date_permalink($event->data->permalink, $event->date['start']['date']) . '">' . $event->data->title . '</a>' . $event_color . '</h4>';
+//                    $events_str .= '<div class="mec-event-time mec-color"><i class="mec-sl-clock-o"></i> ' . $start_time . (trim($end_time) ? ' - ' . $end_time : '') . '</div>';
+                    $event_color = isset($event['meta']['mec_color']) ? '<span class="event-color" style="background: #' . $event['meta']['mec_color'] . '"></span>' : '';
+                $events_str .= '<h4 class="mec-event-title wing-symbol-s"><a class="mec-color-hover" data-event-id="' . $event->data->ID . '" href="' . $event['data']['guid'] . ' target="_blank">' . $event['data']['title'] . ' &nbsp;&nbsp;&nbsp;&nbsp; <i style="font-size:15px" class="fa fa-angle-right"></i></a>' . $event_color . '</h4>';
                 $events_str .= '<div class="mec-event-detail">' . (isset($location['name']) ? $location['name'] : '') . '</div>';
                 $events_str .= '</article>';
             }
-
             $events_str .= '</div>';
         } else {
-            echo '<dt class="mec-calendar-day' . $selected_day . '" data-mec-cell="' . $day_id . '" data-day="' . $list_day . '" data-month="' . date('Ym', $time) . '">' . $list_day . '</dt>';
+            echo '<dt class="mec-calendar-day' . $selected_day . ' cstom-border" data-mec-cell="' . $day_id . '" data-day="' . $list_day . '" data-month="' . date('Ym', $time) . '">' . $list_day . '</dt>';
 
             $events_str .= '<div class="mec-calendar-events-sec" data-mec-cell="' . $day_id . '" ' . (trim($selected_day) != '' ? ' style="display: block;"' : '') . '><h6 class="mec-table-side-title">' . sprintf(__('Events for %s', 'mec'), date_i18n('F', $time)) . '</h6><h3 class="mec-color mec-table-side-day"> ' . $date_suffix . '</h3>';
             $events_str .= '<article class="mec-event-article">';
@@ -223,7 +256,7 @@ elseif ($week_start == 1) { // Monday
     // finish the rest of the days in the week
     if ($days_in_this_week < 8) {
         for ($x = 1; $x <= (8 - $days_in_this_week); $x++) {
-            echo '<dt class="mec-table-nullday">' . $x . '</dt>';
+            echo '<dt class="mec-table-nullday cstom-border">' . $x . '</dt>';
         }
     }
 
@@ -238,4 +271,5 @@ elseif ($week_start == 1) { // Monday
     <?php
 else:
     $this->events_str = $events_str;
-endif;
+        endif;
+        

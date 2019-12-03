@@ -154,7 +154,11 @@ class MEC_factory extends MEC_base
      */
     public function load_menus()
     {
-        add_menu_page(__('M.E. Calendar', 'mec'), __('M.E. Calendar', 'mec'), 'edit_posts', 'mec-intro', array($this->main, 'dashboard'), 'dashicons-calendar', 26);
+//        add_menu_page(__('J.T.Calendar', 'mec'), __('J.T.Calendar', 'mec'), 'edit_posts', 'mec-intro', 'custom_function', 'dashicons-calendar', 26);
+    }
+    
+    function custom_function(){
+        
     }
 
     /**

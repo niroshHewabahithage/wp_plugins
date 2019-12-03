@@ -312,22 +312,22 @@ class MEC_feature_mec extends MEC_base
         remove_menu_page('edit.php?post_type=mec_calendars');
         do_action('before_mec_submenu_action');
         
-        add_submenu_page('mec-intro', __('Add Event', 'mec'), __('Add Event', 'mec'), 'edit_posts', 'post-new.php?post_type='.$this->PT);
-        add_submenu_page('mec-intro', __('Tags', 'mec'), __('Tags', 'mec'), 'edit_others_posts', 'edit-tags.php?taxonomy=post_tag&post_type='.$this->PT);
-        add_submenu_page('mec-intro', $this->main->m('taxonomy_categories', __('Categories', 'mec')), $this->main->m('taxonomy_categories', __('Categories', 'mec')), 'edit_others_posts', 'edit-tags.php?taxonomy=mec_category&post_type='.$this->PT);
-        add_submenu_page('mec-intro', $this->main->m('taxonomy_labels', __('Labels', 'mec')), $this->main->m('taxonomy_labels', __('Labels', 'mec')), 'edit_others_posts', 'edit-tags.php?taxonomy=mec_label&post_type='.$this->PT);
-        add_submenu_page('mec-intro', $this->main->m('taxonomy_locations', __('Locations', 'mec')), $this->main->m('taxonomy_locations', __('Locations', 'mec')), 'edit_others_posts', 'edit-tags.php?taxonomy=mec_location&post_type='.$this->PT);
-        add_submenu_page('mec-intro', $this->main->m('taxonomy_organizers', __('Organizers', 'mec')), $this->main->m('taxonomy_organizers', __('Organizers', 'mec')), 'edit_others_posts', 'edit-tags.php?taxonomy=mec_organizer&post_type='.$this->PT);
-
-        // Speakers Menu
-        if(isset($this->settings['speakers_status']) and $this->settings['speakers_status'])
-        {
-            add_submenu_page('mec-intro', $this->main->m('taxonomy_speakers', __('Speakers', 'mec')), $this->main->m('taxonomy_speakers', __('Speakers', 'mec')), 'edit_others_posts', 'edit-tags.php?taxonomy=mec_speaker&post_type='.$this->PT);
-        }
+//        add_submenu_page('mec-intro', __('Add Event', 'mec'), __('Add Event', 'mec'), 'edit_posts', 'post-new.php?post_type='.$this->PT);
+//        add_submenu_page('mec-intro', __('Tags', 'mec'), __('Tags', 'mec'), 'edit_others_posts', 'edit-tags.php?taxonomy=post_tag&post_type='.$this->PT);
+//        add_submenu_page('mec-intro', $this->main->m('taxonomy_categories', __('Categories', 'mec')), $this->main->m('taxonomy_categories', __('Categories', 'mec')), 'edit_others_posts', 'edit-tags.php?taxonomy=mec_category&post_type='.$this->PT);
+//        add_submenu_page('mec-intro', $this->main->m('taxonomy_labels', __('Labels', 'mec')), $this->main->m('taxonomy_labels', __('Labels', 'mec')), 'edit_others_posts', 'edit-tags.php?taxonomy=mec_label&post_type='.$this->PT);
+//        add_submenu_page('mec-intro', $this->main->m('taxonomy_locations', __('Locations', 'mec')), $this->main->m('taxonomy_locations', __('Locations', 'mec')), 'edit_others_posts', 'edit-tags.php?taxonomy=mec_location&post_type='.$this->PT);
+//        add_submenu_page('mec-intro', $this->main->m('taxonomy_organizers', __('Organizers', 'mec')), $this->main->m('taxonomy_organizers', __('Organizers', 'mec')), 'edit_others_posts', 'edit-tags.php?taxonomy=mec_organizer&post_type='.$this->PT);
+//
+//        // Speakers Menu
+//        if(isset($this->settings['speakers_status']) and $this->settings['speakers_status'])
+//        {
+//            add_submenu_page('mec-intro', $this->main->m('taxonomy_speakers', __('Speakers', 'mec')), $this->main->m('taxonomy_speakers', __('Speakers', 'mec')), 'edit_others_posts', 'edit-tags.php?taxonomy=mec_speaker&post_type='.$this->PT);
+//        }
 
         add_submenu_page('mec-intro', __('Shortcodes', 'mec'), __('Shortcodes', 'mec'), 'edit_others_posts', 'edit.php?post_type=mec_calendars');
-        add_submenu_page('mec-intro', __('MEC - Settings', 'mec'), __('Settings', 'mec'), 'manage_options', 'MEC-settings', array($this, 'page'));
-        add_submenu_page('mec-intro', __('MEC - Addons', 'mec'), __('Addons', 'mec'), 'manage_options', 'MEC-addons', array($this, 'addons'));
+//        add_submenu_page('mec-intro', __('MEC - Settings', 'mec'), __('Settings', 'mec'), 'manage_options', 'MEC-settings', array($this, 'page'));
+//        add_submenu_page('mec-intro', __('MEC - Addons', 'mec'), __('Addons', 'mec'), 'manage_options', 'MEC-addons', array($this, 'addons'));
 
         do_action('after_mec_submenu_action');
     }
