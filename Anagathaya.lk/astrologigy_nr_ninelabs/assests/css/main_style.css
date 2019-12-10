@@ -261,3 +261,7 @@ p.infoTextCheckout {
 .table td, .table th{
     border-top: none !important;
 }
+
+#basic-addon2-view_pass{
+    cursor: pointer;
+}

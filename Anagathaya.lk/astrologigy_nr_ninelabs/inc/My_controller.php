@@ -173,4 +173,120 @@ class My_controller extends Core_controller {
         exit();
     }
 
+    function nr_nl_save_astrologist() {
+        $json = array();
+        $service_array = (isset($_POST['users']) ? $_POST['users'] : '');
+        $first_name_sinhala = (isset($_POST['firstNameSin']) ? $_POST['firstNameSin'] : '');
+        $last_name_sinhala = (isset($_POST['lateNameSin']) ? $_POST['lateNameSin'] : '');
+        $firstNameEn = (isset($_POST['firstNameEn']) ? $_POST['firstNameEn'] : '');
+        $lateNameEn = (isset($_POST['lateNameEn']) ? $_POST['lateNameEn'] : '');
+        $email = (isset($_POST['email']) ? $_POST['email'] : '');
+        $phonenumber = (isset($_POST['phonenumber']) ? $_POST['phonenumber'] : '');
+        $username = (isset($_POST['username']) ? $_POST['username'] : '');
+        $password = (isset($_POST['password']) ? $_POST['password'] : '');
+
+        $msg = new Massage_class();
+        if (!empty($service_array)) {
+            if (!empty($first_name_sinhala)) {
+                if (!empty($firstNameEn)) {
+                    if (!empty($last_name_sinhala)) {
+                        if (!empty($lateNameEn)) {
+                            if (!empty($email)) {
+                                $validate_email = $this->validate_email($email);
+                                if ($validate_email['condt'] != '') {
+                                    if (!empty($phonenumber)) {
+                                        $validatePhone = $this->validate_phone_number($phonenumber);
+                                        if ($validatePhone['condt'] != "") {
+                                            if (!empty($username)) {
+                                                if (!empty($password)) {
+                                                    $user_id = wp_create_user($username, $password, $email);
+                                                    if (!is_wp_error($user_id)) {
+                                                        $first_name = ($first_name_sinhala . " " . $last_name_sinhala);
+                                                        $last_name = ($firstNameEn . " " . $lateNameEn);
+
+                                                        update_user_meta($user_id, "first_name", $first_name);
+                                                        update_user_meta($user_id, "last_name", $last_name);
+                                                        update_usermeta($user_id, 'phone', $phonenumber);
+                                                    } else {
+                                                        $json["msg_type"] = "ERR";
+                                                        $json["msg"] = $user_id->get_error_message();
+                                                        //add into custom table
+//                                                        echo $user_id;
+//                                                        update_user_meta($user_id, "first_name", 'Nirosh');
+//                                                        update_user_meta($user_id, "last_name", 'Randimal');
+                                                    }
+                                                } else {
+                                                    $json["msg_type"] = "ERR";
+                                                    $json["msg"] = $msg->validation_errors("required", 'Password');
+                                                }
+                                            } else {
+                                                $json["msg_type"] = "ERR";
+                                                $json["msg"] = $msg->validation_errors("required", 'User Name');
+                                            }
+                                        } else {
+                                            $json["msg_type"] = "ERR";
+                                            $json["msg"] = $validatePhone['msg_param'];
+                                        }
+                                    } else {
+                                        $json["msg_type"] = "ERR";
+                                        $json["msg"] = $msg->validation_errors("required", 'Phone Number');
+                                    }
+                                } else {
+                                    $json["msg_type"] = "ERR";
+                                    $json["msg"] = $validate_email['msg_param'];
+                                }
+                            } else {
+                                $json["msg_type"] = "ERR";
+                                $json["msg"] = $msg->validation_errors("required", 'Email Address');
+                            }
+                        } else {
+                            $json["msg_type"] = "ERR";
+                            $json["msg"] = $msg->validation_errors("required", 'Last Name in English');
+                        }
+                    } else {
+                        $json["msg_type"] = "ERR";
+                        $json["msg"] = $msg->validation_errors("required", 'Last Name in Sinhala');
+                    }
+                } else {
+                    $json["msg_type"] = "ERR";
+                    $json["msg"] = $msg->validation_errors("required", 'First Name in English');
+                }
+            } else {
+                $json["msg_type"] = "ERR";
+                $json["msg"] = $msg->validation_errors("required", 'First Name in Sinhala');
+            }
+        } else {
+            $json["msg_type"] = "ERR";
+            $json["msg"] = $msg->validation_errors("required", 'Service', "You have to select one or more services in order to save this Astrologiest");
+        }
+        echo json_encode($json);
+        exit();
+    }
+
+    function send_welcome_email_to_new_user($user_id) {
+        $user = get_userdata($user_id);
+        $user_email = $user->user_email;
+        // for simplicity, lets assume that user has typed their first and last name when they sign up
+        $user_full_name = $user->user_firstname . $user->user_lastname;
+
+        // Now we are ready to build our welcome email
+        $to = $user_email;
+        $subject = "Hi " . $user_full_name . ", welcome to our site!";
+        $body = '
+              <h1>Dear ' . $user_full_name . ',</h1></br>
+              <p>Thank you for joining our site. Your account is now active.</p>
+              <p>Please go ahead and navigate around your account.</p>
+              <p>Let me know if you have further questions, I am here to help.</p>
+              <p>Enjoy the rest of your day!</p>
+              <p>Kind Regards,</p>
+              <p>poanchen</p>
+    ';
+        $headers = array('Content-Type: text/html; charset=UTF-8');
+        if (wp_mail($to, $subject, $body, $headers)) {
+            error_log("email has been successfully sent to user whose email is " . $user_email);
+        } else {
+            error_log("email failed to sent to user whose email is " . $user_email);
+        }
+    }
+
 }

@@ -1,5 +1,4 @@
 <?php
-
 /*
   Plugin Name: Astrology Service Search Module
   Plugin URI: https://nine.lk/
@@ -16,6 +15,7 @@ include plugin_dir_path(__FILE__) . 'inc/My_controller.php';
 include plugin_dir_path(__FILE__) . 'inc/View_controller.php';
 include plugin_dir_path(__FILE__) . 'inc/Db_functions.php';
 include plugin_dir_path(__FILE__) . 'inc/Massage_class.php';
+include plugin_dir_path(__FILE__) . 'inc/Upload_view.php';
 
 //end includes
 
@@ -25,7 +25,7 @@ function nr_nl_astrology_admin_menu() {
     //add main menu for apartment and home attributes
     add_menu_page('Service Manager', 'Service Manager', 'manage_options', "services-manager", array($load_view, 'nr_nl_services'), plugins_url('icons/customer.png', __FILE__));
     //attributes Sub Manu
-    add_submenu_page("custom-attributes", 'Custom Sub Attributes', "Custom Sub Attributes", 'manage_options', 'custom-sub-attributes', array($load_view, 'nr_lw_sub_attributes_list'));
+    add_submenu_page("services-manager", 'Add Users', "Add Users", 'manage_options', 'service-add-users', array($load_view, 'nr_nl_service_users'));
     //##############################################################################################################################
 }
 
@@ -77,7 +77,40 @@ if (is_admin()) {
 
 $myCon = new My_controller();
 
+//service Management
 add_action('wp_ajax_save_service', array($myCon, 'nr_nl_save_service'));
 add_action('wp_ajax_get_edit_details', array($myCon, 'nr_nl_get_edit_details'));
 add_action('wp_ajax_update_services', array($myCon, 'nr_nl_update_services'));
 add_action('wp_ajax_delete_service', array($myCon, 'nr_nl_delete_service'));
+
+//Astrology management
+add_action('wp_ajax_save_astrologist', array($myCon, 'nr_nl_save_astrologist'));
+
+add_action('show_user_profile', 'my_show_extra_profile_fields');
+add_action('edit_user_profile', 'my_show_extra_profile_fields');
+
+function my_show_extra_profile_fields($user) {
+    ?>
+    <h3>Extra profile information</h3>
+    <table class="form-table">
+        <tr>
+            <th><label for="phone">Phone Number</label></th>
+            <td>
+                <input type="text" name="phone" id="phone" value="<?php echo esc_attr(get_the_author_meta('phone', $user->ID)); ?>" class="regular-text" /><br />
+                <span class="description">Please enter your phone number.</span>
+            </td>
+        </tr>
+    </table>
+    <?php
+}
+
+add_action('personal_options_update', 'my_save_extra_profile_fields');
+add_action('edit_user_profile_update', 'my_save_extra_profile_fields');
+
+function my_save_extra_profile_fields($user_id) {
+
+    if (!current_user_can('edit_user', $user_id))
+        return false;
+
+    update_usermeta($user_id, 'phone', $_POST['phone']);
+}
