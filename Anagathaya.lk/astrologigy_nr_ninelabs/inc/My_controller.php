@@ -175,6 +175,9 @@ class My_controller extends Core_controller {
 
     function nr_nl_save_astrologist() {
         $json = array();
+        echo '<pre>';
+        print_r();
+        echo '</pre>';
         $service_array = (isset($_POST['users']) ? $_POST['users'] : '');
         $first_name_sinhala = (isset($_POST['firstNameSin']) ? $_POST['firstNameSin'] : '');
         $last_name_sinhala = (isset($_POST['lateNameSin']) ? $_POST['lateNameSin'] : '');
@@ -184,6 +187,7 @@ class My_controller extends Core_controller {
         $phonenumber = (isset($_POST['phonenumber']) ? $_POST['phonenumber'] : '');
         $username = (isset($_POST['username']) ? $_POST['username'] : '');
         $password = (isset($_POST['password']) ? $_POST['password'] : '');
+        $key_map_image = (isset($_POST['key_map_left']) ? $_POST['key_map_left'] : '');
 
         $msg = new Massage_class();
         if (!empty($service_array)) {
@@ -207,13 +211,13 @@ class My_controller extends Core_controller {
                                                         update_user_meta($user_id, "first_name", $first_name);
                                                         update_user_meta($user_id, "last_name", $last_name);
                                                         update_usermeta($user_id, 'phone', $phonenumber);
+                                                        update_usermeta($user_id, 'image', $key_map_image);
                                                     } else {
                                                         $json["msg_type"] = "ERR";
                                                         $json["msg"] = $user_id->get_error_message();
                                                         //add into custom table
 //                                                        echo $user_id;
-//                                                        update_user_meta($user_id, "first_name", 'Nirosh');
-//                                                        update_user_meta($user_id, "last_name", 'Randimal');
+//                                                        update_user_meta($user_id, "first_name", 'Nirosh');s
                                                     }
                                                 } else {
                                                     $json["msg_type"] = "ERR";

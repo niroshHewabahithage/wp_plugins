@@ -80,8 +80,9 @@ $upload_btn = new Upload_view;
         </div>
         <div class="form-control row">
             <div class="col-lg-12">
+                <label class="required">Profile_image</label>
                 <?php
-                $button_key_map = $upload_btn->nr_fixel_it_wprss_uploader('key_map_left', $width = 100, $height = 'auto');
+                $button_key_map = $upload_btn->nr_fixel_it_wprss_uploader('key_map_left', $width = 50, $height = 'auto');
                 echo $button_key_map;
                 ?>
             </div>
@@ -96,10 +97,7 @@ $upload_btn = new Upload_view;
 
     </form>
 </div>
-<?php
-$button_key_map = $upload_btn->nr_fixel_it_wprss_uploader('key_map_left', $width = 100, $height = 'auto');
-echo $button_key_map;
-?>
+
 <?php
 $default_image = plugins_url('../images/no-image-available-icon-6.jpg', __FILE__);
 ?>

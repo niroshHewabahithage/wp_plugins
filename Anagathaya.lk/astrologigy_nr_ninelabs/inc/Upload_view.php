@@ -28,7 +28,7 @@ class Upload_view {
         <div class="upload" >
             <img data-src="' . $default_image . '" src="' . $src . '" width="' . $width . '%" height="' . $height . '"  class="' . $name . '"/>
             <div>
-                <input type="hidden" name="RssFeedIcon_settings[' . $name . ']" id="RssFeedIcon_settings[' . $name . ']" class="' . $name . '_down" value="' . $value . '" />
+                <input type="hidden" name="' . $name . '" id="' . $name . '" class="' . $name . '_down" value="' . $value . '" />
                 <button type="submit" class="upload_image_button button">' . $text . '</button>
                 <button type="submit" class="remove_image_button button">&times;</button>
             </div>
