@@ -1,6 +1,6 @@
 (function ($) {
     $(document).ready(function () {
-
+        
         $('select').select2();
         var is_viewed = '';
         $("#basic-addon2-view_pass").click(function () {
@@ -37,7 +37,6 @@
             });
         });
         $('.upload_image_button').click(function () {
-            window.alert();
             var send_attachment_bkp = wp.media.editor.send.attachment;
             var button = $(this);
             wp.media.editor.send.attachment = function (props, attachment) {

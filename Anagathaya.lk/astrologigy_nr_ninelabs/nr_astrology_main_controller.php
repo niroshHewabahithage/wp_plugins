@@ -1,4 +1,5 @@
 <?php
+
 /*
   Plugin Name: Astrology Service Search Module
   Plugin URI: https://nine.lk/
@@ -76,7 +77,7 @@ if (is_admin()) {
 }
 
 $myCon = new My_controller();
-
+$load_view = new View_controller();
 //service Management
 add_action('wp_ajax_save_service', array($myCon, 'nr_nl_save_service'));
 add_action('wp_ajax_get_edit_details', array($myCon, 'nr_nl_get_edit_details'));
@@ -86,31 +87,12 @@ add_action('wp_ajax_delete_service', array($myCon, 'nr_nl_delete_service'));
 //Astrology management
 add_action('wp_ajax_save_astrologist', array($myCon, 'nr_nl_save_astrologist'));
 
-add_action('show_user_profile', 'my_show_extra_profile_fields');
-add_action('edit_user_profile', 'my_show_extra_profile_fields');
+//view_user edit feilds
+add_action('show_user_profile', array($load_view, 'my_show_extra_profile_fields'));
+add_action('edit_user_profile', array($load_view, 'my_show_extra_profile_fields'));
 
-function my_show_extra_profile_fields($user) {
-    ?>
-    <h3>Extra profile information</h3>
-    <table class="form-table">
-        <tr>
-            <th><label for="phone">Phone Number</label></th>
-            <td>
-                <input type="text" name="phone" id="phone" value="<?php echo esc_attr(get_the_author_meta('phone', $user->ID)); ?>" class="regular-text" /><br />
-                <span class="description">Please enter your phone number.</span>
-            </td>
-        </tr>
-    </table>
-    <?php
-}
+//update new Users
+add_action('personal_options_update', array($myCon, 'my_save_extra_profile_fields'));
+add_action('edit_user_profile_update', array($myCon, 'my_save_extra_profile_fields'));
 
-add_action('personal_options_update', 'my_save_extra_profile_fields');
-add_action('edit_user_profile_update', 'my_save_extra_profile_fields');
 
-function my_save_extra_profile_fields($user_id) {
-
-    if (!current_user_can('edit_user', $user_id))
-        return false;
-
-    update_usermeta($user_id, 'phone', $_POST['phone']);
-}

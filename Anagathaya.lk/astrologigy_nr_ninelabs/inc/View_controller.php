@@ -21,16 +21,23 @@ class View_controller extends My_controller {
         wp_localize_script('_nr_lw_new_users_js', 'the_ajax_script', array('ajaxurl' => admin_url('admin-ajax.php')));
         $db_c = new Db_functions;
         $get_services = $db_c->get_all("services");
-//        $user_id = wp_create_user("nirosh", "nirosh123");
-//        if (is_wp_error($user_id)) {
-//            echo $user_id->get_error_message();
-//        } else {
-//            //add into custom table
-//            echo $user_id;
-//            update_user_meta($user_id, "first_name", 'Nirosh');
-//            update_user_meta($user_id, "last_name", 'Randimal');
-//        }
         include plugin_dir_path(__DIR__) . 'views/admin/users/layout.php';
+    }
+
+    function my_show_extra_profile_fields($user) {
+        wp_enqueue_script('_nr_lw_new_users_js', plugins_url("assests/js/new_users.js", __DIR__), array('jquery'), 1.1, true);
+        wp_localize_script('_nr_lw_new_users_js', 'the_ajax_script', array('ajaxurl' => admin_url('admin-ajax.php')));
+        $db_c = new Db_functions;
+        $get_services = $db_c->get_all("services");
+        $get_select_services = $db_c->get_all_services_selected("service_map", "id_service", "is_user", $user->ID);
+        $item_array = [];
+        if (isset($get_select_services) && !empty($get_select_services) && $get_select_services != "") {
+            foreach ($get_select_services as $gss) {
+                array_push($item_array, [$gss->id_service]);
+            }
+        }
+
+        include plugin_dir_path(__DIR__) . 'views/admin/users/templates/edit_user.php';
     }
 
 }

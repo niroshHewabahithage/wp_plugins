@@ -6,11 +6,16 @@ class Upload_view {
         
     }
 
-    function nr_fixel_it_wprss_uploader($name, $width, $height) {
+    function nr_fixel_it_wprss_uploader($name, $width, $height, $image_item = '', $attachment_id = '') {
         // Set variables
+
         $options = get_option('RssFeedIcon_settings');
 
-        $default_image = plugins_url('../images/no-image-available-icon-6.jpg', __FILE__);
+        if (!empty($image_item)) {
+            $default_image = $image_item;
+        } else {
+            $default_image = plugins_url('../images/no-image-available-icon-6.jpg', __FILE__);
+        }
 
         if (!empty($options[$name])) {
             $image_attributes = wp_get_attachment_image_src($options[$name], array($width, $height));
@@ -18,7 +23,11 @@ class Upload_view {
             $value = $options[$name];
         } else {
             $src = $default_image;
-            $value = '';
+            if ($value != "") {
+                $value = $attachment_id;
+            } else {
+                $value = '';
+            }
         }
 
         $text = __('Upload', 'RSSFI_TEXT');

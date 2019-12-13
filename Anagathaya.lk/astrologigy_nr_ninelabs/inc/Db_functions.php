@@ -98,6 +98,13 @@ class Db_functions extends My_controller {
         return $delete_items;
     }
 
+    function get_all_services_selected($tble_name, $select_colomn, $colomn_name, $column_value) {
+        global $wpdb;
+        $table_name = $wpdb->prefix . $tble_name;
+        $row = $wpdb->get_results("SELECT $select_colomn FROM $table_name where $colomn_name=$column_value");
+        return $row;
+    }
+
     function get_all_dsicounted($payload_array = array()) {
 
         $condition = "";

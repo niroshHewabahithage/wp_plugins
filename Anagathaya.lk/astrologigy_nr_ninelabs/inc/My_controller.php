@@ -175,9 +175,7 @@ class My_controller extends Core_controller {
 
     function nr_nl_save_astrologist() {
         $json = array();
-        echo '<pre>';
-        print_r();
-        echo '</pre>';
+
         $service_array = (isset($_POST['users']) ? $_POST['users'] : '');
         $first_name_sinhala = (isset($_POST['firstNameSin']) ? $_POST['firstNameSin'] : '');
         $last_name_sinhala = (isset($_POST['lateNameSin']) ? $_POST['lateNameSin'] : '');
@@ -207,11 +205,23 @@ class My_controller extends Core_controller {
                                                     if (!is_wp_error($user_id)) {
                                                         $first_name = ($first_name_sinhala . " " . $last_name_sinhala);
                                                         $last_name = ($firstNameEn . " " . $lateNameEn);
-
                                                         update_user_meta($user_id, "first_name", $first_name);
                                                         update_user_meta($user_id, "last_name", $last_name);
                                                         update_usermeta($user_id, 'phone', $phonenumber);
                                                         update_usermeta($user_id, 'image', $key_map_image);
+                                                        update_usermeta($user_id, 'trigeer_key', "new_user123");
+                                                        $db_c = new Db_functions();
+                                                        foreach ($service_array as $sa) {
+                                                            $insert_param = array(
+                                                                "is_user" => ($user_id),
+                                                                "id_service" => $sa,
+                                                                "active" => 1
+                                                            );
+
+                                                            $db_c->insert_data("service_map", $insert_param);
+                                                        }
+                                                        $json['msg_type'] = "OK";
+                                                        $json['msg'] = "Succssfully Saved New User";
                                                     } else {
                                                         $json["msg_type"] = "ERR";
                                                         $json["msg"] = $user_id->get_error_message();
@@ -291,6 +301,15 @@ class My_controller extends Core_controller {
         } else {
             error_log("email failed to sent to user whose email is " . $user_email);
         }
+    }
+
+    function my_save_extra_profile_fields($user_id) {
+
+        if (!current_user_can('edit_user', $user_id))
+            return false;
+
+        update_usermeta($user_id, 'phone', $_POST['phone']);
+        update_usermeta($user_id, 'image', $_POST['key_map_left']);
     }
 
 }
