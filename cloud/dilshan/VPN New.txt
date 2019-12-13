@@ -1,0 +1,147 @@
+ _______________________________________________
+|						|
+|  IPSEC VPN on Ubuntu 16.04 with StrongSwan    |
+|_______________________________________________|
+
+1._Install Strongswan
+apt-get install strongswan strongswan-plugin-af-alg strongswan-plugin-agent strongswan-plugin-certexpire strongswan-plugin-coupling strongswan-plugin-curl strongswan-plugin-dhcp strongswan-plugin-duplicheck strongswan-plugin-eap-aka strongswan-plugin-eap-aka-3gpp2 strongswan-plugin-eap-dynamic strongswan-plugin-eap-gtc strongswan-plugin-eap-mschapv2 strongswan-plugin-eap-peap strongswan-plugin-eap-radius strongswan-plugin-eap-tls strongswan-plugin-eap-ttls strongswan-plugin-error-notify strongswan-plugin-farp strongswan-plugin-fips-prf strongswan-plugin-gcrypt strongswan-plugin-gmp strongswan-plugin-ipseckey strongswan-plugin-kernel-libipsec strongswan-plugin-ldap strongswan-plugin-led strongswan-plugin-load-tester strongswan-plugin-lookip strongswan-plugin-ntru strongswan-plugin-pgp strongswan-plugin-pkcs11 strongswan-plugin-pubkey strongswan-plugin-radattr strongswan-plugin-sshkey strongswan-plugin-systime-fix strongswan-plugin-whitelist strongswan-plugin-xauth-eap strongswan-plugin-xauth-generic strongswan-plugin-xauth-noauth strongswan-plugin-xauth-pam 
+------------------------------------------------------------------------------------------------------------------
+
+2._ Certificates
+apt-get install haveged
+systemctl enable haveged
+systemctl start haveged
+
+-------------------------
+
+cd /etc/ipsec.d/
+mkdir private
+mkdir cacerts
+mkdir certs
+mkdir p12
+ipsec pki --gen --type rsa --size 4096 --outform der > private/strongswanKey.der
+chmod 600 private/strongswanKey.der
+
+ipsec pki --self --ca --lifetime 3650 --in private/strongswanKey.der --type rsa --dn "C=NL, O=Weblankan, CN=strongSwan Root CA" --outform der > cacerts/strongswanCert.der
+
+ipsec pki --print --in cacerts/strongswanCert.der
+
+ipsec pki --gen --type rsa --size 4096 --outform der > private/vpnHostKey.der
+chmod 600 private/vpnHostKey.der
+
+
+ipsec pki --pub --in private/vpnHostKey.der --type rsa | ipsec pki --issue --lifetime 730 --cacert cacerts/strongswanCert.der --cakey private/strongswanKey.der --dn "C=NL, O=Weblankan, CN=vpn.freereload.lk" --san vpn.freereload.lk --san 192.169.172.107  --san @192.169.172.107 --flag serverAuth --flag ikeIntermediate --outform der > certs/vpnHostCert.der
+
+nano /etc/ipsec.secrets [editor]
+
+add this lines
+################################################################
+	: RSA vpnHostKey.der
+################################################################
+
+
+ipsec listcerts [currently i have nothing on the list] [it should some list]
+
+
+
+
+
+
+3._ Client certificate
+
+ipsec pki --gen --type rsa --size 2048 --outform der > private/dilshanKey.der
+chmod 600 private/dilshanKey.der
+
+ipsec pki --pub --in private/dilshanKey.der --type rsa | ipsec pki --issue --lifetime 730 --cacert cacerts/strongswanCert.der --cakey private/strongswanKey.der --dn "C=NL, O=Weblankan, CN=dilshan.weblankan@gmail.com" --san "dilshan.weblankan@gmail.com"  --outform der > certs/dilshanCert.der
+
+openssl rsa -inform DER -in private/dilshanKey.der -out private/dilshanKey.pem -outform PEM
+openssl x509 -inform DER -in certs/dilshanKey.der -out certs/dilshanKey.pem -outform PEM
+openssl x509 -inform DER -in cacerts/strongswanCert.der -out cacerts/strongswanCert.pem -outform PEM
+
+openssl pkcs12 -export -inkey private/dilshanKey.pem -in certs/dilshanCert.pem -name "Dilshan's VPN Certificate" -certfile cacerts/strongswanCert.pem -caname "strongSwan Root CA" -out p12/dilshan.p12
+[==Password required==] given : WLdi@123
+
+
+
+
+4._Revoking a certificate
+
+cd /etc/ipsec.d/
+ipsec pki --signcrl --reason key-compromise --cacert cacerts/strongswanCert.der --cakey private/strongswanKey.der --cert certs/JohnCert.der --outform der > crls/crl.der
+[change appropriate valles ABOVE]
+
+
+
+
+
+
+
+5._ Change the ipsec config file
+
+nano /etc/ipsec.conf
+################################################################
+
+# ipsec.conf - strongSwan IPsec configuration file
+
+config setup
+    charondebug="ike 2, knl 2, cfg 2, net 2, esp 2, dmn 2,  mgr 2"
+
+conn %default
+    keyexchange=ikev2
+    ike=aes128-sha1-modp1024,aes128-sha1-modp1536,aes128-sha1-modp2048,aes128-sha256-ecp256,aes128-sha256-modp1024,aes128-sha256-modp1536,aes128-sha256-modp2048,aes256-aes128-sha256-sha1-modp2048-modp4096-modp1024,aes256-sha1-modp1024,aes256-sha256-modp1024,aes256-sha256-modp1536,aes256-sha256-modp2048,aes256-sha256-modp4096,aes256-sha384-ecp384,aes256-sha384-modp1024,aes256-sha384-modp1536,aes256-sha384-modp2048,aes256-sha384-modp4096,aes256gcm16-aes256gcm12-aes128gcm16-aes128gcm12-sha256-sha1-modp2048-modp4096-modp1024,3des-sha1-modp1024!
+    esp=aes128-aes256-sha1-sha256-modp2048-modp4096-modp1024,aes128-sha1,aes128-sha1-modp1024,aes128-sha1-modp1536,aes128-sha1-modp2048,aes128-sha256,aes128-sha256-ecp256,aes128-sha256-modp1024,aes128-sha256-modp1536,aes128-sha256-modp2048,aes128gcm12-aes128gcm16-aes256gcm12-aes256gcm16-modp2048-modp4096-modp1024,aes128gcm16,aes128gcm16-ecp256,aes256-sha1,aes256-sha256,aes256-sha256-modp1024,aes256-sha256-modp1536,aes256-sha256-modp2048,aes256-sha256-modp4096,aes256-sha384,aes256-sha384-ecp384,aes256-sha384-modp1024,aes256-sha384-modp1536,aes256-sha384-modp2048,aes256-sha384-modp4096,aes256gcm16,aes256gcm16-ecp384,3des-sha1!
+    dpdaction=clear
+    dpddelay=300s
+    authby=pubkey
+    left=%any
+    leftid=vpn.freereload.lk
+    leftsubnet=0.0.0.0/0
+    leftcert=vpnHostCert.der
+    leftsendcert=always
+    right=%any
+    rightsourceip=10.42.42.0/24,2002:25f7:7489:3::/112
+    rightdns=8.8.8.8,2001:4860:4860::8888
+
+conn IPSec-IKEv2
+    keyexchange=ikev2
+    auto=add
+
+################################################################
+
+6._ Enable packet routing
+
+echo "net.ipv4.ip_forward = 1" | tee -a /etc/sysctl.conf 
+echo "net.ipv4.conf.all.accept_redirects = 0" | tee -a /etc/sysctl.conf 
+echo "net.ipv4.conf.all.send_redirects = 0" | tee -a /etc/sysctl.conf 
+echo "net.ipv4.conf.default.rp_filter = 0" | tee -a /etc/sysctl.conf 
+echo "net.ipv4.conf.default.accept_source_route = 0" | tee -a /etc/sysctl.conf 
+echo "net.ipv4.conf.default.send_redirects = 0" | tee -a /etc/sysctl.conf 
+echo "net.ipv4.icmp_ignore_bogus_error_responses = 1" | tee -a /etc/sysctl.conf
+sysctl -p
+
+
+7._ Start strongswan
+
+systemctl enable strongswan
+systemctl start strongswan
+
+[==If you get a permission denied error, stroke the files with apparmor:==]
+apparmor_parser -R /etc/apparmor.d/usr.lib.ipsec.charon
+apparmor_parser -R /etc/apparmor.d/usr.lib.ipsec.stroke
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

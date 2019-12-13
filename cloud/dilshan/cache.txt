@@ -1,0 +1,46 @@
+sudo apt-get update
+sudo apt-get install apache2-utils
+
+Enable the necessary Apache modules:
+----------------------------------------------------|
+sudo a2enmod cache
+sudo a2enmod cache_disk
+sudo a2enmod expires
+sudo a2enmod headers
+
+Restart and start service to take effect
+----------------------------------------------------|
+service apache-htcacheclean start
+systemctl restart apache2
+
+
+Add the Virtual Host Configurations
+----------------------------------------------------|
+
+
+        <Directory /var/www/html>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride All
+                allow from all
+                Require all granted
+         </Directory>
+
+        CacheQuickHandler off
+        CacheLock on
+        CacheLockPath /tmp/mod_cache-lock
+        CacheLockMaxAge 5
+        CacheIgnoreHeaders Set-Cookie
+
+        CacheMinFileSize 1
+
+
+        <Location />
+            CacheEnable disk
+            CacheHeader on
+            CacheDefaultExpire 800
+            CacheMaxExpire 64000
+            CacheIgnoreNoLastMod On
+            ExpiresActive on
+            ExpiresDefault "access plus 60 minutes"
+        </Location>
+

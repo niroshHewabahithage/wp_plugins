@@ -1,0 +1,17 @@
+========================================================================
+Create a Maintenance Page
+========================================================================
+
+sudo nano maintenance.html
+sudo nano maintenance.enable  // create maintenance file to activate the mode
+
+
+add to .HTACCESS
+<IfModule mod_rewrite.c>
+RewriteCond %{REMOTE_ADDR} !^123\.456\.789\.000
+RewriteCond %{DOCUMENT_ROOT}/maintenance.html -f
+RewriteCond %{DOCUMENT_ROOT}/maintenance.enable -f
+RewriteCond %{SCRIPT_FILENAME} !maintenance.html
+RewriteRule ^.*$ /maintenance.html [R=503,L]
+ErrorDocument 503 /maintenance.html
+</IfModule>

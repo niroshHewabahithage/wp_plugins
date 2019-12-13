@@ -1,0 +1,157 @@
+https://www.server-world.info/en/note?os=Ubuntu_16.04&p=nginx&f=1
+
+===============================================
+Nginx : Install
+===============================================
+
+Install fast HTTP Server "Nginx" and configure HTTP Server with it.
+[1]	Install Nginx.
+
+apt-get -y install nginx
+-----------------------------------------------
+
+[2]	Configure Nginx.
+
+nano  /etc/nginx/sites-available/default
+
+# line 38: change to your own hostname
+
+server_name www.servername.com;
+
+Change below block
+        location / {
+
+                try_files $uri $uri/ /index.php?$query_string; 
+        }
+
+
+
+systemctl start nginx 
+systemctl enable nginx
+-----------------------------------------------
+===============================================
+Nginx : PHP-FPM
+===============================================
+
+[1]	Install PHP and PHP-FPM.
+
+apt-get -y install php php-fpm
+
+[2]	Configure PHP-FPM and Nginx.
+
+nano /etc/nginx/sites-available/default
+
+	# add follows in "server" section
+        location ~ \.php$ {
+               include snippets/fastcgi-php.conf;
+               fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+        }
+
+systemctl restart php7.0-fpm nginx
+
+
+
+[3]	Create a test page to make sure PHP script works normally.
+echo "<?php phpinfo() ?>" > /var/www/html/__i.php  
+
+
+
+
+===============================================
+Nginx : Sample Host file
+===============================================
+
+server {
+        server_name domain.tld;
+
+        root /var/www/codeignitor;
+        index index.html index.php;
+
+        # set expiration of assets to MAX for caching
+        location ~* \.(ico|css|js|gif|jpe?g|png)(\?[0-9]+)?$ {
+                expires max;
+                log_not_found off;
+        }
+
+        location / {
+                # Check if a file or directory index file exists, else route it to index.php.
+                try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        location ~* \.php$ {
+                fastcgi_pass unix:/run/php/php7.0-fpm.sock;
+                include fastcgi.conf;
+        }
+        location /phpmyadmin {
+             index index.php index.html index.htm;
+             root /usr/share/;
+        }
+
+}
+
+
+===============================================
+Nginx : Enable Gzip
+===============================================
+https://www.digitalocean.com/community/tutorials/how-to-add-the-gzip-module-to-nginx-on-ubuntu-14-04
+
+
+nano /etc/nginx/nginx.conf
+
+gzip on;
+gzip_disable "msie6";
+
+gzip_vary on;
+gzip_proxied any;
+gzip_comp_level 6;
+gzip_buffers 16 8k;
+gzip_http_version 1.1;
+gzip_min_length 256;
+gzip_types text/plain text/css application/json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/vnd.ms-fontobject application/x-font-ttf font/opentype image/svg+xml image/x-icon;
+
+
+Edit the File as Above
+Then restart Nginx Server 	systemctl restart nginx
+
+
+===============================================
+Nginx : Configuring Cache-Control and Expires Headers
+===============================================
+https://www.digitalocean.com/community/tutorials/how-to-implement-browser-caching-with-nginx-s-header-module-on-centos-7
+
+nano /etc/nginx/sites-available/default
+
+Add code before " server { " line
+
+# Expires map
+map $sent_http_content_type $expires {
+    default                    off;
+    text/html                  epoch;
+    text/css                   max;
+    application/javascript     max;
+    ~image/                    max;
+}
+
+
+add this after listen segment
+
+expires $expires;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

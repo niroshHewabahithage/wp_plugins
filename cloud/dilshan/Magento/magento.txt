@@ -1,0 +1,73 @@
+=================================================
+Setup Upgrade
+=================================================
+	PUT to live
+	magento deploy:mode:set production (dont, stuck some times)
+
+	php bin/magento setup:upgrade
+
+
+
+**after above, do this**
+	php bin/magento setup:static-content:deploy [optional]--area frontend
+	php bin/magento setup:static-content:deploy --area adminhtml
+Then make permision back to php
+	sudo chown -R ftp_admin:www-data ./*   (bitnami daemon instead of www-data)
+	sudo chown -R bitnami:daemon ./*
+	sudo chmod -R 777 ./*
+
+
+sudo chown -R ftp_admin:www-data ./
+sudo chmod -R 777 ./
+
+**then, if not working** 
+	php bin/magento indexer:reindex (**also when slow**)
+
+**enable Module** 
+	php bin/magento module:enable mod_name (**Enable Cache**)
+
+
+
+php bin/magento maintenance:disable
+
+
+
+php bin/magento setup:di:compile
+
+sudo /opt/bitnami/ctlscript.sh restart varnish
+
+
+
+===================================
+After migration if no pages display  OR  Requested store is not found
+===================================
+
+SET FOREIGN_KEY_CHECKS=0;
+UPDATE `store` SET store_id = 0 WHERE code='admin';
+UPDATE `store_group` SET group_id = 0 WHERE name='Default';
+UPDATE `store_website` SET website_id = 0 WHERE code='admin';
+UPDATE `customer_group` SET customer_group_id = 0 WHERE customer_group_code='NOT LOGGED IN';
+SET FOREIGN_KEY_CHECKS=1;
+
+
+
+
+
+vendor/magento/zendframework1/library/Zend/Locale/Data/en.xml
+search for -- currencyFormat
+
+
+
+vendor/magento/module-catalog/view/frontend/templates/product/view/form.phtml
+
+var conf = {'priceConfig': <?php /* @escapeNotVerified */ echo $block->getJsonConfig() ?>};
+        conf.priceConfig.priceFormat.pattern = "LKR %s";
+        console.warn(conf);
+        priceBoxes.priceBox(conf);
+
+
+vendor/magento/module-directory/Model/Currency.php
+ line - 214
+
+return only   return " ".$price; 
+

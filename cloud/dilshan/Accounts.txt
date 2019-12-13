@@ -1,0 +1,64 @@
+CameraLK System
+
+IP : 172.104.43.46
+SHELL - 
+	UN : root
+	PW : Dilshan@123
+
+FTP - 	(Inactive now)
+	UN : ftp_admin
+	PW : WLdi@123
+MYSQL -	
+	UN : root
+	PW : Asdf1234$
+	#  : /_myadmin_
+=======================================
+Freereload
+
+IP : 172.104.46.128
+SHELL - 
+	UN : root
+	PW : Dilshan@123
+
+FTP - 	
+	UN : ftp_admin
+	PW : WLdi@123
+MYSQL -	
+	UN : root
+	PW : Asdf1234$
+	#  : /_myadmin_
+=======================================
+Subasinghe
+
+IP : 139.162.58.113
+SHELL - 
+	UN : root
+	PW : Dilshan@123
+
+FTP - 	
+	UN : ftp_admin
+	PW : WLdi@123
+MYSQL -	
+	UN : root
+	PW : Asdf1234$
+	#  : /_myadmin_
+
+=======================================
+WebLankanNew
+
+IP : 139.162.25.226
+SHELL - 
+	UN : root
+	PW : Dilshan@123
+
+FTP - 	(Inactive now)
+	UN : ftp_admin
+	PW : WLdi@123
+MYSQL -	
+	UN : root
+	PW : Asdf1234$
+	#  : /_myadmin_
+=======================================
+Etisalat
+Slitt
+Cameralk web

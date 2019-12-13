@@ -1,0 +1,196 @@
+ _______________________________________________
+|						|
+|          SETUP OPEN VPN to 16.04              |
+|_______________________________________________|
+
+1:) Install OpenVPN
+	sudo apt-get update
+	sudo apt-get install openvpn easy-rsa
+
+
+2:) Set Up the CA Directory
+	make-cadir ~/openvpn-ca
+	cd ~/openvpn-ca
+
+3:) Configure the CA Variables
+	nano vars	
+		. . . update at bottom
+		export KEY_COUNTRY="US"
+		export KEY_PROVINCE="NY"
+		export KEY_CITY="New York City"
+		export KEY_ORG="DigitalOcean"
+		export KEY_EMAIL="admin@example.com"
+		export KEY_OU="Community"
+		. . .
+
+4:) Build the Certificate Authority
+	cd ~/openvpn-ca
+	source vars -- reslts like 
+		[NOTE: If you run ./clean-all, I will be doing a rm -rf on /home/sammy/openvpn-ca/keys]
+	./clean-all
+	./build-ca (then just hit enter key)
+
+5:) Create the Server Certificate, Key, and Encryption Files
+	./build-key-server server  (then just hit enter key do not give a password)
+	./build-dh
+	openvpn --genkey --secret keys/ta.key 
+	
+6:) Generate a Client Certificate and Key Pair
+	
+	[== without password ==]
+	cd ~/openvpn-ca
+	source vars
+	./build-key client1
+	
+	[== with password ==]
+	cd ~/openvpn-ca
+	source vars
+	./build-key-pass client1
+
+
+7:) Configure the OpenVPN Service
+	:-Copy the Files to the OpenVPN Directory
+		cd ~/openvpn-ca/keys	
+		sudo cp ca.crt ca.key server.crt server.key ta.key dh2048.pem /etc/openvpn
+	
+	gunzip -c /usr/share/doc/openvpn/examples/sample-config-files/server.conf.gz | sudo tee /etc/openvpn/server.conf
+		
+	sudo nano /etc/openvpn/server.conf
+		[-- changes --]
+		tls-auth ta.key 0 # This file is secret
+		key-direction 0
+		cipher AES-128-CBC
+		auth SHA256
+		user nobody
+		group nogroup
+	:-(Optional) Push DNS Changes to Redirect All Traffic Through the VPN
+		push "redirect-gateway def1 bypass-dhcp"
+		push "dhcp-option DNS 208.67.222.222"
+		push "dhcp-option DNS 208.67.220.220"
+	:-(Optional) Adjust the Port and Protocol
+		# Optional!
+		port 443
+	:-(Optional) Point to Non-Default Credentials
+		cert server.crt
+		key server.key
+
+8:) Adjust the Server Networking Configuration
+	Allow IP Forwarding
+		sudo nano /etc/sysctl.conf
+			change net.ipv4.ip_forward=1
+		sudo sysctl -p [ -- view status -- ] 
+
+	:- Adjust the UFW Rules to Masquerade Client Connections
+		ip route | grep default
+		sudo nano /etc/ufw/before.rules
+			[-- changes --] added
+			# START OPENVPN RULES
+			# NAT table rules
+			*nat
+			:POSTROUTING ACCEPT [0:0] 
+			# Allow traffic from OpenVPN client to wlp11s0 (change to the interface you discovered!)
+			-A POSTROUTING -s 10.8.0.0/8 -o wlp11s0 -j MASQUERADE
+			COMMIT
+			# END OPENVPN RULES
+
+		sudo nano /etc/default/ufw
+			[--changes --]
+				DEFAULT_FORWARD_POLICY="ACCEPT"
+
+	:- Open the OpenVPN Port and Enable the Changes
+		sudo ufw allow 1194/udp
+		sudo ufw allow OpenSSH
+	
+		sudo ufw disable
+		sudo ufw enable
+
+9:) Start and Enable the OpenVPN Service
+
+	sudo systemctl start openvpn@server	
+	sudo systemctl status openvpn@server
+
+	ip addr show tun0
+	sudo systemctl enable openvpn@server
+
+
+10:) Create Client Configuration Infrastructure
+	:-Creating the Client Config Directory Structure
+		mkdir -p ~/client-configs/files	
+		chmod 700 ~/client-configs/files
+
+	
+	:-Creating a Base Configuration
+		cp /usr/share/doc/openvpn/examples/sample-config-files/client.conf ~/client-configs/base.conf
+		nano ~/client-configs/base.conf
+			[ -- changes -- ]
+			. . .
+			# The hostname/IP and port of the server.
+			# You can have multiple remote entries
+			# to load balance between the servers.
+			remote server_IP_address 1194
+			. . .
+			proto udp
+			user nobody
+			group nogroup
+	
+		
+			commnect these
+			#ca ca.crt
+			#cert client.crt
+			#key client.key
+
+
+			cipher AES-128-CBC
+			auth SHA256
+			key-direction 1
+
+			# script-security 2
+			# up /etc/openvpn/update-resolv-conf
+			# down /etc/openvpn/update-resolv-conf
+
+	Creating a Configuration Generation Script
+		nano ~/client-configs/make_config.sh
+			[-- changes --]
+			#!/bin/bash
+
+# First argument: Client identifier
+
+KEY_DIR=~/openvpn-ca/keys
+OUTPUT_DIR=~/client-configs/files
+BASE_CONFIG=~/client-configs/base.conf
+
+cat ${BASE_CONFIG} \
+    <(echo -e '<ca>') \
+    ${KEY_DIR}/ca.crt \
+    <(echo -e '</ca>\n<cert>') \
+    ${KEY_DIR}/${1}.crt \
+    <(echo -e '</cert>\n<key>') \
+    ${KEY_DIR}/${1}.key \
+    <(echo -e '</key>\n<tls-auth>') \
+    ${KEY_DIR}/ta.key \
+    <(echo -e '</tls-auth>') \
+    > ${OUTPUT_DIR}/${1}.ovpn
+
+		chmod 700 ~/client-configs/make_config.sh
+
+11:) Generate Client Configurations
+	cd ~/client-configs
+	./make_config.sh client1
+
+	
+	ls ~/client-configs/files
+
+
+
+
+
+
+
+
+		
+				
+				
+	
+	
+	
+

@@ -1,0 +1,12 @@
+root@freereload:/etc/ipsec.d# ipsec pki --print --in cacerts/strongswanCert.der
+cert:      X509
+subject:  "C=NL, O=Weblankan, CN=strongSwan Root CA"
+issuer:   "C=NL, O=Weblankan, CN=strongSwan Root CA"
+validity:  not before Jul 09 23:47:29 2017, ok
+           not after  Jul 07 23:47:29 2027, ok (expires in 3649 days)
+serial:    79:91:5e:d4:95:b5:bd:83
+flags:     CA CRLSign self-signed
+subjkeyId: 29:53:51:20:a6:48:59:83:b9:14:8b:1d:ca:bc:75:cf:67:a3:5f:4a
+pubkey:    RSA 4096 bits
+keyid:     11:4a:28:e4:32:73:ab:39:e9:4e:5d:f3:83:7f:e1:db:9d:cc:0c:ef
+subjkey:   29:53:51:20:a6:48:59:83:b9:14:8b:1d:ca:bc:75:cf:67:a3:5f:4a

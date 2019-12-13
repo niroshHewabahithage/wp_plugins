@@ -1,0 +1,142 @@
+================================
+sudo: add-apt-repository: command not found
+================================
+sudo apt-get install software-properties-common python-software-properties
+
+
+================================
+Remove Installed Programmes
+================================
+sudo apt-get autoremove app_name
+
+================================
+Hidden files
+================================
+ls -la
+
+Install Apache webserver
+================================
+apt-get install apache2
+
+sudo apachectl configtest
+
+Kill all apache processes
+
+sudo killall -9 apache2
+
+
+
+--------restart server----------
+/etc/init.d/apache2 restart
+sudo systemctl restart apache2
+
+--------server status ----------
+systemctl status apache2
+
+
+--------enable rewrite module --------
+a2enmod rewrite
+
+--------view enable rewrite module --------
+apache2ctl -M
+
+
+
+
+]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+==================================================================================
+FILE TRANSFER server to Server
+==================================================================================
+
+Putty [[ pscp.exe command line ]]
+scp sourceuser@sourcehost:/path/to/source/file destinationuser@destinationhost:/path/to/destination/
+
+scp username@remote_1:/file/to/send username@remote_2:/where/to/put
+
+
+==================================================================================
+ZIP
+zip -r /var/www/html/zipfile.zip path/*
+zip -9 -r --exclude=*.svn*  foo.zip [directory-to-compress]
+==================================================================================
+
+MYSL ENABLE QUERY CACHE
+==================================================================================
+
+mysql> SET GLOBAL query_cache_size = 40000;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> SHOW WARNINGS\G
+*************************** 1. row ***************************
+  Level: Warning
+   Code: 1282
+Message: Query cache failed to set size 39936;
+         new query cache size is 0
+
+mysql> SET GLOBAL query_cache_size = 41984;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SHOW VARIABLES LIKE 'query_cache_size';
++------------------+-------+
+| Variable_name    | Value |
++------------------+-------+
+| query_cache_size | 41984 |
++------------------+-------+
+==================================================================================
+
+
+cut -d: -f1 /etc/passwd
+
+du -cha --max-depth=1 / | grep -E "M|G"
+du -cha --max-depth=1 ./ | grep -E "M|G"  -----current floder usage
+
+find . -type f | wc -l     ----------File count
+find ~/ -type f -name "postgis-2.0.0"
+
+
+
+sudo systemctl stop mysql apache2 varnish nginx
+sudo systemctl stop mysql apache2 php7.0-fpm
+sudo systemctl start mysql php7.0-fpm apache2 
+
+
+sudo systemctl restart php7.0-fpm apache2 apache-htcacheclean
+
+Down 
+Stop Start 
+
+sudo systemctl start mysql
+
+==========================================
+LOGGING
+==========================================
+truncate all logs  -- 
+truncate -s 0 /var/log/*log
+
+
+Disable the log service
+sudo systemctl disable rsyslog.service
+
+
+
+To free pagecache:
+
+# echo 1 > /proc/sys/vm/drop_caches
+To free dentries and inodes:
+
+# echo 2 > /proc/sys/vm/drop_caches
+To free pagecache, dentries and inodes:
+
+# echo 3 > /proc/sys/vm/drop_caches
+
+
+
+
+
+
+
+
+
+
+

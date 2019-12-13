@@ -1,0 +1,96 @@
+==================================================================================
+Disable Wordpress Updates
+==================================================================================
+
+add to wp-config.php file
+
+	define( 'WP_AUTO_UPDATE_CORE', false );
+
+Disable automatic WordPress plugin updates:	add to current theme's functions.php File
+
+-----------------------------------------------------------------------------------
+// Disable the wordpress plugin update notifications
+remove_action('load-update-core.php', 'wp_update_plugins');
+add_filter('pre_site_transient_update_plugins', '__return_null');
+
+// Disable the wordpress theme update notifications
+remove_action('load-update-core.php', 'wp_update_themes');
+add_filter('pre_site_transient_update_themes', create_function('$a', "return null;"));
+
+// Disable the wordpress core update notifications
+add_action('after_setup_theme', 'remove_core_updates');
+
+    function remove_core_updates() {
+        if (!current_user_can('update_core')) {
+            return;
+        }
+        add_action('init', create_function('$a', "remove_action( 'init', 'wp_version_check' );"), 2);
+        add_filter('pre_option_update_core', '__return_null');
+        add_filter('pre_site_transient_update_core', '__return_null');
+ }
+
+-----------------------------------------------------------------------------------	
+
+
+
+
+==================================================================================
+chown www-data:www-data  -R * # Let Apache be owner
+find . -type d -exec chmod 755 {} \;  # Change directory permissions rwxr-xr-x
+find . -type f -exec chmod 644 {} \;  # Change file permissions rw-r--r--
+==================================================================================
+==================================================================================
+Grant permision to kallyas css folder
+Apply only this folder
+
+sudo chmod -R 777 wp-content/uploads/zion-builder/cache/
+
+==================================================================================
+==================================================================================
+Secure wordpress
+
+Add to .htaccess file
+Options -Indexes				| Disable indexing on file system
+
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+
+Disable User enumeration
+
+add to .htaccess				| It's better to add after the default rewrite rule
+
+RewriteEngine On
+RewriteCond %{QUERY_STRING} author=\d
+RewriteRule ^ /? [L,R=301]
+
+----------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
+Secure wp-admin Area
+
+password generator Link		: http://www.htaccesstools.com/htpasswd-generator/
+
+
+Add this into locking folder .htaccess
+++++++++++++++++++++++++++++++++++++++++++++++++
+AuthName "Admins Only"
+AuthType Basic
+AuthName "editor"
+AuthUserFile /var/www/.htpasswds
+Require valid-user
+
+
+<Files admin-ajax.php>
+        Order allow,deny
+        Allow from all
+        Satisfy any
+</Files>
+
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+
+

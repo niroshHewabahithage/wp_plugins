@@ -1,0 +1,43 @@
+---------------------------------------------------
+View Application PWD
+
+cat bitnami_application_password  U2UH6cfMoHol
+---------------------------------------------------
+https://docs.bitnami.com/aws/faq/#using-amazon-lightsail
+
+http://ec2-13-229-93-142.ap-southeast-1.compute.amazonaws.com/
+
+
+sudo /opt/bitnami/apps/APPNAME/bnconfig --disable_banner 1
+
+---------------------------------------------------
+Restart All services
+sudo /opt/bitnami/ctlscript.sh restart
+---------------------------------------------------
+
+PHP-FPM
+
+pm.max_children=50
+pm.start_servers=5
+pm.min_spare_servers=5
+pm.max_spare_servers=30
+pm.max_requests=5000
+
+
+
+ sudo php srdb.cli.php -h localhost -n bitnami_wordpress -u root -p B5J8K69ETQef -p 3306 -s "13.229.39.66" -r "www.etisalat.lk"
+
+
+##############################################################
+How To Disable The Cache In The Server?
+##############################################################
+If you are developing on top of an AMP Stack or customizing any Bitnami Stack, your files (like JavaScript files) may be cached by the server and even you modify them your changes will not appear to be applied.
+
+In order to disable the cache in the server and let the files be served each time, disable PageSpeed for Apache and OPCache, enabled by default in PHP.
+
+To disable PageSpeed, comment out the following lines in your httpd.conf (/opt/bitnami/apache2/conf/httpd.conf)
+
+#Include conf/pagespeed.conf
+
+#Include conf/pagespeed_libraries.conf
+

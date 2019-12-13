@@ -1,0 +1,87 @@
+<VirtualHost *:80>
+ServerName cameralk.com
+#Redirect permanent / https://www.cameralk.com/
+DocumentRoot /var/www/html
+        CacheQuickHandler off
+
+            CacheLock on
+            CacheLockPath /tmp/mod_cache-lock
+            CacheLockMaxAge 5
+
+            CacheIgnoreHeaders Set-Cookie
+        <Location />
+                CacheEnable disk
+                CacheHeader on
+
+                CacheDefaultExpire 600
+                CacheMaxExpire 86400
+                CacheLastModifiedFactor 0.5
+                Header merge Cache-Control public
+                FileETag All
+                ExpiresActive on
+                ExpiresDefault "access plus 5 minutes"
+        </Location>
+        <Directory /var/www/html>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny
+                allow from all
+         </Directory>
+</VirtualHost>
+
+<VirtualHost *:443>
+        SSLEngine on
+        SSLCertificateFile /var/www/396603c825dd9524.crt
+        SSLCertificateKeyFile /var/www/cameralk.com.key
+        SSLCertificateChainFile /var/www/gd_bundle-g2-g1.crt
+
+        ServerAdmin info@weblankan.com
+        DocumentRoot /var/www/html
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+        #ProxyPassMatch ^/(.*\.php(/.*)?)$ unix:/run/php/php7.0-fpm.sock|fcgi://localhost/var/www/html/
+
+
+        <Directory />
+                Options FollowSymLinks
+                AllowOverride None
+        </Directory>
+
+
+CacheQuickHandler off
+
+    CacheLock on
+    CacheLockPath /tmp/mod_cache-lock
+    CacheLockMaxAge 5
+
+    CacheIgnoreHeaders Set-Cookie
+
+    <Location />
+        CacheEnable disk
+        CacheHeader on
+
+        CacheDefaultExpire 600
+        CacheMaxExpire 86400
+        CacheLastModifiedFactor 0.5
+        ExpiresActive on
+        ExpiresDefault "access plus 5 minutes"
+        Header merge Cache-Control public
+        FileETag All
+    </Location>
+
+
+    CacheDisable "/service-manager"
+    CacheDisable "/gallery"
+
+    #<Location "/gallery">
+    #   CacheDisable on
+    #</Location>
+
+        <Directory /var/www/html>
+                Options Indexes FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny
+                allow from all
+         </Directory>
+</VirtualHost>

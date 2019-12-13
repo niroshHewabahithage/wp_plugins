@@ -1,0 +1,69 @@
+	Prerequisites 
+
+Add Nginx Repository
+
+yum install epel-release
+-------------------------------------------------------
+
+https://www.server-world.info/en/note?os=CentOS_7&p=nginx&f=5
+
+[1]	Install Nginx.
+
+yum -y install nginx
+
+
+[2]	Configure Basic Settings.
+
+nano /etc/nginx/nginx.conf
+
+# line 38: change hostname
+server_name www.srv.world; # your domain name
+
+[3]	If Firewalld is running, allow HTTP service. HTTP uses 80/TCP.
+
+firewall-cmd --add-service=http --permanent 
+
+firewall-cmd --reload
+
+
+------------------------------------------------------------------------
+
+INSTALL PHP
+
+[1]	Install PHP and PHP-FPM.
+
+yum -y install php php-mbstring php-pear php-fpm
+
+[2]	Configure PHP-FPM and Nginx.
+
+nano /etc/php-fpm.d/www.conf
+
+# line 39: change
+user = nginx
+# line 41: change
+group = nginx
+
+systemctl start php-fpm 
+systemctl enable php-fpm
+
+
+nano /etc/nginx/nginx.conf
+# add into "server" section
+        location ~ \.php$ {
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_param  PATH_INFO $fastcgi_path_info;
+            include        fastcgi_params;
+        }
+
+
+
+[3]	Create a test page to make sure PHP script works normally.
+
+echo "<?php phpinfo() ?>" > /usr/share/nginx/html/info.php 
+
+
+
+
+
+

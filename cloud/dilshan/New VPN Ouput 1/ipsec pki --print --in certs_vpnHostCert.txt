@@ -1,0 +1,13 @@
+cert:      X509
+subject:  "C=NL, O=Weblankan, CN=vpn.freereload.lk"
+issuer:   "C=NL, O=Weblankan, CN=strongSwan Root CA"
+validity:  not before Jul 09 23:54:37 2017, ok
+           not after  Jul 09 23:54:37 2019, ok (expires in 729 days)
+serial:    2f:d1:3a:f8:ec:2a:5f:6a
+altNames:  vpn.freereload.lk, 192.169.172.107, 192.169.172.107
+flags:     serverAuth iKEIntermediate
+authkeyId: 29:53:51:20:a6:48:59:83:b9:14:8b:1d:ca:bc:75:cf:67:a3:5f:4a
+subjkeyId: 2b:f9:ec:ae:d0:e2:0f:08:fd:a3:6d:6f:8b:fd:e6:27:10:47:7c:25
+pubkey:    RSA 4096 bits
+keyid:     b2:01:2d:67:fa:f9:fa:b9:5b:30:b6:56:1d:00:79:0e:ee:21:ac:b4
+subjkey:   2b:f9:ec:ae:d0:e2:0f:08:fd:a3:6d:6f:8b:fd:e6:27:10:47:7c:25

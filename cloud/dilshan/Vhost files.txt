@@ -1,0 +1,8 @@
+<VirtualHost *:80>
+    ServerAdmin webmaster@domain1.com
+    DocumentRoot "/srv/http/domain1.com"
+    ServerName domain1.com
+    ServerAlias www.domain1.com
+    ErrorLog "/var/log/httpd/domain1.com-error_log"
+    CustomLog "/var/log/httpd/domain1.com-access_log" common
+</VirtualHost>

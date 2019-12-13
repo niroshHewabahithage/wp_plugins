@@ -1,0 +1,23 @@
+Generate CSR File
+openssl req -newkey rsa:2048 -nodes -keyout example.com.key -out example.com.csr
+===================================================================================
+
+
+===================================================================================
+LINK 
+
+https://www.digitalocean.com/community/tutorials/how-to-install-an-ssl-certificate-from-a-commercial-certificate-authority
+===================================================================================
+
+
+===================================================================================
+
+
+Nginx 
+        ssl_certificate /etc/ssl/tm.lk-combined.crt;
+        ssl_certificate_key /etc/ssl/tm.lk.key;
+
+
+Mergin
+
+cat lotsfx_vip.crt AddTrustExternalCARoot.crt > certificate_chain.crt

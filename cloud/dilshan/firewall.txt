@@ -1,0 +1,14 @@
+sudo ufw app list
+
+==add CLI to firewall ==
+sudo ufw allow OpenSSH
+
+
+sudo ufw enable
+
+
+sudo ufw status
+
+
+sudo ufw allow 80
+sudo ufw deny 80

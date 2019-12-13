@@ -1,0 +1,6 @@
+chown -R :www-data .
+chmod -R 755 .
+
+
+scp where to get ./
+scp where to get where to put un@ip:path

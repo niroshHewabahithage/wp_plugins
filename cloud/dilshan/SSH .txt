@@ -1,0 +1,12 @@
+==================================
+Anable to connect or no permisio
+chmod go-w ~/
+chmod 700 ~/.ssh
+chmod 600 ~/.ssh/authorized_keys
+==================================
+
+
+
+SSH PORT 
+
+/etc/ssh/sshd_config

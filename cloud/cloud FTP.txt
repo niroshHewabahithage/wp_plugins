@@ -1,0 +1,60 @@
+========================================================
+Step 1 — Installing vsftpd
+========================================================
+	sudo apt-get update
+	sudo apt-get install vsftpd
+
+
+========================================================
+backup original config file
+========================================================
+	sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.orig
+
+========================================================
+Create User
+========================================================
+sudo adduser ftp_admin
+sudo addgroup gp_ftp
+
+add user to group
+	1.) sudo usermod -a -G groupName userName
+	2.) sudo adduser user group
+	3.) 
+add user to root 
+
+sudo usermod -d /var/www/html/ ftp_admin
+
+remove from group
+	1.) sudo deluser user group
+
+========================================================
+Give Permition
+========================================================
+
+	sudo chown -R ftp_admin:www-data /var/www/html
+	sudo chmod -R 755 ./
+
+========================================================
+Config file
+========================================================
+# add this to end of config file
+
+echo "ftp_admin" > /etc/vsftpd.userlist
+
+nano /etc/vsftpd.conf
+
+write_enable=YES
+userlist_enable=YES
+userlist_file=/etc/vsftpd.userlist
+userlist_deny=NO
+
+allow_writeable_chroot=YES
+
+pasv_enable=YES
+pasv_max_port=12100
+pasv_min_port=12000
+port_enable=YES
+listen_port=21
+pasv_addr_resolve=YES
+
+

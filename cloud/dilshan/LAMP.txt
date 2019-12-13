@@ -1,0 +1,57 @@
+Cloud Install LAMP sTACk
+=======================================|
+
+apt-get -y install apache2   			|Install Apache server (2.4 current)
+
+/etc/apache2/conf-enabled/security.conf  	|edit this file 
+						| # line 25: change
+						| ServerTokens Prod
+
+systemctl restart apache2    			|restart and reload  the ip on the browser
+
+
+	
+Configure Apache2 to use PHP scripts.
+=======================================|
+
+	Install PHP.
+--------------------------------------------
+apt-get -y install php php-cgi libapache2-mod-php php-common php-pear php-mbstring
+						| Install php and some modules
+
+optional 
+apt-get -y install php-mysql php-curl php-gd php-intl php-pear php-imagick php-imap php-mcrypt php-memcache
+apt-get -y install php-pspell php-recode php-snmp php-tidy php-xmlrpc php-xsl
+apt-get -y install php-json php-iconv php-soap php-zip
+
+a2enconf php7.0-cgi 				| Enable apache cgi module
+
+/etc/php/7.0/apache2/php.ini			| In here the time zone  search for this - date.timezone
+						| Sri lanka Zone is "Asia/Colombo"
+
+
+
+
+Install PHP-FPM (FPM : FastCGI Process Manager) to make PHP scripts be fast
+=======================================|
+
+		Install PHP-FPM.
+--------------------------------------------
+
+apt-get -y install php-fpm libapache2-mod-fastcgi
+
+
+/etc/php/7.0/fpm/pool.d/www.conf		| edit this file and change this
+						| # line 36: change
+						| listen = 127.0.0.1:9000
+
+/etc/apache2/sites-enabled/			| Vhost File Location find the the 000-default.conf file and use it as
+						| template to make better config file
+						|         <FilesMatch "\.php$">
+						|            SetHandler "proxy:fcgi://127.0.0.1:9000/"
+						|         </FilesMatch>
+						| Add above code to apache to use the php fastCgi module for run php scripts.
+
+a2enmod proxy_fcgi  				| Enable fast CGI Proxy module
+
+systemctl restart php7.0-fpm apache2		| Restart Both serverss

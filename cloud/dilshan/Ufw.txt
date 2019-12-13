@@ -1,0 +1,25 @@
+Before enable make sure u enable ssh from firewall
+
+ufw default deny incoming
+ufw default allow outgoing
+
+ufw allow ssh   -- this is important
+
+
+ ufw enable     --- before you do this enable SSH
+
+
+
+
+ufw allow http
+or
+ufw allow 80
+
+
+
+Allow Specific IP Addresses
+
+ufw allow from 15.15.15.51 to any port 22
+
+Deny Connections
+ufw allow from 15.15.15.51 to any port 22
