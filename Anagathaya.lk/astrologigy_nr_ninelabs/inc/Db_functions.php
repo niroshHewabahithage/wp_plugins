@@ -155,7 +155,18 @@ class Db_functions extends My_controller {
     function get_astrologist_for_service($id_service) {
         global $wpdb;
         $row = $wpdb->get_results("select * from " . $wpdb->prefix . "service_map sm left join " . $wpdb->prefix . "users u on sm.is_user=u.ID where sm.id_service=$id_service");
-        
+        return $row;
+    }
+
+    function get_user_capabilies($user_id) {
+        global $wpdb;
+        $row = $wpdb->get_row("select * from " . $wpdb->prefix . "usermeta where user_id=$user_id AND meta_key='wp_capabilities'");
+        return $row;
+    }
+
+    function get_meta_values($user_id, $tbl_name, $serch_param) {
+        global $wpdb;
+        $row = $wpdb->get_row("select meta_value from " . $wpdb->prefix . "$tbl_name where user_id=$user_id AND meta_key='$serch_param'");
         return $row;
     }
 

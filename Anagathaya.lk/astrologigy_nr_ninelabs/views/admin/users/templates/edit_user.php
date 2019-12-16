@@ -11,6 +11,18 @@
 <?php
 if (esc_attr(get_the_author_meta('trigeer_key', $user->ID)) == "new_user123") {
     ?>
+    <script>
+        (function ($) {
+            $(document).ready(function () {
+                $("#role").attr("disabled", true);
+            });
+        })(jQuery);
+    </script>
+    <style>
+        #profile-page .wp-heading-inline, #profile-page .page-title-action{
+            display: none;
+        }
+    </style>
     <h3>Extra profile information</h3>
     <table class="form-table">
         <tr>
@@ -32,10 +44,9 @@ if (esc_attr(get_the_author_meta('trigeer_key', $user->ID)) == "new_user123") {
                 $image_path = "";
 
                 if (!empty($image_path_id)) {
-                   
+
                     $image_array = wp_get_attachment_image_src($image_path_id, $default);
                     $image_path = $image_array[0];
-                    
                 }
 
                 $button_key_map = $upload_btn->nr_fixel_it_wprss_uploader('key_map_left', $width = 10, $height = 'auto', $image_path, $image_path_id);

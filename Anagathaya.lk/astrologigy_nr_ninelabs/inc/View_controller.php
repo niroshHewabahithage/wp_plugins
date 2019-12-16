@@ -19,6 +19,10 @@ class View_controller extends My_controller {
     function nr_nl_service_users() {
         wp_enqueue_script('_nr_lw_new_users_js', plugins_url("assests/js/new_users.js", __DIR__), array('jquery'), 1.1, true);
         wp_localize_script('_nr_lw_new_users_js', 'the_ajax_script', array('ajaxurl' => admin_url('admin-ajax.php')));
+        ob_start();
+        include_once plugin_dir_path(__FILE__) . '/class-astrologer_list-all.php';
+        $template = ob_get_contents();
+        ob_end_clean();
         $db_c = new Db_functions;
         $get_services = $db_c->get_all("services");
         include plugin_dir_path(__DIR__) . 'views/admin/users/layout.php';

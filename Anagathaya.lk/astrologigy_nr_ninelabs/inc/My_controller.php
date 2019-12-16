@@ -330,14 +330,12 @@ class My_controller extends Core_controller {
 
     //front end Funtions 
     function nr_nl_get_astrologist() {
-        $json = array();
+        $json = array();        
         $id_service = (isset($_POST['item_id']) ? $_POST['item_id'] : '');
         if(!empty($id_service)){
             $db_c=new Db_functions();
             $get_atrology_primary=$db_c->get_astrologist_for_service($id_service);
-            echo '<pre>';
-            print_r($get_atrology_primary);
-            echo '</pre>';
+            
         }else{
             $json['msg_type']="ERR";
             $json['msg']="Something went wrong please try again later";

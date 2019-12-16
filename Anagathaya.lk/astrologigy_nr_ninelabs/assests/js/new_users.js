@@ -60,5 +60,9 @@
             return false;
         });
     });
+    
+    $(".edit-items").click(function(){
+//        window.alert();
+    });
 })(jQuery);
 

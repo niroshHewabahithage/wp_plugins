@@ -26,7 +26,7 @@ function nr_nl_astrology_admin_menu() {
     //add main menu for apartment and home attributes
     add_menu_page('Service Manager', 'Service Manager', 'manage_options', "services-manager", array($load_view, 'nr_nl_services'), plugins_url('icons/customer.png', __FILE__));
     //attributes Sub Manu
-    add_submenu_page("services-manager", 'Add Users', "Add Users", 'manage_options', 'service-add-users', array($load_view, 'nr_nl_service_users'));
+    add_submenu_page("services-manager", 'Add Astrologer', "Add Astrologer", 'manage_options', 'service-add-astrologer', array($load_view, 'nr_nl_service_users'));
     //##############################################################################################################################
 }
 
@@ -105,4 +105,5 @@ add_action("wp_ajax_nopriv_get_astrologist", array($myCon, "nr_nl_get_astrologis
 add_action("nr_custom_title", "nr_nl_custom_edit");
 
 function nr_nl_custom_edit() {
+    
 }
