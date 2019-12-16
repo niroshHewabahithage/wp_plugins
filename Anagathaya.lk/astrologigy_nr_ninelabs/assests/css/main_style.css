@@ -303,3 +303,50 @@ p.infoTextCheckout {
 #astrology_services p{
     font-size:15px !important;
 }
+
+.astrolger_div{
+    border: 1px solid #bf6c23;
+    padding: 10px;
+    border-radius: 9px;
+    max-height: 212px;
+    min-height: 212px;
+}
+
+.astrolger_div h5{
+    line-height: 21px;
+}
+
+.astrolger_div .form-check{
+    position: absolute;
+    right: 5%;
+}
+.astrolger_div img{
+    height: 150px;
+    width: 100%;
+}
+.light-yellow{
+    background: #c8961f;
+    padding: 10px 10px;
+    border-top-left-radius:5px;
+    border-bottom-left-radius:5px;
+    color:#fff !important;
+}
+.light-dark-yellow{
+    background:#c4822d;
+    padding: 10px 10px;
+    border-top-right-radius:5px;
+    border-bottom-right-radius:5px;
+    color:#fff !important;
+}
+
+.light-yellow h5, .light-dark-yellow h5{
+    color:#fff;
+
+}
+
+.border-radius{
+    border-radius: 5px;
+}
+.border-radius h5{
+    text-align: center;
+}

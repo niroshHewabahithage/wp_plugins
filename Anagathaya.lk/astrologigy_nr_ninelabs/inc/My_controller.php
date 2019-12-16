@@ -330,15 +330,58 @@ class My_controller extends Core_controller {
 
     //front end Funtions 
     function nr_nl_get_astrologist() {
-        $json = array();        
+        $json = array();
         $id_service = (isset($_POST['item_id']) ? $_POST['item_id'] : '');
-        if(!empty($id_service)){
-            $db_c=new Db_functions();
-            $get_atrology_primary=$db_c->get_astrologist_for_service($id_service);
-            
-        }else{
-            $json['msg_type']="ERR";
-            $json['msg']="Something went wrong please try again later";
+        if (!empty($id_service)) {
+            $db_c = new Db_functions();
+            $get_atrology_primary = $db_c->get_astrologist_for_service($id_service);
+            $div = "";
+            if (!empty($get_atrology_primary)) {
+                foreach ($get_atrology_primary as $users) {
+                    $first_name = $db_c->get_meta_values($users->ID, "usermeta", "first_name");
+                    $last_name = $db_c->get_meta_values($users->ID, "usermeta", "last_name");
+                    $phone = $db_c->get_meta_values($users->ID, "usermeta", "phone");
+                    $user_src = $db_c->get_meta_values($users->ID, "usermeta", "image");
+                    $post_array[] = array(
+                        "id" => $users->ID,
+                        "astrologer_name_sinhala" => $first_name->meta_value,
+                        "astrologer_name_english" => $last_name->meta_value,
+                        "astrologer_phone" => $phone->meta_value,
+                        "astology_image" => $user_src->meta_value,
+                        "active" => 1,
+                    );
+                }
+                if (!empty($post_array)) {
+                    foreach ($post_array as $ps) {
+                        $name_in_sinhala = (isset($ps['astrologer_name_sinhala']) ? $ps['astrologer_name_sinhala'] : '');
+                        $name_in_english = (isset($ps['astrologer_name_english']) ? $ps['astrologer_name_english'] : '');
+                        $image_array = wp_get_attachment_image_src((isset($ps['astology_image']) ? $ps['astology_image'] : ''), $default);
+                        $image_path = (!empty($image_array[0]) ? $image_array[0] : '');
+                        $user_id = (isset($ps['id']) ? $ps['id'] : '');
+
+                        $div .= <<<MSG
+                        <div class="col-lg-4">
+                        <div class="astrolger_div">
+                            <div class="form-check" style="position:absolute">
+                                <input type="checkbox" value='$user_id' class="form-check-input checkUser" name="users[1][]"  id="materialUncheckedU_$user_id">
+                                <label class="form-check-label" for="materialUncheckedU_$user_id"></label>
+                            </div>
+                            <img src="$image_path">
+                            <h5 class='text-center'>$name_in_sinhala</h5>
+                            <h5 class='text-center'>$name_in_english</h5>
+                            <div>
+                            </div>
+                        </div>
+                    </div>
+MSG;
+                    }
+                }
+                $json['msg_type'] = "OK";
+                $json['return_div'] = $div;
+            }
+        } else {
+            $json['msg_type'] = "ERR";
+            $json['msg'] = "Something went wrong please try again later";
         }
         echo json_encode($json);
         exit();
