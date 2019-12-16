@@ -9,6 +9,14 @@
   Author URI: www.linkedin.com/in/nirosh-randimal-331598146
   License: GPL2
  */
+global $table_name;
+global $table_name2;
+global $fis_db_version;
+$fis_db_version = '1.0.0';
+global $wpdb;
+$table_name = $wpdb->prefix . "services";
+$table_name2 = $wpdb->prefix . "service_map";
+
 
 //inlcudes
 include plugin_dir_path(__FILE__) . 'inc/Core_controller.php';
@@ -17,6 +25,12 @@ include plugin_dir_path(__FILE__) . 'inc/View_controller.php';
 include plugin_dir_path(__FILE__) . 'inc/Db_functions.php';
 include plugin_dir_path(__FILE__) . 'inc/Massage_class.php';
 include plugin_dir_path(__FILE__) . 'inc/Upload_view.php';
+
+$cr_con = new Core_controller();
+//activation_link
+register_activation_hook(__FILE__, array($cr_con, '_nr_fis_destination_install'));
+
+
 
 //end includes
 

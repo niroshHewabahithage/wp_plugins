@@ -62,5 +62,44 @@ class Core_controller {
         
     }
 
+    function _nr_fis_destination_install() {
+        global $table_name;
+        global $table_name2;
+        global $fis_db_version;
+        global $wpdb;
+
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE $table_name (
+                `id`  int(11) NOT NULL AUTO_INCREMENT ,
+                `service_name_si`  TEXT ,
+                `service_name_en`  TEXT ,
+                `service_price`  TEXT ,
+                `active`  int(2) ZEROFILL NOT NULL ,
+                `created_by`  int(11) NULL ,
+                `created_date`  TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+                `edited_by`  int(11) NULL,
+                `edited_date`  TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                `remark`  TEXT NULL ,
+                PRIMARY KEY (`id`)
+	) $charset_collate;CREATE TABLE $table_name2 (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `is_user` INT(11) NULL DEFAULT NULL,
+  `id_service` INT(11) NULL DEFAULT NULL,
+  `active` INT(11) NULL DEFAULT NULL,
+  `created_by` INT(11) NULL DEFAULT NULL,
+  `created_date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `edited_by` INT(11) NULL DEFAULT NULL,
+  `edited_date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `remark` TEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+	) $charset_collate;";
+        $sql2 = "";
+
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta($sql);
+//    dbDelta($sql2);
+        add_option('fis_db_version', $fis_db_version);
+    }
+
 //    function validate_price
 }
