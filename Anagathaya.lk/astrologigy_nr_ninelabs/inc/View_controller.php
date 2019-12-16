@@ -30,14 +30,25 @@ class View_controller extends My_controller {
         $db_c = new Db_functions;
         $get_services = $db_c->get_all("services");
         $get_select_services = $db_c->get_all_services_selected("service_map", "id_service", "is_user", $user->ID);
-        $item_array = [];
+        $item_array = array();
         if (isset($get_select_services) && !empty($get_select_services) && $get_select_services != "") {
             foreach ($get_select_services as $gss) {
-                array_push($item_array, [$gss->id_service]);
+                array_push($item_array, $gss->id_service);
             }
         }
 
         include plugin_dir_path(__DIR__) . 'views/admin/users/templates/edit_user.php';
+    }
+
+    // front end 
+    function nr_nl_astrology_form() {
+        wp_enqueue_script('_nr_lw_astrology_form_js', plugins_url("assests/js/astrology_form.js", __DIR__), array('jquery'), 1.1, true);
+        wp_localize_script('_nr_lw_astrology_form_js', 'the_ajax_script', array('ajaxurl' => admin_url('admin-ajax.php')));
+
+        //db functions 
+        $db_c = new Db_functions();
+        $get_services = $db_c->get_all("services");
+        include plugin_dir_path(__DIR__) . 'views/front/astrology_form.php';
     }
 
 }

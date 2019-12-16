@@ -265,3 +265,41 @@ p.infoTextCheckout {
 #basic-addon2-view_pass{
     cursor: pointer;
 }
+
+#astrology_services tr{
+    border:1px solid #000;
+}
+#astrology_services tr:hover{
+    background: #c8961f;
+}
+
+#astrology_services .pricetd{
+    display: inline-flex;
+    border-left: 1px solid #000;
+    width: 100%;
+}
+
+#astrology_services .pricetd:hover{
+    background:#c4822d;
+    color:#fff;
+}
+
+#astrology_services input[type="checkbox"] + label{
+    padding-left: 0;
+    margin-right: 0;
+}
+
+
+#astrology_services{
+    width: 100%;
+}
+
+#astrology_services tr td{
+    /*padding: 0;*/
+    padding: 5px 6px;
+    text-align: left;
+}
+
+#astrology_services p{
+    font-size:15px !important;
+}

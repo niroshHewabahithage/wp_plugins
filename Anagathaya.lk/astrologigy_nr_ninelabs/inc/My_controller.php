@@ -307,9 +307,43 @@ class My_controller extends Core_controller {
 
         if (!current_user_can('edit_user', $user_id))
             return false;
-
+        $service_array = (isset($_POST['users']) ? $_POST['users'] : '');
         update_usermeta($user_id, 'phone', $_POST['phone']);
         update_usermeta($user_id, 'image', $_POST['key_map_left']);
+
+        $db_c = new Db_functions();
+        $delete_services = $db_c->delete_item("service_map", "is_user", $user_id);
+        if (!empty($delete_services)) {
+            foreach ($service_array as $sa) {
+                $insert_param = array(
+                    "is_user" => ($user_id),
+                    "id_service" => $sa,
+                    "active" => 1
+                );
+
+                $db_c->insert_data("service_map", $insert_param);
+            }
+        } else {
+            
+        }
+    }
+
+    //front end Funtions 
+    function nr_nl_get_astrologist() {
+        $json = array();
+        $id_service = (isset($_POST['item_id']) ? $_POST['item_id'] : '');
+        if(!empty($id_service)){
+            $db_c=new Db_functions();
+            $get_atrology_primary=$db_c->get_astrologist_for_service($id_service);
+            echo '<pre>';
+            print_r($get_atrology_primary);
+            echo '</pre>';
+        }else{
+            $json['msg_type']="ERR";
+            $json['msg']="Something went wrong please try again later";
+        }
+        echo json_encode($json);
+        exit();
     }
 
 }

@@ -14,7 +14,7 @@ $upload_btn = new Upload_view;
             <div class="col-lg-12">
                 <label class="required">Select Service for this User</label>
                 <select class="form-control selectpicker" name="users[]" multiple="multiple" id="content-type" title="Select Content Type" style="width: 100% !important">
-                    <option disabled="" selected="">Select Content Type</option>
+                    <!--<option disabled="" selected="">Select Content Type</option>-->
                     <?php
                     if (isset($get_services) && !empty($get_services) && $get_services != "" && $get_services != null) {
                         foreach ($get_services as $gs) {

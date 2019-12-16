@@ -8,7 +8,7 @@ class Upload_view {
 
     function nr_fixel_it_wprss_uploader($name, $width, $height, $image_item = '', $attachment_id = '') {
         // Set variables
-
+       
         $options = get_option('RssFeedIcon_settings');
 
         if (!empty($image_item)) {
@@ -23,7 +23,7 @@ class Upload_view {
             $value = $options[$name];
         } else {
             $src = $default_image;
-            if ($value != "") {
+            if ($attachment_id != "") {
                 $value = $attachment_id;
             } else {
                 $value = '';

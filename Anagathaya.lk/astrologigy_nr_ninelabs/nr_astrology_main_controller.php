@@ -96,3 +96,13 @@ add_action('personal_options_update', array($myCon, 'my_save_extra_profile_field
 add_action('edit_user_profile_update', array($myCon, 'my_save_extra_profile_fields'));
 
 
+//front end 
+add_shortcode("astrology_form", array($load_view, "nr_nl_astrology_form"));
+
+//front end functions 
+add_action("wp_ajax_nopriv_get_astrologist", array($myCon, "nr_nl_get_astrologist"));
+
+add_action("nr_custom_title", "nr_nl_custom_edit");
+
+function nr_nl_custom_edit() {
+}

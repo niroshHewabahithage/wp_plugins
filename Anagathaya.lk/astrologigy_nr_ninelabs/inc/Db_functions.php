@@ -152,4 +152,11 @@ class Db_functions extends My_controller {
         return $row;
     }
 
+    function get_astrologist_for_service($id_service) {
+        global $wpdb;
+        $row = $wpdb->get_results("select * from " . $wpdb->prefix . "service_map sm left join " . $wpdb->prefix . "users u on sm.is_user=u.ID where sm.id_service=$id_service");
+        
+        return $row;
+    }
+
 }
