@@ -55,6 +55,9 @@ class Core_controller {
             "condt" => $cond,
             "msg_param" => $msg_param
         );
+        echo '<pre>';
+        print_r($array_name);
+        echo '</pre>';
         return $push_data;
     }
 
@@ -74,6 +77,7 @@ class Core_controller {
                 `service_name_si`  TEXT ,
                 `service_name_en`  TEXT ,
                 `service_price`  TEXT ,
+                `is_multiple`  int(1),
                 `active`  int(2) ZEROFILL NOT NULL ,
                 `created_by`  int(11) NULL ,
                 `created_date`  TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,

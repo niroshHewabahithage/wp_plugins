@@ -12,9 +12,17 @@
             <form id="astrology_data">
                 <div class="form-group row">
                     <div class="col-lg-12">
-                        <h3>සේවාව තෝරන්න | Select Service</h3>
+                        <?php
+                         
+                        if (isset($get_services) && !empty($get_services) && $get_services != "" && $get_services != "") {
+                            ?>
+                            <h3>සේවාව තෝරන්න | Select Service</h3>
+                            <?php
+                        }
+                        ?>
                         <table id="astrology_services">
                             <?php
+                           
                             if (isset($get_services) && !empty($get_services) && $get_services != "" && $get_services != "") {
                                 foreach ($get_services as $gs) {
                                     ?>
@@ -23,7 +31,7 @@
                                         <td><p><?php echo $gs->service_name_si; ?>| <?php echo $gs->service_name_en; ?></p></td>
                                         <td class="pricetd"><p>රු <?php echo number_format($gs->service_price, 2) ?></p>
                                             <div class="form-check">
-                                                <input type="checkbox" value='<?php echo $gs->id; ?>' data-value='<?php echo $gs->service_price; ?>' data-id='<?php echo ($gs->service_name_en == "Matching Horoscope") ? 'multiple' : ''; ?>' class="form-check-input checkService" name="service[1][]"  id="materialUnchecked_<?php echo $gs->id; ?>">
+                                                <input type="checkbox" value='<?php echo $gs->id; ?>' data-value='<?php echo $gs->service_price; ?>' data-id='<?php echo ($gs->is_multiple == 1) ? 'multiple' : ''; ?>' class="form-check-input checkService" name="service[1][]"  id="materialUnchecked_<?php echo $gs->id; ?>">
                                                 <label class="form-check-label" for="materialUnchecked_<?php echo $gs->id; ?>"></label>
                                             </div>
 
@@ -32,12 +40,22 @@
                                     <?php
                                 }
                             } else {
-                                
+                                ?>
+                                <h3 class="text-center">කණගාටුයි මෙම අවස්ථාවේ අප තුල ඔබට පිරිනැමීමට සේවාවන් නොමැත සිදුවූ අපහසුතාවයට සමාවන්න </h3>
+                                <h3 class="text-center">Sorry We don't have services to offer you, sorry for the inconvenience  </h3>
+                                <?php
                             }
                             ?>
                         </table>
                     </div>
-                </div>            
+                </div>
+                <div class='form-group row' id="no_error" style="display: none">
+                    <div class="col-lg-12">
+                        <h3 class="text-center">කණගාටුයි  කිසිදු ජෝතිශ්‍යවෙදියෙකු මෙම සේවාව සදහා ලියාපදිංචි වී නොමැත, සිදුවූ අපහසුතාවයට සමාවන්න </h3>
+                        <h3 class="text-center">Sorry, any astrologer haven't registered to this particular service</h3>
+
+                    </div>
+                </div>
                 <div class="form-group row" id="select_astrolger_div" style="display:none">
                     <div class="col-lg-12">
                         <h3>ජෝතිර්වේදියාව  තෝරන්න  | Select Astrologer</h3>
@@ -184,28 +202,35 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <div class="col-lg-8">
-                        <div class="row">
-                            <div class="col-lg-8 pr-0"> 
-                                <div class="light-yellow">
-                                    <h5>සම්පුර්ණ ගාස්තුව |Total Cost</h5>
+                <?php
+                if (isset($get_services) && !empty($get_services) && $get_services != "" && $get_services != "") {
+                    ?>
+
+                    <div class="form-group row">
+                        <div class="col-lg-8">
+                            <div class="row">
+                                <div class="col-lg-8 pr-0"> 
+                                    <div class="light-yellow">
+                                        <h5>සම්පුර්ණ ගාස්තුව |Total Cost</h5>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-4 pl-0">
-                                <div class="light-dark-yellow">
-                                    <h5 id="set_price">රු 00.00</h5>
+                                <div class="col-lg-4 pl-0">
+                                    <div class="light-dark-yellow">
+                                        <h5 id="set_price">රු 00.00</h5>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <div class="light-dark-yellow border-radius">
-                            <h5>තහවුරු කරන්න | Submit</h5>
+                        <div class="col-lg-4">
+                            <div class="light-dark-yellow border-radius">
+                                <h5>තහවුරු කරන්න | Submit</h5>
+                            </div>
                         </div>
                     </div>
-                </div>
+                <?php } ?>
+            </form>
         </div>
 
-        </form>
+
     </div>
+</div>

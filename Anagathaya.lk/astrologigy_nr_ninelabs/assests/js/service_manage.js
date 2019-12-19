@@ -41,6 +41,11 @@
                 $("#serviceNameSin").val(res.return_array.service_name_si);
                 $("#serviceNameEn").val(res.return_array.service_name_en);
                 $("#servicePrice").val(res.return_array.service_price);
+                if (res.return_array.is_multiple == 1) {
+                    $("#serviceMultiple").attr("checked", true);
+                } else {
+                    $("#serviceMultiple").attr("checked", false);
+                }
                 $("#save-items").slideUp(500);
                 $("#update-items").delay(500).slideDown(800);
             } else {

@@ -39,6 +39,7 @@ class My_controller extends Core_controller {
         $service_name_sin = (isset($_POST['serviceNameSin']) ? $_POST['serviceNameSin'] : '');
         $service_name_en = (isset($_POST['serviceNameEn']) ? $_POST['serviceNameEn'] : '');
         $service_price = (isset($_POST['servicePrice']) ? $_POST['servicePrice'] : '');
+        $service_multiple = (isset($_POST['serviceMultiple']) ? '1' : '0');
 
         if (!empty($service_name_sin)) {
             if (!empty($service_name_en)) {
@@ -48,6 +49,7 @@ class My_controller extends Core_controller {
                             "service_name_si" => ($service_name_sin),
                             "service_name_en" => ($service_name_en),
                             "service_price" => ($service_price),
+                            "is_multiple" => ($service_multiple),
                             "active" => 1
                         );
 
@@ -103,6 +105,7 @@ class My_controller extends Core_controller {
         $service_name_sin = (isset($_POST['serviceNameSin']) ? $_POST['serviceNameSin'] : '');
         $service_name_en = (isset($_POST['serviceNameEn']) ? $_POST['serviceNameEn'] : '');
         $service_price = (isset($_POST['servicePrice']) ? $_POST['servicePrice'] : '');
+        $service_multiple = (isset($_POST['serviceMultiple']) ? '1' : '0');
         $db_c = new Db_functions();
         if (!empty($item_id)) {
             if (!empty($service_name_sin)) {
@@ -114,6 +117,7 @@ class My_controller extends Core_controller {
                                 "service_name_si" => ($service_name_sin),
                                 "service_name_en" => ($service_name_en),
                                 "service_price" => ($service_price),
+                                "is_multiple" => ($service_multiple),
                                 "active" => 1
                             );
 

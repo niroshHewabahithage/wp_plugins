@@ -21,6 +21,7 @@
                 });
                 Notiflix.Loading.Pulse('මොහොතක් රැදීසිටින්න |Process in prograss');
                 //send ajax request
+                $("#no_error").slideUp(800);
                 var data = [{"name": "item_id", "value": item_id}];
                 data.push({
                     name: "action",
@@ -29,6 +30,7 @@
                 $.post(the_ajax_script.ajaxurl, data, function (response) {
                     var res = JSON.parse(response);
                     if (res.msg_type == "OK") {
+                        $("#no_error").slideUp(800);
                         $("#select_astrolger_div").slideDown(500);
                         $("#basic_info").slideDown(500);
                         $("#set_price").html("රු " + WL.format_number(data_value, 2));
@@ -41,6 +43,7 @@
                         Notiflix.Loading.Remove(600);
                         //Notiflix.Notify.Success(res.msg);
                     } else {
+                        $("#no_error").slideDown(800);
                         // Notiflix.Notify.Failure(res.msg);
                         Notiflix.Loading.Remove(600);
                     }

@@ -20,6 +20,15 @@
             </div>
         </div>
         <div class="form-group row">
+            <div class="col-lg-12">
+                <!--<label class="required">Does this service involve a partner</label>-->
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" value='1' name='serviceMultiple' id="serviceMultiple">
+                    <label class="form-check-label" for="serviceMultiple">Does this service involve a partner</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
             <div class="col-lg-12 pull-right">
                 <button type="button" class="btn btn-sm btn-primary" id="save-items">Save Service</button>
                 <button type="button" class="btn btn-sm btn-warning" style="display: none" id="update-items">Update Service</button>
