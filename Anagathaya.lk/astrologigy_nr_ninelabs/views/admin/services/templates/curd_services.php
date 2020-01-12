@@ -13,12 +13,12 @@
                 <input type="text" name="serviceNameEn" id="serviceNameEn" class="form-control" placeholder="Enter Service Name In English">
             </div>
         </div>
-        <div class="form-group row">
+<!--        <div class="form-group row">
             <div class="col-lg-12">
                 <label class="required">Service Price</label>
                 <input type="text" name="servicePrice" id="servicePrice" class="form-control" placeholder="Service Price">
             </div>
-        </div>
+        </div>-->
         <div class="form-group row">
             <div class="col-lg-12">
                 <!--<label class="required">Does this service involve a partner</label>-->

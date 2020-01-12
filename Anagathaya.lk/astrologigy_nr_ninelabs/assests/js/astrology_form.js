@@ -3,6 +3,7 @@
         $(".checkService").attr("checked", false);
         $(".checkUser").attr("checked", false);
         $(".checkService").click(function () {
+            $("#set_price").html("රු " + WL.format_number("000", 2));
             $("#set_strologer").html("");
             $("#select_astrolger_div").slideUp(500);
             $("#basic_info").slideUp(500);
@@ -11,7 +12,7 @@
             if ($box.is(":checked")) {
                 var item_id = this.value;
                 var data_id = $(this).attr("data-id");
-                var data_value = $(this).data('value');
+
                 //                window.alert(data_id);
                 var group = "input:checkbox[name='" + $box.attr("name") + "']";
                 $(group).prop("checked", false);
@@ -30,20 +31,52 @@
                 $.post(the_ajax_script.ajaxurl, data, function (response) {
                     var res = JSON.parse(response);
                     if (res.msg_type == "OK") {
-                        $("#no_error").slideUp(800);
-                        $("#select_astrolger_div").slideDown(500);
-                        $("#basic_info").slideDown(500);
-                        $("#set_price").html("රු " + WL.format_number(data_value, 2));
-                        if (data_id == "multiple") {
-                            $("#partner_details").slideDown(500);
+
+                        if (res.sub_services != "") {
+                            $("#sub_service").slideDown(800);
+                            $("#sub_service").find("#astrology_services").html(res.sub_services);
+                        } else {
+                            $("#sub_service").slideUp(800);
+                            $("#sub_service").find("#astrology_services").html("");
                         }
-                        $("#set_strologer").slideDown(1500, function () {
-                            $("#set_strologer").html(res.return_div)
-                        });
+                        setTimeout(function () {
+                            $("#no_error").slideUp(800);
+                            $("#select_astrolger_div").slideDown(500);
+                            $("#basic_info").slideDown(500);
+
+                            if (data_id == "multiple") {
+                                $("#partner_details").slideDown(500);
+                            }
+                            $("#set_strologer").slideDown(1500, function () {
+                                $("#set_strologer").html(res.return_div)
+                            });
+                            $(".checkUser").click(function () {
+
+                                var $box = $(this);
+                                if ($box.is(":checked")) {
+                                    var item_id = this.value;
+                                    var data_value = $(this).data('value');
+                                    var group = "input:checkbox[name='" + $box.attr("name") + "']";
+                                    $(group).prop("checked", false);
+                                    $box.prop("checked", true);
+                                    $("#set_price").html("රු " + WL.format_number(data_value, 2));
+
+                                    //send ajax request
+
+                                } else {
+                                    $box.prop("checked", false);
+                                    $("#set_price").html("රු " + WL.format_number("000", 2));
+                                }
+                            });
+                        }, 800)
+
+
                         Notiflix.Loading.Remove(600);
                         //Notiflix.Notify.Success(res.msg);
                     } else {
                         $("#no_error").slideDown(800);
+                        $("#sub_service").slideUp(800);
+                        $("#sub_service").find("#astrology_services").html("");
                         // Notiflix.Notify.Failure(res.msg);
                         Notiflix.Loading.Remove(600);
                     }
@@ -52,19 +85,6 @@
                 $box.prop("checked", false);
             }
         });
-        $(".checkUser").click(function () {
-            var $box = $(this);
-            if ($box.is(":checked")) {
-                var item_id = this.value;
-                var group = "input:checkbox[name='" + $box.attr("name") + "']";
-                $(group).prop("checked", false);
-                $box.prop("checked", true);
 
-                //send ajax request
-
-            } else {
-                $box.prop("checked", false);
-            }
-        });
     });
 })(jQuery);

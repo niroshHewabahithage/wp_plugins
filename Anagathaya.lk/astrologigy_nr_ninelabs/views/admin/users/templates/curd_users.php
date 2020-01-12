@@ -9,7 +9,7 @@ $upload_btn = new Upload_view;
 
 <div class="col-lg-5">
      <!--<textarea class="editor"></textarea>-->
-    <form id="template_item">
+    <form id="template_item"> 
         <div class="form-group row">
             <div class="col-lg-12">
                 <label class="required">Select Service for this User</label>
@@ -95,6 +95,30 @@ $upload_btn = new Upload_view;
             </div>
         </div>
 
+    </form>
+
+    <form id="template_form" style="display:none">
+        <div class="form-group row">
+            <div class="col-lg-12">
+                <h4>Price Management For the Astrologer</h4>
+                <p>Add prices to the services which the astrologer wish to provide separately, saved one's will be automatically filled </p>
+            </div>
+        </div>
+<!--        <div class="form-group row">
+            <div class="col-lg-12">
+                <label>Service One</label>
+                <input type="hidden" name="astrologer[services][1][mapId]">
+                <input type="text" name="astrologer[services][1][servicePrice]" placeholder="Enter Price" class="form-control">
+            </div>
+
+        </div>-->
+        <div id="set_value_prices"></div>
+        <div class="form-group row">
+            <div class="col-lg-12 pull-right">
+                <button type="button" class="btn btn-sm btn-primary" id="save-items-prices">Save Astrologist Price</button>
+                <button type="button" class="btn btn-sm btn-danger" onclick="location.reload()" >Cancel</button>
+            </div>
+        </div>
     </form>
 </div>
 

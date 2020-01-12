@@ -265,7 +265,7 @@ p.infoTextCheckout {
 #basic-addon2-view_pass{
     cursor: pointer;
 }
-
+/*//astrology_main services*/
 #astrology_services tr{
     border:1px solid #000;
 }
@@ -274,7 +274,7 @@ p.infoTextCheckout {
 }
 
 #astrology_services .pricetd{
-    display: inline-flex;
+    display: flow-root;
     border-left: 1px solid #000;
     width: 100%;
 }
@@ -301,6 +301,45 @@ p.infoTextCheckout {
 }
 
 #astrology_services p{
+    font-size:15px !important;
+}
+
+/*astrologer sub services*/
+#astrology_sub_services tr{
+    border:1px solid #000;
+}
+#astrology_sub_services tr:hover{
+    background: #c8961f;
+}
+
+#astrology_sub_services .pricetd{
+    display: flow-root;
+    border-left: 1px solid #000;
+    width: 100%;
+}
+
+#astrology_sub_services .pricetd:hover{
+    background:#c4822d;
+    color:#fff;
+}
+
+#astrology_sub_services input[type="checkbox"] + label{
+    padding-left: 0;
+    margin-right: 0;
+}
+
+
+#astrology_sub_services{
+    width: 100%;
+}
+
+#astrology_sub_services tr td{
+    /*padding: 0;*/
+    padding: 5px 6px;
+    text-align: left;
+}
+
+#astrology_sub_services p{
     font-size:15px !important;
 }
 
@@ -349,4 +388,8 @@ p.infoTextCheckout {
 }
 .border-radius h5{
     text-align: center;
+}
+
+.checked {
+  color: orange;
 }

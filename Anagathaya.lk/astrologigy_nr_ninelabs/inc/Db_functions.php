@@ -160,13 +160,27 @@ class Db_functions extends My_controller {
 
     function get_user_capabilies($user_id) {
         global $wpdb;
-        $row = $wpdb->get_row("select * from " . $wpdb->prefix . "usermeta where user_id=$user_id AND meta_key='wp_capabilities'");
+        $row = $wpdb->get_row("select * from " . $wpdb->prefix . "usermeta where user_id=$user_id AND meta_key='".$wpdb->prefix."capabilities'");
         return $row;
     }
 
     function get_meta_values($user_id, $tbl_name, $serch_param) {
         global $wpdb;
         $row = $wpdb->get_row("select meta_value from " . $wpdb->prefix . "$tbl_name where user_id=$user_id AND meta_key='$serch_param'");
+        return $row;
+    }
+
+    function get_services_for_user($item_id) {
+        global $wpdb;
+        $select_colomn = "sm.id as mapId,sm.is_user, sm.id_service, sm.service_price as price_service, s.service_name_en, s.service_name_si";
+        $row = $wpdb->get_results("SELECT $select_colomn from " . $wpdb->prefix . "service_map sm left join " . $wpdb->prefix . "services s on sm.id_service = s.id where sm.is_user=$item_id");
+        return $row;
+    }
+
+    function get_sub_services($id_service) {
+        global $wpdb;
+        $select_colomn = "*";
+        $row = $wpdb->get_results("SELECT $select_colomn from " . $wpdb->prefix . "sub_services where service_id=$id_service");
         return $row;
     }
 

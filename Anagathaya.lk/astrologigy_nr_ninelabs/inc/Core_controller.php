@@ -68,6 +68,7 @@ class Core_controller {
     function _nr_fis_destination_install() {
         global $table_name;
         global $table_name2;
+        global $table_name3;
         global $fis_db_version;
         global $wpdb;
 
@@ -96,8 +97,20 @@ class Core_controller {
   `edited_date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `remark` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-	) $charset_collate;";
-        $sql2 = "";
+	) $charset_collate;CREATE TABLE $table_name3 (
+  `id` int(11) NOT NULL,
+  `service_id` int(11) DEFAULT NULL,
+  `sub_service_sinhala` text CHARACTER SET utf8 DEFAULT NULL,
+  `sub_service_english` text DEFAULT NULL,  
+  `service_price` text DEFAULT NULL,
+  `active` int(11) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `edited_by` int(11) DEFAULT NULL,
+  `edited_date` timestamp NULL DEFAULT current_timestamp() ON UPDATE CURRENT_TIMESTAMP,
+  `remark` text DEFAULT NULL,
+  PRIMARY KEY (`id`)
+)$charset_collate;";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta($sql);

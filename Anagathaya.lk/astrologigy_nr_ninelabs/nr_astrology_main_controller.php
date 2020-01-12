@@ -11,11 +11,13 @@
  */
 global $table_name;
 global $table_name2;
+global $table_name3;
 global $fis_db_version;
 $fis_db_version = '1.0.0';
 global $wpdb;
 $table_name = $wpdb->prefix . "services";
 $table_name2 = $wpdb->prefix . "service_map";
+$table_name3 = $wpdb->prefix . "sub_services";
 
 
 //inlcudes
@@ -30,8 +32,6 @@ $cr_con = new Core_controller();
 //activation_link
 register_activation_hook(__FILE__, array($cr_con, '_nr_fis_destination_install'));
 
-
-
 //end includes
 
 function nr_nl_astrology_admin_menu() {
@@ -40,6 +40,7 @@ function nr_nl_astrology_admin_menu() {
     //add main menu for apartment and home attributes
     add_menu_page('Service Manager', 'Service Manager', 'manage_options', "services-manager", array($load_view, 'nr_nl_services'), plugins_url('icons/customer.png', __FILE__));
     //attributes Sub Manu
+    add_submenu_page("services-manager", 'Add Sub Service', "Add Sub Service", 'manage_options', 'service-add-sub-service', array($load_view, 'nr_nl_service_sub_services'));
     add_submenu_page("services-manager", 'Add Astrologer', "Add Astrologer", 'manage_options', 'service-add-astrologer', array($load_view, 'nr_nl_service_users'));
     //##############################################################################################################################
 }
@@ -121,3 +122,14 @@ add_action("nr_custom_title", "nr_nl_custom_edit");
 function nr_nl_custom_edit() {
     
 }
+
+//save-sub_services
+add_action("wp_ajax_save_sub_services", array($myCon, "nr_nl_save_sub_services"));
+
+
+//get services to the astrolger
+add_action("wp_ajax_get_services_astrologer", array($myCon, "nr_nl_get_service_astrologer"));
+add_action("wp_ajax_submit_prices_astrologer", array($myCon, "nr_nl_submit_pricess"));
+
+//get sub services 
+//add_action("wp_ajax_nopriv_get_sub_service");

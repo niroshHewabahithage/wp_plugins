@@ -55,4 +55,14 @@ class View_controller extends My_controller {
         include plugin_dir_path(__DIR__) . 'views/front/astrology_form.php';
     }
 
+    function nr_nl_service_sub_services() {
+         wp_enqueue_script('_nr_lw_astrology_sub_services_js', plugins_url("assests/js/sub_services.js", __DIR__), array('jquery'), 1.1, true);
+        wp_localize_script('_nr_lw_astrology_sub_services_js', 'the_ajax_script', array('ajaxurl' => admin_url('admin-ajax.php')));
+    
+        //db_functions
+        $db_c = new Db_functions();
+        $get_services = $db_c->get_all("services");
+        include plugin_dir_path(__DIR__) . 'views/admin/sub_services/layout.php';
+        }
+
 }

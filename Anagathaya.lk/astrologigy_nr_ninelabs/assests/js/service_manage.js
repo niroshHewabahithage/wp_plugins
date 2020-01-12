@@ -40,7 +40,7 @@
                 $("#itemId").val(res.return_array.id);
                 $("#serviceNameSin").val(res.return_array.service_name_si);
                 $("#serviceNameEn").val(res.return_array.service_name_en);
-                $("#servicePrice").val(res.return_array.service_price);
+//                $("#servicePrice").val(res.return_array.service_price);
                 if (res.return_array.is_multiple == 1) {
                     $("#serviceMultiple").attr("checked", true);
                 } else {

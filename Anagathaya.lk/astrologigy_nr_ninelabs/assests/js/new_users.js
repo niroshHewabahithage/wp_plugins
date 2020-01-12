@@ -1,6 +1,6 @@
 (function ($) {
     $(document).ready(function () {
-        
+
         $('select').select2();
         var is_viewed = '';
         $("#basic-addon2-view_pass").click(function () {
@@ -60,9 +60,56 @@
             return false;
         });
     });
-    
-    $(".edit-items").click(function(){
+
+    $(".edit-items").click(function () {
 //        window.alert();
+    });
+
+    $(".change-price").click(function () {
+
+        var item_id = this.value;
+        var data = [{"name": "item_id", "value": item_id}]
+        data.push({
+            name: "action",
+            value: "get_services_astrologer"
+        });
+//        data.push();
+        $.post(the_ajax_script.ajaxurl, data, function (response) {
+            var res = JSON.parse(response);
+            if (res.msg_type == "OK") {
+                $("#template_item").slideUp(800);
+                $("#template_form").slideDown(800);
+                if (res.div_content != "") {
+                    $("#template_form").find("#set_value_prices").fadeIn(800).html(res.div_content);
+                }
+            } else {
+                Notiflix.Notify.Failure(res.msg);
+            }
+        });
+
+    });
+
+    $("#save-items-prices").click(function () {
+        WL.disable_ele_fa(this, "");
+        var elem=this;
+        var data = $("#template_form").serializeArray();
+        data.push({
+            "name": "action",
+            'value': "submit_prices_astrologer"
+        });
+
+        $.post(the_ajax_script.ajaxurl, data, function (response) {
+            var res = JSON.parse(response);
+            if (res.msg_type == "OK") {
+                Notiflix.Notify.Success(res.msg);
+                setTimeout(function () {
+                    location.reload();
+                }, 2500)
+            } else {
+                Notiflix.Notify.Failure(res.msg);
+                WL.enable_ele_fa(elem, "");
+            }
+        });
     });
 })(jQuery);
 

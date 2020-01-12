@@ -328,7 +328,15 @@ class My_controller extends Core_controller {
                 $db_c->insert_data("service_map", $insert_param);
             }
         } else {
-            
+            foreach ($service_array as $sa) {
+                $insert_param = array(
+                    "is_user" => ($user_id),
+                    "id_service" => $sa,
+                    "active" => 1
+                );
+
+                $db_c->insert_data("service_map", $insert_param);
+            }
         }
     }
 
@@ -339,22 +347,54 @@ class My_controller extends Core_controller {
         if (!empty($id_service)) {
             $db_c = new Db_functions();
             $get_atrology_primary = $db_c->get_astrologist_for_service($id_service);
+            $get_sub_service = $db_c->get_sub_services($id_service);
+//            echo '<pre>';
+//            print_r($get_sub_service);
+//            echo '</pre>';
+            $sub_services = "";
+            if (!empty($get_sub_service)) {
+                foreach ($get_sub_service as $gss) {
+                    $sub_service_sinhala = (isset($gss->sub_service_sinhala) ? $gss->sub_service_sinhala : '');
+                    $sub_service_english = (isset($gss->sub_service_english) ? $gss->sub_service_english : '');
+                    $item_id = (isset($gss->id) ? $gss->id : '');
+                    $image_path = plugins_url('/icons/keyboard-right-arrow-button.png', __DIR__);
+                    $sub_services .= <<<MSG
+                            <tr>
+                                        <td><img src="$image_path"width="28%" ></td>
+                                        <td><p>$sub_service_sinhala | $sub_service_english</p></td>
+                                        <td class="pricetd"></p>
+                                            <div class="form-check">
+                                                <input type="checkbox" value='$item_id'   class="form-check-input checkSub_Service" name="service[1][]"  id="materialUnchecked_$item_id">
+                                                <label class="form-check-label" for="materialUnchecked_$item_id"></label>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+MSG;
+                }
+            } else {
+                $sub_services = "";
+            }
             $div = "";
+
             if (!empty($get_atrology_primary)) {
                 foreach ($get_atrology_primary as $users) {
                     $first_name = $db_c->get_meta_values($users->ID, "usermeta", "first_name");
                     $last_name = $db_c->get_meta_values($users->ID, "usermeta", "last_name");
                     $phone = $db_c->get_meta_values($users->ID, "usermeta", "phone");
                     $user_src = $db_c->get_meta_values($users->ID, "usermeta", "image");
+                    $price_item = (isset($users->service_price) ? $users->service_price : '');
                     $post_array[] = array(
                         "id" => $users->ID,
                         "astrologer_name_sinhala" => $first_name->meta_value,
                         "astrologer_name_english" => $last_name->meta_value,
                         "astrologer_phone" => $phone->meta_value,
                         "astology_image" => $user_src->meta_value,
+                        "price_item" => $price_item,
                         "active" => 1,
                     );
                 }
+
                 if (!empty($post_array)) {
                     foreach ($post_array as $ps) {
                         $name_in_sinhala = (isset($ps['astrologer_name_sinhala']) ? $ps['astrologer_name_sinhala'] : '');
@@ -362,12 +402,13 @@ class My_controller extends Core_controller {
                         $image_array = wp_get_attachment_image_src((isset($ps['astology_image']) ? $ps['astology_image'] : ''), $default);
                         $image_path = (!empty($image_array[0]) ? $image_array[0] : '');
                         $user_id = (isset($ps['id']) ? $ps['id'] : '');
+                        $price_value = (isset($ps['price_item']) ? $ps['price_item'] : '');
 
                         $div .= <<<MSG
                         <div class="col-lg-4">
                         <div class="astrolger_div">
                             <div class="form-check" style="position:absolute">
-                                <input type="checkbox" value='$user_id' class="form-check-input checkUser" name="users[1][]"  id="materialUncheckedU_$user_id">
+                                <input type="checkbox" value='$user_id' class="form-check-input checkUser" data-value='$price_value'  name="users[1][]"  id="materialUncheckedU_$user_id">
                                 <label class="form-check-label" for="materialUncheckedU_$user_id"></label>
                             </div>
                             <img src="$image_path">
@@ -382,10 +423,134 @@ MSG;
                 }
                 $json['msg_type'] = "OK";
                 $json['return_div'] = $div;
+                $json['sub_services'] = $sub_services;
             }
         } else {
             $json['msg_type'] = "ERR";
             $json['msg'] = "Something went wrong please try again later";
+        }
+        echo json_encode($json);
+        exit();
+    }
+
+    function nr_nl_save_sub_services() {
+        $json = array();
+        $msg = new Massage_class();
+        $selected_service = (isset($_POST['service_select']) ? $_POST['service_select'] : '');
+        $sub_service_english = (isset($_POST['sub-service-english']) ? $_POST['sub-service-english'] : '');
+        $sub_service_sinhala = (isset($_POST['sub-service-sinhala']) ? $_POST['sub-service-sinhala'] : '');
+
+        //validations
+        if ($selected_service != "") {
+            if ($sub_service_english != "") {
+                if ($sub_service_sinhala != "") {
+                    $db_c = new Db_functions();
+                    $insert_param = array(
+                        "service_id" => $selected_service,
+                        "sub_service_sinhala" => $sub_service_sinhala,
+                        "sub_service_english" => $sub_service_english,
+                        "active" => 1
+                    );
+
+                    $save_sub_service = $db_c->insert_data("sub_services", $insert_param);
+
+                    if (!empty($save_sub_service)) {
+                        $json['msg_type'] = "OK";
+                        $json['msg'] = "Successfully Created New Sub Category";
+                    } else {
+                        $json['msg_type'] = "ERR";
+                        $json['msg'] = "Sorry Something Went Wrong with your request";
+                    }
+                } else {
+                    $json['msg_type'] = "ERR";
+                    $json['msg'] = $msg->validation_errors("required", "Sub Service Name in Sinhala");
+                }
+            } else {
+                $json['msg_type'] = "ERR";
+                $json['msg'] = $msg->validation_errors("required", "Sub Service Name in English");
+            }
+        } else {
+            $json['msg_type'] = "ERR";
+            $json["msg"] = $msg->validation_errors("required", 'Desired Service', "You Should Select a Service to add a Sub Service");
+        }
+        echo json_encode($json);
+        exit();
+    }
+
+    public function nr_nl_get_service_astrologer() {
+        $json = array();
+        $item_id = (isset($_POST['item_id']) ? $_POST['item_id'] : '');
+        $db_c = new Db_functions();
+        $get_services_astrologer = $db_c->get_services_for_user($item_id);
+//        echo '<pre>';
+//        print_r($get_services_astrologer);
+//        echo '</pre>';
+        $div_content = "";
+        if (!empty($get_services_astrologer)) {
+            $x = 0;
+            foreach ($get_services_astrologer as $gsa) {
+                $x++;
+                $service_name = (($gsa->service_name_en != "") ? $gsa->service_name_en : '') . " | " . (($gsa->service_name_si != "") ? $gsa->service_name_si : '');
+                $map_id = (($gsa->mapId != "") ? $gsa->mapId : '');
+                $service_price = (($gsa->price_service != "") ? $gsa->price_service : '');
+                $div_content .= <<<MSG
+                <div class="form-group row">
+                    <div class="col-lg-12">
+                        <label class="required">$service_name</label>
+                        <input type="hidden" name="astrologer[services][$x][mapId]" value="$map_id">
+                        <input type="text" name="astrologer[services][$x][servicePrice]" placeholder="Enter Price" class="form-control" value="$service_price">
+                    </div>
+                </div>
+MSG;
+            }
+            $json['msg_type'] = "OK";
+            $json['msg'] = "Successs";
+            $json['div_content'] = $div_content;
+        } else {
+            $json['msg_type'] = "ERR";
+            $json['msg'] = "Sorry Something Went Wrong";
+        }
+        echo json_encode($json);
+        exit();
+    }
+
+    public function nr_nl_submit_pricess() {
+        $json = array();
+        $service_array = ((isset($_POST['astrologer']["services"]) ? $_POST['astrologer']["services"] : ''));
+//        echo count($service_array);
+        $item_okay = false;
+        if (!empty($service_array)) {
+//            echo 'nirosh';
+            $x = 0;
+            for ($i = 0; count($service_array) > $i; $i++) {
+                $x++;
+                if ($service_array[$x]['servicePrice'] != "") {
+                    $item_okay = true;
+                } else {
+                    $item_okay = false;
+                    break;
+                }
+            }
+            $db_c = new Db_functions();
+            if ($item_okay) {
+                $inc = 0;
+                for ($i = 0; count($service_array) > $i; $i++) {
+                    $inc++;
+                    $item_id = $service_array[$inc]['mapId'];
+                    $price_value = $service_array[$inc]['servicePrice'];
+                    $update_values = $db_c->update_items("service_map", "id", $item_id, array(
+                        "service_price" => $price_value,
+                    ));
+                }
+                $json['msg_type'] = "OK";
+                $json['msg'] = "Successfully Update the prices";
+            } else {
+                $json['msg_type'] = "ERR";
+                $json['msg'] = "Sorry You Have to fill everything in this Form";
+            }
+        } else {
+            $json['msg_type'] = "ERR";
+            $json['msg'] = "Sorry Something Went Wrong with my request";
         }
         echo json_encode($json);
         exit();

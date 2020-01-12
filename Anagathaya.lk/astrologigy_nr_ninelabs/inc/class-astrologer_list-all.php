@@ -116,7 +116,7 @@ class NineAstrologyServces extends WP_List_Table {
 
         $action = array(
             "edit" => "<a href='" . home_url() . "/wp-admin/user-edit.php?user_id=" . $item['id'] . "?'><button class='admin_list_button edit-items' value='" . $item['id'] . "' " . (($item['active'] != 1) ? 'disabled="" title="Please Activate this item first"' : "") . ">Edit</button></a>",
-//            "deactivate" => (($item['active'] == 1) ? "<button class='admin_list_button deactivate-items' value='" . $item['id'] . "' >Deactivate</button>" : "<button class='admin_list_button enable-items' value='" . $item['id'] . "' >Activate</button>"),
+            "change_price" => "<button class='admin_list_button change-price' value='" . $item['id'] . "' >Change Price</button>",
             "delete" => "<button class='admin_list_button delete-items' value='" . $item['id'] . "' >Delete</button>",
         );
 
