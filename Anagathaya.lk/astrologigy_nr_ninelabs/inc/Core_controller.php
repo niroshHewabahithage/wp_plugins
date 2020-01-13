@@ -69,6 +69,7 @@ class Core_controller {
         global $table_name;
         global $table_name2;
         global $table_name3;
+        global $table_name4;
         global $fis_db_version;
         global $wpdb;
 
@@ -110,7 +111,36 @@ class Core_controller {
   `edited_date` timestamp NULL DEFAULT current_timestamp() ON UPDATE CURRENT_TIMESTAMP,
   `remark` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-)$charset_collate;";
+)$charset_collate;CREATE TABLE $table_name4 (
+  `id` int(11) NOT NULL,
+  `service_id` int(11) DEFAULT NULL,
+  `sub_service_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `name` text,
+  `gender` text,
+  `birth_year` text,
+  `birth_month` text,
+  `birth_day` text,
+  `birth_hour` text,
+  `birth_minute` text,
+  `birth_place` text,
+  `par_name` text,
+  `par_gender` text,
+  `par_birth_year` text,
+  `par_birth_month` text,
+  `par_birth_day` text,
+  `par_birth_hour` text,
+  `par_birth_minute` text,
+  `par_birth_place` text,
+  `need_partner` int(11) DEFAULT NULL,
+  `active` int(11) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `edited_by` int(11) DEFAULT NULL,
+  `edited_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `remark` text,
+  PRIMARY KEY (`id`)
+) $charset_collate;";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta($sql);

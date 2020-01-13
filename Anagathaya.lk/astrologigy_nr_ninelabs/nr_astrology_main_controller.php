@@ -12,12 +12,14 @@
 global $table_name;
 global $table_name2;
 global $table_name3;
+global $table_name4;
 global $fis_db_version;
 $fis_db_version = '1.0.0';
 global $wpdb;
 $table_name = $wpdb->prefix . "services";
 $table_name2 = $wpdb->prefix . "service_map";
 $table_name3 = $wpdb->prefix . "sub_services";
+$table_name4 = $wpdb->prefix . "customer_requests";
 
 
 //inlcudes
@@ -133,3 +135,5 @@ add_action("wp_ajax_submit_prices_astrologer", array($myCon, "nr_nl_submit_price
 
 //get sub services 
 //add_action("wp_ajax_nopriv_get_sub_service");
+//submit astrology_form
+add_action("wp_ajax_nopriv_submit_form_data", array($myCon, "nr_nl_submit_astro_form"));

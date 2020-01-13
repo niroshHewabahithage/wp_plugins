@@ -3,6 +3,8 @@
         $(".checkService").attr("checked", false);
         $(".checkUser").attr("checked", false);
         $(".checkService").click(function () {
+            $("#need_partner").val(0);
+            $("#have_sub").val(0);
             $("#set_price").html("රු " + WL.format_number("000", 2));
             $("#set_strologer").html("");
             $("#select_astrolger_div").slideUp(500);
@@ -35,9 +37,11 @@
                         if (res.sub_services != "") {
                             $("#sub_service").slideDown(800);
                             $("#sub_service").find("#astrology_services").html(res.sub_services);
+                            $("#have_sub").val(1);
                         } else {
                             $("#sub_service").slideUp(800);
                             $("#sub_service").find("#astrology_services").html("");
+                            $("#have_sub").val(0);
                         }
                         setTimeout(function () {
                             $("#no_error").slideUp(800);
@@ -46,6 +50,7 @@
 
                             if (data_id == "multiple") {
                                 $("#partner_details").slideDown(500);
+                                $("#need_partner").val(1);
                             }
                             $("#set_strologer").slideDown(1500, function () {
                                 $("#set_strologer").html(res.return_div)
@@ -68,6 +73,24 @@
                                     $("#set_price").html("රු " + WL.format_number("000", 2));
                                 }
                             });
+                            $(".checkSub_Service").click(function () {
+
+                                var $box = $(this);
+                                if ($box.is(":checked")) {
+//                                    var item_id = this.value;
+//                                    var data_value = $(this).data('value');
+                                    var group = "input:checkbox[name='" + $box.attr("name") + "']";
+                                    $(group).prop("checked", false);
+                                    $box.prop("checked", true);
+//                                    $("#set_price").html("රු " + WL.format_number(data_value, 2));
+
+                                    //send ajax request
+
+                                } else {
+                                    $box.prop("checked", false);
+//                                    $("#set_price").html("රු " + WL.format_number("000", 2));
+                                }
+                            });
                         }, 800)
 
 
@@ -84,6 +107,30 @@
             } else {
                 $box.prop("checked", false);
             }
+        });
+
+        $("#submit_values_home").click(function () {
+            var data = $("#astrology_data").serializeArray();
+            data.push({
+                name: "action",
+                value: "submit_form_data"
+            });
+            $.post(the_ajax_script.ajaxurl, data, function (response) {
+                var res = JSON.parse(response);
+                if (res.msg_type == "OK") {
+                    Notiflix.Notify.Success(res.msg);
+//                    WL.generate_function_messages("errorId", "alert-success", res.msg, "3000");
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2500);
+                } else {
+                    Notiflix.Notify.Failure(res.msg);
+//                    WL.generate_function_messages("errorId", "alert-danger", res.msg, "3000");
+                    setTimeout(function () {
+                        //location.reload();
+                    }, 2500);
+                }
+            });
         });
 
     });

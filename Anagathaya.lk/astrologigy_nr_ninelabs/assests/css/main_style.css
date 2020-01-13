@@ -391,5 +391,9 @@ p.infoTextCheckout {
 }
 
 .checked {
-  color: orange;
+    color: orange;
+}
+
+.cursor_view{
+    cursor: pointer;
 }

@@ -364,7 +364,7 @@ class My_controller extends Core_controller {
                                         <td><p>$sub_service_sinhala | $sub_service_english</p></td>
                                         <td class="pricetd"></p>
                                             <div class="form-check">
-                                                <input type="checkbox" value='$item_id'   class="form-check-input checkSub_Service" name="service[1][]"  id="materialUnchecked_$item_id">
+                                                <input type="checkbox" value='$item_id'   class="form-check-input checkSub_Service" name="Subservice"  id="materialUnchecked_$item_id">
                                                 <label class="form-check-label" for="materialUnchecked_$item_id"></label>
                                             </div>
 
@@ -408,7 +408,7 @@ MSG;
                         <div class="col-lg-4">
                         <div class="astrolger_div">
                             <div class="form-check" style="position:absolute">
-                                <input type="checkbox" value='$user_id' class="form-check-input checkUser" data-value='$price_value'  name="users[1][]"  id="materialUncheckedU_$user_id">
+                                <input type="checkbox" value='$user_id' class="form-check-input checkUser" data-value='$price_value'  name="users"  id="materialUncheckedU_$user_id">
                                 <label class="form-check-label" for="materialUncheckedU_$user_id"></label>
                             </div>
                             <img src="$image_path">
@@ -551,6 +551,239 @@ MSG;
         } else {
             $json['msg_type'] = "ERR";
             $json['msg'] = "Sorry Something Went Wrong with my request";
+        }
+        echo json_encode($json);
+        exit();
+    }
+
+    public function nr_nl_submit_astro_form() {
+        $json = array();
+        //validating_form
+        $msg = new Massage_class();
+        $service_id = ((isset($_POST['service']) ? $_POST['service'] : ''));
+        if ($service_id != "") {
+            $is_sub_service = false;
+            $have_sub_service = (isset($_POST['have_sub']) ? $_POST['have_sub'] : '');
+            if ($have_sub_service != "" && $have_sub_service == "1") {
+                $sub_service = (isset($_POST['Subservice']) ? $_POST['Subservice'] : '');
+                if ($sub_service != "") {
+                    $is_sub_service = true;
+                } else {
+                    $json['msg_type'] = "ERR";
+                    $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබට අවශ්‍ය උප සේවාව තෝරන්න | Please Select a Sub Service which you want to get");
+                }
+            } else {
+                $is_sub_service = true;
+            }
+            if ($is_sub_service) {
+                $user_id = (isset($_POST['users']) ? $_POST['users'] : '');
+                if ($user_id != "") {
+                    $name = (isset($_POST['name']) ? $_POST['name'] : '');
+                    if ($name != "") {
+                        $gender = (isset($_POST['gender']) ? $_POST['gender'] : '');
+                        if ($gender != "") {
+                            $year = (isset($_POST['year']) ? $_POST['year'] : '');
+                            if ($year != "") {
+                                if (is_numeric($year)) {
+                                    $month = (isset($_POST['bmonth']) ? $_POST['bmonth'] : '');
+                                    if ($month != "") {
+                                        $date = (isset($_POST['day']) ? $_POST['day'] : '');
+                                        if ($date != "") {
+                                            if (is_numeric($date)) {
+                                                $hours = (isset($_POST['hours']) ? $_POST['hours'] : '');
+                                                if ($hours != "") {
+                                                    if (is_numeric($hours)) {
+                                                        if ($hours < 24) {
+                                                            $minutes = (isset($_POST['minutes']) ? $_POST['minutes'] : '');
+                                                            if ($minutes != "") {
+                                                                if (is_numeric($minutes)) {
+                                                                    if ($minutes < 60) {
+                                                                        $birthPlace = (isset($_POST['birthPlace']) ? $_POST['birthPlace'] : '');
+                                                                        if ($birthPlace != "") {
+                                                                            $need_partner = (isset($_POST['need_partner']) ? $_POST['need_partner'] : '');
+                                                                            $_isneed_partner = false;
+                                                                            if ($need_partner != "" || $need_partner != "1") {
+                                                                                $Pname = (isset($_POST['pname']) ? $_POST['pname'] : '');
+                                                                                if ($Pname != "") {
+                                                                                    $Pgender = (isset($_POST['pgender']) ? $_POST['pgender'] : '');
+                                                                                    if ($Pgender != "") {
+                                                                                        $Pyear = (isset($_POST['pyear']) ? $_POST['pyear'] : '');
+                                                                                        if ($Pyear != "") {
+                                                                                            if (is_numeric($Pyear)) {
+                                                                                                $pmonth = (isset($_POST['pmonth']) ? $_POST['pmonth'] : '');
+                                                                                                if ($month != "") {
+                                                                                                    $pdate = (isset($_POST['pday']) ? $_POST['pday'] : '');
+                                                                                                    if ($pdate != "") {
+                                                                                                        if (is_numeric($pdate)) {
+                                                                                                            $phours = (isset($_POST['phours']) ? $_POST['phours'] : '');
+                                                                                                            if ($phours != "") {
+                                                                                                                if (is_numeric($phours)) {
+                                                                                                                    if ($phours < 24) {
+                                                                                                                        $pminutes = (isset($_POST['pminutes']) ? $_POST['pminutes'] : '');
+                                                                                                                        if ($pminutes != "") {
+                                                                                                                            if (is_numeric($pminutes)) {
+                                                                                                                                if ($pminutes < 60) {
+                                                                                                                                    $pbirthPlace = (isset($_POST['pbirthPlace']) ? $_POST['pbirthPlace'] : '');
+                                                                                                                                    if ($pbirthPlace != "") {
+                                                                                                                                        $_isneed_partner = true;
+                                                                                                                                    } else {
+                                                                                                                                        $json['msg_type'] = "ERR";
+                                                                                                                                        $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ සහකරු  උපන් ස්ථානය ඇතුලත් කරන්න | Please Enter your partner's Birth Place");
+                                                                                                                                    }
+                                                                                                                                } else {
+                                                                                                                                    $json['msg_type'] = "ERR";
+                                                                                                                                    $json['msg'] = $msg->validation_errors("required", "Service", "ඔබ ඇතුලත් කල මිනිත්තු වැරදි කරුණාකර නැවත උත්සහ කරන්න | The Minutes that you entered is wrong, please enter a correct value");
+                                                                                                                                }
+                                                                                                                            } else {
+                                                                                                                                $json['msg_type'] = "ERR";
+                                                                                                                                $json['msg'] = $msg->validation_errors("required", "Service", "සමාවන්න උපන් මිනිත්තු සදහා අංක පමණක් වලංගුවේ | Sorry only numbers are accepted in birth minutes");
+                                                                                                                            }
+                                                                                                                        } else {
+                                                                                                                            $json['msg_type'] = "ERR";
+                                                                                                                            $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ සහකරු  උපන් වෙලාවේ මිනිත්තු ඇතුලත් කරන්න | Please Enter Brith Minute");
+                                                                                                                        }
+                                                                                                                    } else {
+                                                                                                                        $json['msg_type'] = "ERR";
+                                                                                                                        $json['msg'] = $msg->validation_errors("required", "Service", "ඔබ ඇතුලත් කල පැය  වැරදි කරුණාකර නැවත උත්සහ කරන්න  | The Hour that you entered is wrong, please enter a correct value");
+                                                                                                                    }
+                                                                                                                } else {
+                                                                                                                    $json['msg_type'] = "ERR";
+                                                                                                                    $json['msg'] = $msg->validation_errors("required", "Service", "සමාවන්න උපන් පැය සදහා අංක පමණක් වලංගුවේ | Sorry only numbers are accepted in  birth hour");
+                                                                                                                }
+                                                                                                            } else {
+                                                                                                                $json['msg_type'] = "ERR";
+                                                                                                                $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ සහකරුගේ උපන් පැය ඇතුලත් කරන්න  | Please Enter Your Partner's Birth Hour");
+                                                                                                            }
+                                                                                                        } else {
+                                                                                                            $json['msg_type'] = "ERR";
+                                                                                                            $json['msg'] = $msg->validation_errors("required", "Service", "සමාවන්න  උපන් දිනය සදහා අංක පමණක් වලංගුවේ | Sorry only numbers are accepted in birth date");
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        $json['msg_type'] = "ERR";
+                                                                                                        $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ සහකරුගේ  උපන් දිනය ඇතුලත් කරන්න | Please Enter Your Partner's Birth Date");
+                                                                                                    }
+                                                                                                } else {
+                                                                                                    $json['msg_type'] = "ERR";
+                                                                                                    $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ සහකරුගේ උපන් මාසය ඇතුලත් කරන්න | Please Select your Partner Birth Month");
+                                                                                                }
+                                                                                            } else {
+                                                                                                $json['msg_type'] = "ERR";
+                                                                                                $json['msg'] = $msg->validation_errors("required", "Service", "සමාවන්න උපන් වර්ෂය සදහා අංක පමණක් වලංගුවේ | Sorry only numbers are accepted in birth year");
+                                                                                            }
+                                                                                        } else {
+                                                                                            $json['msg_type'] = "ERR";
+                                                                                            $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ සහකරුගේ උපන් වර්ෂය ඇතුලත් කරන්න | Please Enter Your Partner's Birth Year");
+                                                                                        }
+                                                                                    } else {
+                                                                                        $json['msg_type'] = "ERR";
+                                                                                        $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ සහකරුගේ ස්ත්‍රී පුරුෂ භාවය  ඇතුලත් කරන්න | Please Enter your Partner Gender");
+                                                                                    }
+                                                                                } else {
+                                                                                    $json['msg_type'] = "ERR";
+                                                                                    $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ සහකරුගේ නම ඇතුලත් කරන්න | Please Enter your Partner Name");
+                                                                                }
+                                                                            } else {
+                                                                                $_isneed_partner = true;
+                                                                            }
+                                                                            if ($_isneed_partner) {
+                                                                                //inserting_to the db
+                                                                                $db_c = new Db_functions();
+                                                                                $add_data = array(
+                                                                                    "service_id" => ((isset($_POST['service']) ? $_POST['service'] : '')),
+                                                                                    "sub_service_id" => (isset($_POST['Subservice']) ? $_POST['Subservice'] : ''),
+                                                                                    "user_id" => (isset($_POST['users']) ? $_POST['users'] : ''),
+                                                                                    "name" => (isset($_POST['name']) ? $_POST['name'] : ''),
+                                                                                    "gender" => (isset($_POST['gender']) ? $_POST['gender'] : ''),
+                                                                                    "birth_year" => (isset($_POST['year']) ? $_POST['year'] : ''),
+                                                                                    "birth_month" => (isset($_POST['bmonth']) ? $_POST['bmonth'] : ''),
+                                                                                    "birth_day" => (isset($_POST['day']) ? $_POST['day'] : ''),
+                                                                                    "birth_hour" => (isset($_POST['hours']) ? $_POST['hours'] : ''),
+                                                                                    "birth_minute" => (isset($_POST['minutes']) ? $_POST['minutes'] : ''),
+                                                                                    "birth_place" => (isset($_POST['birthPlace']) ? $_POST['birthPlace'] : ''),
+                                                                                    "par_name" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['pname']) ? $_POST['pname'] : '') : '') : ''),
+                                                                                    "par_gender" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['pgender']) ? $_POST['pgender'] : '') : '') : ''),
+                                                                                    "par_birth_year" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['pyear']) ? $_POST['pyear'] : '') : '') : ''),
+                                                                                    "par_birth_month" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['pmonth']) ? $_POST['pmonth'] : '') : '') : ''),
+                                                                                    "par_birth_day" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['pday']) ? $_POST['pday'] : '') : '') : ''),
+                                                                                    "par_birth_hour" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['phours']) ? $_POST['phours'] : '') : '') : ''),
+                                                                                    "par_birth_minute" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['pminutes']) ? $_POST['pminutes'] : '') : '') : ''),
+                                                                                    "par_birth_place" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['pbirthPlace']) ? $_POST['pbirthPlace'] : '') : '') : ''),
+                                                                                    "need_partner" => (isset($_POST['need_partner']) ? $_POST['need_partner'] : ''),
+                                                                                    "active" => 1,
+                                                                                );
+                                                                                $submit_request = $db_c->insert_data("customer_requests", $add_data);
+                                                                                if (!empty($submit_request)) {
+                                                                                    $json["msg_type"] = "OK";
+                                                                                    $json["msg"] = "Successfullt Submitted your Request";
+                                                                                } else {
+                                                                                    $json["msg_type"] = "ERR";
+                                                                                    $json["msg"] = "Something went wrong when processing your request.";
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            $json['msg_type'] = "ERR";
+                                                                            $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබ උපන් ස්ථානය ඇතුලත් කරන්න | Please Enter your Birth Place");
+                                                                        }
+                                                                    } else {
+                                                                        $json['msg_type'] = "ERR";
+                                                                        $json['msg'] = $msg->validation_errors("required", "Service", "ඔබ ඇතුලත් කල මිනිත්තු වැරදි කරුණාකර නැවත උත්සහ කරන්න | The Minutes that you entered is wrong, please enter a correct value");
+                                                                    }
+                                                                } else {
+                                                                    $json['msg_type'] = "ERR";
+                                                                    $json['msg'] = $msg->validation_errors("required", "Service", "සමාවන්න ඔබගේ උපන් මිනිත්තු සදහා අංක පමණක් වලංගුවේ | Sorry only numbers are accepted in you birth minutes");
+                                                                }
+                                                            } else {
+                                                                $json['msg_type'] = "ERR";
+                                                                $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබ උපන් වෙලාවේ මිනිත්තු ඇතුලත් කරන්න | Please Enter Brith Minute");
+                                                            }
+                                                        } else {
+                                                            $json['msg_type'] = "ERR";
+                                                            $json['msg'] = $msg->validation_errors("required", "Service", "ඔබ ඇතුලත් කල පැය  වැරදි කරුණාකර නැවත උත්සහ කරන්න  | The Hour that you entered is wrong, please enter a correct value");
+                                                        }
+                                                    } else {
+                                                        $json['msg_type'] = "ERR";
+                                                        $json['msg'] = $msg->validation_errors("required", "Service", "සමාවන්න ඔබගේ උපන් පැය සදහා අංක පමණක් වලංගුවේ | Sorry only numbers are accepted in you birth hour");
+                                                    }
+                                                } else {
+                                                    $json['msg_type'] = "ERR";
+                                                    $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ උපන් පැය ඇතුලත් කරන්න  | Please Enter Your Birth Hour");
+                                                }
+                                            } else {
+                                                $json['msg_type'] = "ERR";
+                                                $json['msg'] = $msg->validation_errors("required", "Service", "සමාවන්න ඔබගේ උපන් දිනය සදහා අංක පමණක් වලංගුවේ | Sorry only numbers are accepted in you birth date");
+                                            }
+                                        } else {
+                                            $json['msg_type'] = "ERR";
+                                            $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ උපන් දිනය ඇතුලත් කරන්න | Please Enter Your Birth Date");
+                                        }
+                                    } else {
+                                        $json['msg_type'] = "ERR";
+                                        $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ උපන් මාසය ඇතුලත් කරන්න | Please Select your Birth Month");
+                                    }
+                                } else {
+                                    $json['msg_type'] = "ERR";
+                                    $json['msg'] = $msg->validation_errors("required", "Service", "සමාවන්න ඔබගේ උපන් වර්ෂය සදහා අංක පමණක් වලංගුවේ | Sorry only numbers are accepted in you birth year");
+                                }
+                            } else {
+                                $json['msg_type'] = "ERR";
+                                $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ උපන් වර්ෂය   ඇතුලත් කරන්න | Please Enter Your Birth Year");
+                            }
+                        } else {
+                            $json['msg_type'] = "ERR";
+                            $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ ස්ත්‍රී පුරුෂ භාවය  ඇතුලත් කරන්න | Please Enter You Gender");
+                        }
+                    } else {
+                        $json['msg_type'] = "ERR";
+                        $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබේ නම ඇතුලත් කරන්න | Please Enter You Name");
+                    }
+                } else {
+                    $json['msg_type'] = "ERR";
+                    $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබට අවශ්‍ය ජෝතිර්වෙදියාව තෝරන්න | Please Select the Astrologer you want");
+                }
+            }
+        } else {
+            $json['msg_type'] = "ERR";
+            $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබට අවශ්‍ය සේවාව තෝරන්න | Please Select a Service which you want to get");
         }
         echo json_encode($json);
         exit();

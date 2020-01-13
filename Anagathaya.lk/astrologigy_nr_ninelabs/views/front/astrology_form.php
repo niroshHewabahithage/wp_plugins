@@ -16,6 +16,8 @@
             <span class="fa fa-star"></span>
             <span class="fa fa-star"></span>-->
             <form id="astrology_data">
+                <input type="hidden" name="need_partner" id="need_partner" value="0">
+                <input type="hidden" name="have_sub" id="have_sub" value="0">
                 <div class="form-group row">
                     <div class="col-lg-12">
                         <?php
@@ -35,7 +37,7 @@
                                         <td><p><?php echo $gs->service_name_si; ?>| <?php echo $gs->service_name_en; ?></p></td>
                                         <td class="pricetd"></p>
                                             <div class="form-check">
-                                                <input type="checkbox" value='<?php echo $gs->id; ?>' data-value='<?php echo $gs->service_price; ?>' data-id='<?php echo ($gs->is_multiple == 1) ? 'multiple' : ''; ?>' class="form-check-input checkService" name="service[1][]"  id="materialUnchecked_<?php echo $gs->id; ?>">
+                                                <input type="checkbox" value='<?php echo $gs->id; ?>' data-value='<?php echo $gs->service_price; ?>' data-id='<?php echo ($gs->is_multiple == 1) ? 'multiple' : ''; ?>' class="form-check-input checkService" name="service"  id="materialUnchecked_<?php echo $gs->id; ?>">
                                                 <label class="form-check-label" for="materialUnchecked_<?php echo $gs->id; ?>"></label>
                                             </div>
 
@@ -106,7 +108,7 @@
                             <input type="text" name="year" id="year" class="form-control" placeholder="අවුරුද්ද | Year">
                         </div>
                         <div class="col-lg-4">
-                            <select class="form-control" name="month" id="month">
+                            <select class="form-control" name="bmonth" id="month">
                                 <option selected="" disabled="">මාසය  | Month</option>
                                 <?php
                                 for ($m = 1; $m <= 12; ++$m) {
@@ -234,7 +236,7 @@
                             </div>
                         </div>
                         <div class="col-lg-4">
-                            <div class="light-dark-yellow border-radius">
+                            <div class="light-dark-yellow border-radius cursor_view" id="submit_values_home">
                                 <h5>තහවුරු කරන්න | Submit</h5>
                             </div>
                         </div>
