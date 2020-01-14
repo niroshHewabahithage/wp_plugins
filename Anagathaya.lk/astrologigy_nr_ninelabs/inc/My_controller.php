@@ -709,7 +709,7 @@ MSG;
                                                                                     "par_birth_minute" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['pminutes']) ? $_POST['pminutes'] : '') : '') : ''),
                                                                                     "par_birth_place" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['pbirthPlace']) ? $_POST['pbirthPlace'] : '') : '') : ''),
                                                                                     "need_partner" => (isset($_POST['need_partner']) ? $_POST['need_partner'] : ''),
-                                                                                    "active" => 1,
+                                                                                    "active" => 0,
                                                                                 );
                                                                                 $submit_request = $db_c->insert_data("customer_requests", $add_data);
                                                                                 if (!empty($submit_request)) {
@@ -784,6 +784,112 @@ MSG;
         } else {
             $json['msg_type'] = "ERR";
             $json['msg'] = $msg->validation_errors("required", "Service", "කරුණාකර ඔබට අවශ්‍ය සේවාව තෝරන්න | Please Select a Service which you want to get");
+        }
+        echo json_encode($json);
+        exit();
+    }
+
+    public function nr_nl_get_single_order() {
+        $json = array();
+        $item_id = (isset($_POST['item_value']) ? $_POST['item_value'] : '');
+        if ($item_id != "") {
+            $db_c = new Db_functions();
+            $get_single_item = $db_c->get_single_order($item_id);
+            if (!empty($get_single_item)) {
+                $service_name = (isset($get_single_item->service_name_en) ? (($get_single_item->service_name_en != "") ? $get_single_item->service_name_en : '') : '') . " " . (isset($get_single_item->service_name_si) ? (($get_single_item->service_name_si != "") ? "| " . $get_single_item->service_name_si : '') : '');
+                $sub_service_name = (isset($get_single_item->sub_service_english) ? (($get_single_item->sub_service_english != "") ? $get_single_item->sub_service_english : '') : '') . " " . (isset($get_single_item->sub_service_sinhala) ? (($get_single_item->sub_service_sinhala != "") ? "| " . $get_single_item->sub_service_sinhala : '') : '');
+                $price_value = (isset($get_single_item->service_price) ? (($get_single_item->service_price != "") ? "LKR " . number_format($get_single_item->service_price, 2) : '') : '');
+                $need_partner = (isset($get_single_item->need_partner) ? (($get_single_item->need_partner == 1) ? $get_single_item->need_partners : '') : '');
+                //requestor
+                $name = (isset($get_single_item->name) ? ($get_single_item->name != "") ? $get_single_item->name : '' : '');
+                $gender = (isset($get_single_item->gender) ? ($get_single_item->gender != "") ? $get_single_item->gender : '' : '');
+                $birthday = (isset($get_single_item->birth_year) ? ($get_single_item->birth_year != "") ? $get_single_item->birth_year : '' : '') . (isset($get_single_item->birth_month) ? (($get_single_item->birth_month != "") ? "-" . $get_single_item->birth_month : '') : '') . (isset($get_single_item->birth_day) ? (($get_single_item->birth_day != "") ? "-" . $get_single_item->birth_day : '') : '');
+                $birth_time = (isset($get_single_item->birth_hour) ? (($get_single_item->birth_hour != "") ? $get_single_item->birth_hour : '') : '') . (isset($get_single_item->birth_minute) ? (($get_single_item->birth_minute != "") ? " : " . $get_single_item->birth_minute : '') : '');
+                $birth_place = (isset($get_single_item->birth_place) ? (($get_single_item->birth_place != "") ? $get_single_item->birth_place : "") : '');
+                $table_view = "";
+                $parner_values = "";
+                //partner_values
+                if ($get_single_item->need_partner == 1) {
+                    $pname = (isset($get_single_item->par_name) ? ($get_single_item->par_name != "") ? $get_single_item->par_name : '' : '');
+                    $pgender = (isset($get_single_item->par_gender) ? ($get_single_item->par_gender != "") ? $get_single_item->par_gender : '' : '');
+                    $pbirthday = (isset($get_single_item->par_birth_year) ? ($get_single_item->par_birth_year != "") ? $get_single_item->par_birth_year : '' : '') . (isset($get_single_item->par_birth_month) ? (($get_single_item->par_birth_month != "") ? "-" . $get_single_item->par_birth_month : '') : '') . (isset($get_single_item->par_birth_day) ? (($get_single_item->par_birth_day != "") ? "-" . $get_single_item->par_birth_day : '') : '');
+                    $pbirth_time = (isset($get_single_item->birth_hour) ? (($get_single_item->par_birth_hour != "") ? $get_single_item->par_birth_hour : '') : '') . (isset($get_single_item->par_birth_minute) ? (($get_single_item->par_birth_minute != "") ? " : " . $get_single_item->par_birth_minute : '') : '');
+                    $pbirth_place = (isset($get_single_item->par_birth_place) ? (($get_single_item->par_birth_place != "") ? $get_single_item->par_birth_place : "") : '');
+
+                    $parner_values = <<<MSG
+                                <tr>
+                                    <td colspan="2" class="center_item">Partner Details</td>
+                                </tr>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>$pname</td>
+                                </tr>
+                                <tr>
+                                    <td>Gender</td>
+                                    <td>$pgender</td>
+                                </tr>
+                                <tr>
+                                    <td>Birth Date</td>
+                                    <td>$pbirthday</td>
+                                </tr>
+                                <tr>
+                                    <td>Birth Time</td>
+                                    <td>$pbirth_time Hours</td>
+                                </tr>
+                                <tr>
+                                    <td>Birth Place</td>
+                                    <td>$pbirth_place</td>
+                                </tr>
+MSG;
+                }
+                $table_view = <<<MSG
+                                <tr>
+                                    <td>Service Name</td>
+                                    <td>$service_name</td>
+                                </tr>
+                                <tr>
+                                    <td>Sub Service Name</td>
+                                    <td>$sub_service_name</td>
+                                </tr>
+                                <tr>
+                                    <td>Service Price</td>
+                                    <td>$price_value</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="center_item">Requestor Details</td>
+                                </tr>
+                                <tr>
+                                    <td>Requested Person</td>
+                                    <td>$name</td>
+                                </tr>
+                                <tr>
+                                    <td>Gender</td>
+                                    <td>$gender</td>
+                                </tr>
+                                <tr>
+                                    <td>Birth Date</td>
+                                    <td>$birthday</td>
+                                </tr>
+                                <tr>
+                                    <td>Birth Time</td>
+                                    <td>$birth_time Hours</td>
+                                </tr>
+                                <tr>
+                                    <td>Birth Place</td>
+                                    <td>$birth_place</td>
+                                </tr>
+                                    $parner_values
+MSG;
+                $json['msg_type'] = "OK";
+                $json['return_div'] = $table_view;
+                $json['return_array'] = $get_single_item;
+            } else {
+                $json["msg_type"] = "ERR";
+                $json["msg"] = "Something went wrong when processing your request.";
+            }
+        } else {
+            $json['msg_type'] = "ERR";
+            $json['msg'] = "Sorry Something Went Wrong Try Again";
         }
         echo json_encode($json);
         exit();

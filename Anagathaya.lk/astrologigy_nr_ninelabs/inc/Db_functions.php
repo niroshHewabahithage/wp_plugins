@@ -71,6 +71,18 @@ class Db_functions extends My_controller {
         return $row;
     }
 
+    function get_all_orders() {
+        global $wpdb;
+        $row = $wpdb->get_results("SELECT cr.id as order_id, cr.service_id, cr.sub_service_id, s.service_name_en, s.service_name_si, ss.sub_service_english, ss.sub_service_sinhala, cr.created_date, cr.active as request_completed, (Select meta_value from " . $wpdb->prefix . "usermeta where meta_key='first_name' AND user_id=cr.user_id) as user_name_sinhala, (Select meta_value from " . $wpdb->prefix . "usermeta where meta_key='last_name' AND user_id=cr.user_id) as user_name_english FROM " . $wpdb->prefix . "customer_requests cr LEFT JOIN " . $wpdb->prefix . "usermeta u ON cr.user_id = u.user_id LEFT JOIN " . $wpdb->prefix . "services s on cr.service_id=s.id LEFT JOIN " . $wpdb->prefix . "sub_services ss on cr.sub_service_id=ss.id group by cr.id order by cr.active ASC;");
+        return $row;
+    }
+
+    function get_all_orders_astrolger($id_user) {
+        global $wpdb;
+        $row = $wpdb->get_results("SELECT cr.id as order_id, cr.service_id, cr.sub_service_id, s.service_name_en, s.service_name_si,cr.name, ss.sub_service_english, ss.sub_service_sinhala, cr.created_date, cr.active as request_completed, (Select meta_value from " . $wpdb->prefix . "usermeta where meta_key='first_name' AND user_id=cr.user_id) as user_name_sinhala, (Select meta_value from " . $wpdb->prefix . "usermeta where meta_key='last_name' AND user_id=cr.user_id) as user_name_english FROM " . $wpdb->prefix . "customer_requests cr LEFT JOIN " . $wpdb->prefix . "usermeta u ON cr.user_id = u.user_id LEFT JOIN " . $wpdb->prefix . "services s on cr.service_id=s.id LEFT JOIN " . $wpdb->prefix . "sub_services ss on cr.sub_service_id=ss.id where cr.user_id=$id_user  group by cr.id order by cr.active ASC;");
+        return $row;
+    }
+
     function update_items($tbl_name, $contd_col, $uniqu_key, $payload) {
         global $wpdb;
         if ($uniqu_key != "" && $contd_col != "") {
@@ -160,7 +172,7 @@ class Db_functions extends My_controller {
 
     function get_user_capabilies($user_id) {
         global $wpdb;
-        $row = $wpdb->get_row("select * from " . $wpdb->prefix . "usermeta where user_id=$user_id AND meta_key='".$wpdb->prefix."capabilities'");
+        $row = $wpdb->get_row("select * from " . $wpdb->prefix . "usermeta where user_id=$user_id AND meta_key='" . $wpdb->prefix . "capabilities'");
         return $row;
     }
 
@@ -181,6 +193,13 @@ class Db_functions extends My_controller {
         global $wpdb;
         $select_colomn = "*";
         $row = $wpdb->get_results("SELECT $select_colomn from " . $wpdb->prefix . "sub_services where service_id=$id_service");
+        return $row;
+    }
+
+    function get_single_order($order_id) {
+        global $wpdb;
+        $select_colomn = "s.service_name_en, s.service_name_si, ss.sub_service_english, ss.sub_service_sinhala, sm.service_price, cr.*";
+        $row = $wpdb->get_row("SELECT $select_colomn FROM " . $wpdb->prefix . "customer_requests cr LEFT JOIN " . $wpdb->prefix . "services s ON cr.service_id = s.id LEFT JOIN " . $wpdb->prefix . "sub_services ss on cr.sub_service_id=ss.id LEFT JOIN " . $wpdb->prefix . "service_map sm on cr.service_id=sm.id_service where cr.id=$order_id group by cr.id");
         return $row;
     }
 

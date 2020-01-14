@@ -44,7 +44,26 @@ function nr_nl_astrology_admin_menu() {
     //attributes Sub Manu
     add_submenu_page("services-manager", 'Add Sub Service', "Add Sub Service", 'manage_options', 'service-add-sub-service', array($load_view, 'nr_nl_service_sub_services'));
     add_submenu_page("services-manager", 'Add Astrologer', "Add Astrologer", 'manage_options', 'service-add-astrologer', array($load_view, 'nr_nl_service_users'));
+    add_submenu_page("services-manager", 'All Orders', "All Orders", 'manage_options', 'all-recived-orders', array($load_view, 'nr_nl_all_orders'));
     //##############################################################################################################################
+    $current_user = wp_get_current_user();
+//    echo '<pre>';
+//    print_r($current_user);
+//    echo '</pre>';
+    if (is_user_logged_in()) {
+        $user = wp_get_current_user();
+        $roles = (array) $user->roles;
+        if ($roles[0] == 'subscriber') {
+            add_menu_page('Your Orders', 'Your Orders', 'subscriber', 'astrologer-orders', array($load_view, 'nr_nl_your_orders'), plugins_url('icons/customer.png', __FILE__));
+            //attributes Sub Manu
+//            add_submenu_page("astrologer-orders", 'Add Sub Service', "Add Sub Service", 'subscriber', 'service-add-sub-service', array($load_view, 'nr_nl_service_sub_services'));
+//            add_submenu_page("astrologer-orders", 'Add Astrologer', "Add Astrologer", 'subscriber', 'service-add-astrologer', array($load_view, 'nr_nl_service_users'));
+//            add_submenu_page("astrologer-orders", 'All Orders', "All Orders", 'subscriber', 'all-recived-orders', array($load_view, 'nr_nl_all_orders'));
+        }
+        //return $roles; // This returns an array
+        // Use this to return a single value
+        // return $roles[0];
+    }
 }
 
 add_action('admin_menu', 'nr_nl_astrology_admin_menu');
@@ -137,3 +156,7 @@ add_action("wp_ajax_submit_prices_astrologer", array($myCon, "nr_nl_submit_price
 //add_action("wp_ajax_nopriv_get_sub_service");
 //submit astrology_form
 add_action("wp_ajax_nopriv_submit_form_data", array($myCon, "nr_nl_submit_astro_form"));
+
+
+//astrologer dashoard 
+add_action("wp_ajax_get_single_order", array($myCon, 'nr_nl_get_single_order'));

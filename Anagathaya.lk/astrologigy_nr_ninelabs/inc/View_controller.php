@@ -44,6 +44,31 @@ class View_controller extends My_controller {
         include plugin_dir_path(__DIR__) . 'views/admin/users/templates/edit_user.php';
     }
 
+    function nr_nl_all_orders() {
+        wp_enqueue_script('_nr_lw_new_users_js', plugins_url("assests/js/new_users.js", __DIR__), array('jquery'), 1.1, true);
+        wp_localize_script('_nr_lw_new_users_js', 'the_ajax_script', array('ajaxurl' => admin_url('admin-ajax.php')));
+        ob_start();
+        include_once plugin_dir_path(__FILE__) . '/class-all-orders.php';
+        $template = ob_get_contents();
+        ob_end_clean();
+        $db_c = new Db_functions;
+        $get_services = $db_c->get_all("services");
+        include plugin_dir_path(__DIR__) . 'views/admin/orders/layout.php';
+    }
+
+    //custom_user
+    function nr_nl_your_orders() {
+        wp_enqueue_script('_nr_lw_list_orders_js', plugins_url("assests/js/list_orders.js", __DIR__), array('jquery'), 1.1, true);
+        wp_localize_script('_nr_lw_list_orders_js', 'the_ajax_script', array('ajaxurl' => admin_url('admin-ajax.php')));
+        ob_start();
+        include_once plugin_dir_path(__FILE__) . '/class-astrologer-orders.php';
+        $template = ob_get_contents();
+        ob_end_clean();
+        $db_c = new Db_functions;
+        $get_services = $db_c->get_all("services");
+        include plugin_dir_path(__DIR__) . 'views/admin/orders/layout.php';
+    }
+
     // front end 
     function nr_nl_astrology_form() {
         wp_enqueue_script('_nr_lw_astrology_form_js', plugins_url("assests/js/astrology_form.js", __DIR__), array('jquery'), 1.1, true);
@@ -56,13 +81,13 @@ class View_controller extends My_controller {
     }
 
     function nr_nl_service_sub_services() {
-         wp_enqueue_script('_nr_lw_astrology_sub_services_js', plugins_url("assests/js/sub_services.js", __DIR__), array('jquery'), 1.1, true);
+        wp_enqueue_script('_nr_lw_astrology_sub_services_js', plugins_url("assests/js/sub_services.js", __DIR__), array('jquery'), 1.1, true);
         wp_localize_script('_nr_lw_astrology_sub_services_js', 'the_ajax_script', array('ajaxurl' => admin_url('admin-ajax.php')));
-    
+
         //db_functions
         $db_c = new Db_functions();
         $get_services = $db_c->get_all("services");
         include plugin_dir_path(__DIR__) . 'views/admin/sub_services/layout.php';
-        }
+    }
 
 }

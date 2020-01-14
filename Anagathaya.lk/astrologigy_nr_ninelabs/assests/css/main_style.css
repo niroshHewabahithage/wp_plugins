@@ -397,3 +397,12 @@ p.infoTextCheckout {
 .cursor_view{
     cursor: pointer;
 }
+
+#custom-show-table td{
+    border: 1px solid #000;
+    padding: 10px;
+}
+
+.center_item{
+    text-align: center;
+}
