@@ -105,7 +105,21 @@
                             <label>උපන් දිනය | Birthday</label>
                         </div>
                         <div class="col-lg-4">
-                            <input type="text" name="year" id="year" class="form-control" placeholder="අවුරුද්ද | Year">
+                            <select class="form-control" name="year" id="year">
+                                <option selected="" disabled="">අවුරුද්ද | Year</option>
+                                <?php
+                                $curr_year = date("Y");
+                                $year_diff = ($curr_year - 1900);
+                                $date_inc = 1900;
+                                for ($m = 1; $m <= $year_diff; ++$m) {
+                                    $date_inc++;
+                                    ?>
+                                    <option class="<?php echo $date_inc; ?>"><?php echo $date_inc; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                            <!--<input type="text" name="year" id="year" class="form-control" placeholder="අවුරුද්ද | Year">-->
                         </div>
                         <div class="col-lg-4">
                             <select class="form-control" name="bmonth" id="month">
@@ -120,7 +134,17 @@
                             </select>
                         </div>
                         <div class="col-lg-4">
-                            <input type="text" name="day" id="day" class="form-control" placeholder="දිනය  | Day">
+                            <select class="form-control" name="day" id="day">
+                                <option selected="" disabled="">දිනය  | Day</option>
+                                <?php
+                                for ($m = 1; $m <= 31; ++$m) {
+                                    ?>
+                                    <option class="<?php echo $m; ?>"><?php echo $m; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                            <!--<input type="text" name="day" id="day" class="form-control" placeholder="දිනය  | Day">-->
                         </div>
                     </div>
                     <div class="form-group row">
@@ -140,7 +164,27 @@
                             <label>උපන් ස්ථානය | Birth Place</label>
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <input type="text" name="birthPlace" id="birthPlace" class="form-control" placeholder="උපන් ස්ථානය |Birthday Place">
+                                    <?php
+                                    if (isset($get_districts) && !empty($get_districts) && $get_districts != "" && $get_districts != null) {
+                                        ?>
+                                        <select class="form-control" name="birthPlace" id="birthPlace">
+                                            <option selected="" disabled="">උපන් ස්ථානය |Birthday Place</option>
+                                            <?php
+                                            foreach ($get_districts as $gd) {
+                                                ?>
+                                                <option class="<?php echo (isset($gd->name_en) ? $gd->name_en : ''); ?>"><?php echo (isset($gd->name_en) ? $gd->name_en : '') . (isset($gd->name_si) ? "| " . $gd->name_si : ''); ?></option>
+                                                <?php
+                                            }
+                                            ?>
+
+                                        </select>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <input type="text" name="birthPlace" id="birthPlace" class="form-control" placeholder="උපන් ස්ථානය |Birthday Place">
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
 
                             </div>
@@ -174,7 +218,21 @@
                             <label>උපන් දිනය | Birthday</label>
                         </div>
                         <div class="col-lg-4">
-                            <input type="text" name="pyear" id="pyear" class="form-control" placeholder="අවුරුද්ද | Year">
+                            <select class="form-control" name="pyear" id="pyear">
+                                <option selected="" disabled="">අවුරුද්ද | Year</option>
+                                <?php
+                                $curr_year = date("Y");
+                                $year_diff = ($curr_year - 1900);
+                                $date_inc = 1900;
+                                for ($m = 1; $m <= $year_diff; ++$m) {
+                                    $date_inc++;
+                                    ?>
+                                    <option class="<?php echo $date_inc; ?>"><?php echo $date_inc; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
+                            <!--<input type="text" name="pyear" id="pyear" class="form-control" placeholder="අවුරුද්ද | Year">-->
                         </div>
                         <div class="col-lg-4">
                             <select class="form-control" name="pmonth" id="pmonth">
@@ -189,7 +247,16 @@
                             </select>
                         </div>
                         <div class="col-lg-4">
-                            <input type="text" name="pday" id="pday" class="form-control" placeholder="දිනය  | Day">
+                            <select class="form-control" name="pday" id="pday">
+                                <option selected="" disabled="">දිනය  | Day</option>
+                                <?php
+                                for ($m = 1; $m <= 31; ++$m) {
+                                    ?>
+                                    <option class="<?php echo $m; ?>"><?php echo $m; ?></option>
+                                    <?php
+                                }
+                                ?>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -209,13 +276,42 @@
                             <label>උපන් ස්ථානය | Birth Place</label>
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <input type="text" name="pbirthPlace" id="pbirthPlace" class="form-control" placeholder="උපන් ස්ථානය |Birthday Place">
+                                    <?php
+                                    if (isset($get_districts) && !empty($get_districts) && $get_districts != "" && $get_districts != null) {
+                                        ?>
+                                        <select class="form-control" name="pbirthPlace" id="pbirthPlace">
+                                            <option selected="" disabled="">උපන් ස්ථානය |Birthday Place</option>
+                                            <?php
+                                            foreach ($get_districts as $gd) {
+                                                ?>
+                                                <option class="<?php echo (isset($gd->name_en) ? $gd->name_en : ''); ?>"><?php echo (isset($gd->name_en) ? $gd->name_en : '') . (isset($gd->name_si) ? "| " . $gd->name_si : ''); ?></option>
+                                                <?php
+                                            }
+                                            ?>
+
+                                        </select>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <input type="text" name="pbirthPlace" id="pbirthPlace" class="form-control" placeholder="උපන් ස්ථානය |Birthday Place">
+                                        <?php
+                                    }
+                                    ?>
                                 </div>
 
                             </div>
                         </div>
                     </div>
                 </div>
+                <div id="other_information">
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <label>වෙනත් විස්තර | Other Information</label>
+                            <textarea class="form-control" name="other_info" id="other_info" rows="5" placeholder="වෙනත් විස්තර ඇතුලත් කරන්න | Enter Other Information"></textarea>
+                        </div>
+                    </div>
+                </div>
+
                 <?php
                 if (isset($get_services) && !empty($get_services) && $get_services != "" && $get_services != "") {
                     ?>

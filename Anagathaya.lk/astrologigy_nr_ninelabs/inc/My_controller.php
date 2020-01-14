@@ -709,6 +709,7 @@ MSG;
                                                                                     "par_birth_minute" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['pminutes']) ? $_POST['pminutes'] : '') : '') : ''),
                                                                                     "par_birth_place" => (isset($_POST['need_partner']) ? (($_POST['need_partner'] == 1) ? (isset($_POST['pbirthPlace']) ? $_POST['pbirthPlace'] : '') : '') : ''),
                                                                                     "need_partner" => (isset($_POST['need_partner']) ? $_POST['need_partner'] : ''),
+                                                                                    "other_information" => (isset($_POST['other_info']) ? $_POST['other_info'] : ''),
                                                                                     "active" => 0,
                                                                                 );
                                                                                 $submit_request = $db_c->insert_data("customer_requests", $add_data);
@@ -800,6 +801,7 @@ MSG;
                 $sub_service_name = (isset($get_single_item->sub_service_english) ? (($get_single_item->sub_service_english != "") ? $get_single_item->sub_service_english : '') : '') . " " . (isset($get_single_item->sub_service_sinhala) ? (($get_single_item->sub_service_sinhala != "") ? "| " . $get_single_item->sub_service_sinhala : '') : '');
                 $price_value = (isset($get_single_item->service_price) ? (($get_single_item->service_price != "") ? "LKR " . number_format($get_single_item->service_price, 2) : '') : '');
                 $need_partner = (isset($get_single_item->need_partner) ? (($get_single_item->need_partner == 1) ? $get_single_item->need_partners : '') : '');
+                $other_infp = (isset($get_single_item->other_information) ? (($get_single_item->other_information != "") ? $get_single_item->other_information : '') : '');
                 //requestor
                 $name = (isset($get_single_item->name) ? ($get_single_item->name != "") ? $get_single_item->name : '' : '');
                 $gender = (isset($get_single_item->gender) ? ($get_single_item->gender != "") ? $get_single_item->gender : '' : '');
@@ -879,6 +881,10 @@ MSG;
                                     <td>$birth_place</td>
                                 </tr>
                                     $parner_values
+                                <tr>
+                                    <td>Other Information</td>
+                                    <td>$other_infp</td>
+                                </tr>
 MSG;
                 $json['msg_type'] = "OK";
                 $json['return_div'] = $table_view;

@@ -70,6 +70,7 @@ class Core_controller {
         global $table_name2;
         global $table_name3;
         global $table_name4;
+        global $table_name5;
         global $fis_db_version;
         global $wpdb;
 
@@ -87,10 +88,11 @@ class Core_controller {
                 `edited_date`  TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 `remark`  TEXT NULL ,
                 PRIMARY KEY (`id`)
-	) $charset_collate;CREATE TABLE $table_name2 (
+	) CHARSET=utf8;CREATE TABLE $table_name2 (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `is_user` INT(11) NULL DEFAULT NULL,
   `id_service` INT(11) NULL DEFAULT NULL,
+  `service_price` text,
   `active` INT(11) NULL DEFAULT NULL,
   `created_by` INT(11) NULL DEFAULT NULL,
   `created_date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
@@ -98,10 +100,10 @@ class Core_controller {
   `edited_date` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `remark` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-	) $charset_collate;CREATE TABLE $table_name3 (
+	) CHARSET=utf8;CREATE TABLE $table_name3 (
   `id` int(11) NOT NULL,
   `service_id` int(11) DEFAULT NULL,
-  `sub_service_sinhala` text CHARACTER SET utf8 DEFAULT NULL,
+  `sub_service_sinhala` text CHARACTER SET utf8 DEFAULT NULL ,
   `sub_service_english` text DEFAULT NULL,  
   `service_price` text DEFAULT NULL,
   `active` int(11) DEFAULT NULL,
@@ -111,7 +113,7 @@ class Core_controller {
   `edited_date` timestamp NULL DEFAULT current_timestamp() ON UPDATE CURRENT_TIMESTAMP,
   `remark` text DEFAULT NULL,
   PRIMARY KEY (`id`)
-)$charset_collate;CREATE TABLE $table_name4 (
+)CHARSET=utf8;CREATE TABLE $table_name4 (
   `id` int(11) NOT NULL,
   `service_id` int(11) DEFAULT NULL,
   `sub_service_id` int(11) DEFAULT NULL,
@@ -132,7 +134,8 @@ class Core_controller {
   `par_birth_hour` text,
   `par_birth_minute` text,
   `par_birth_place` text,
-  `need_partner` int(11) DEFAULT NULL,
+  `need_partner` int(11) DEFAULT NULL,  
+  `other_information` text,
   `active` int(11) DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
@@ -140,7 +143,13 @@ class Core_controller {
   `edited_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `remark` text,
   PRIMARY KEY (`id`)
-) $charset_collate;";
+) CHARSET=utf8;CREATE TABLE $table_name5 (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name_en` varchar(45) DEFAULT NULL,
+  `name_si` varchar(45) DEFAULT NULL,
+  `name_ta` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+ ) CHARSET=utf8;)";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
         dbDelta($sql);
@@ -150,3 +159,5 @@ class Core_controller {
 
 //    function validate_price
 }
+
+//INSERT INTO wp_districts VALUES (1,'Ampara','අම්පාර','அம்பாறை'),(2,'Anuradhapura','අනුරාධපුරය','அனுராதபுரம்'),(3,'Badulla','බදුල්ල','பதுளை'),(4,'Batticaloa','මඩකලපුව','மட்டக்களப்பு'),(5,'Colombo','කොළඹ','கொழும்பு'),(6,'Galle','ගාල්ල','காலி'),(7,'Gampaha','ගම්පහ','கம்பஹா'),(8,'Hambantota','හම්බන්තොට','அம்பாந்தோட்டை'),(9,'Jaffna','යාපනය','யாழ்ப்பாணம்'),(10,'Kalutara','කළුතර','களுத்துறை'),(11,'Kandy','මහනුවර','கண்டி'),(12,'Kegalle','කෑගල්ල','கேகாலை'),(13,'Kilinochchi','කිලිනොච්චිය','கிளிநொச்சி'),(14,'Kurunegala','කුරුණෑගල','குருணாகல்'),(15,'Mannar','මන්නාරම','மன்னார்'),(16,'Matale','මාතලේ','மாத்தளை'),(17,'Matara','මාතර','மாத்தறை'),(18,'Monaragala','මොණරාගල','மொணராகலை'),(19,'Mullaitivu','මුලතිව්','முல்லைத்தீவு'),(20,'Nuwara Eliya','නුවර එළිය','நுவரேலியா'),(21,'Polonnaruwa','පොළොන්නරුව','பொலன்னறுவை'),(22,'Puttalam','පුත්තලම','புத்தளம்'),(23,'Ratnapura','රත්නපුර','இரத்தினபுரி'),(24,'Trincomalee','ත්‍රිකුණාමලය','திருகோணமலை'),(25,'Vavuniya','වව්නියාව','வவுனியா')

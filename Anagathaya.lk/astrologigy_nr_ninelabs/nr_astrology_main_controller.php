@@ -13,6 +13,7 @@ global $table_name;
 global $table_name2;
 global $table_name3;
 global $table_name4;
+global $table_name5;
 global $fis_db_version;
 $fis_db_version = '1.0.0';
 global $wpdb;
@@ -20,6 +21,7 @@ $table_name = $wpdb->prefix . "services";
 $table_name2 = $wpdb->prefix . "service_map";
 $table_name3 = $wpdb->prefix . "sub_services";
 $table_name4 = $wpdb->prefix . "customer_requests";
+$table_name5 = $wpdb->prefix . "districts";
 
 
 //inlcudes

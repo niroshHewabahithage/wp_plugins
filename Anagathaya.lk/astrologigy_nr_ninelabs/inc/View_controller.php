@@ -77,6 +77,7 @@ class View_controller extends My_controller {
         //db functions 
         $db_c = new Db_functions();
         $get_services = $db_c->get_all("services");
+        $get_districts = $db_c->get_all("districts");
         include plugin_dir_path(__DIR__) . 'views/front/astrology_form.php';
     }
 
