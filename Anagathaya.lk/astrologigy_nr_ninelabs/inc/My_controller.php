@@ -6,17 +6,20 @@
  * @author DP5
  * Nov 27, 2019 5:04:14 PM
  */
-class My_controller extends Core_controller {
+class My_controller extends Core_controller
+{
 
-    public function __construct() {
-        
+    public function __construct()
+    {
     }
 
-    function get_print() {
+    function get_print()
+    {
         return $this->print_all();
     }
 
-    function nr_lw_save_attribute() {
+    function nr_lw_save_attribute()
+    {
         $json = array();
         $msg = new Massage_class();
         $attribute_name = (isset($_POST['attribute_name']) ? $_POST['attribute_name'] : '');
@@ -33,7 +36,8 @@ class My_controller extends Core_controller {
         exit();
     }
 
-    function nr_nl_save_service() {
+    function nr_nl_save_service()
+    {
         $json = array();
         $msg = new Massage_class();
         $service_name_sin = (isset($_POST['serviceNameSin']) ? $_POST['serviceNameSin'] : '');
@@ -43,29 +47,19 @@ class My_controller extends Core_controller {
 
         if (!empty($service_name_sin)) {
             if (!empty($service_name_en)) {
-                if (!empty($service_price)) {
-                    if (is_numeric($service_price)) {
-                        $add_params = array(
-                            "service_name_si" => ($service_name_sin),
-                            "service_name_en" => ($service_name_en),
-                            "service_price" => ($service_price),
-                            "is_multiple" => ($service_multiple),
-                            "active" => 1
-                        );
+                $add_params = array(
+                    "service_name_si" => ($service_name_sin),
+                    "service_name_en" => ($service_name_en),
+                    "service_price" => ($service_price),
+                    "is_multiple" => ($service_multiple),
+                    "active" => 1
+                );
 
-                        $db_c = new Db_functions();
-                        $save_service = $db_c->insert_data('services', $add_params);
-                        if (!empty($save_service)) {
-                            $json["msg_type"] = "OK";
-                            $json["msg"] = "Successfully Saved the Service";
-                        } else {
-                            $json["msg_type"] = "ERR";
-                            $json["msg"] = "Something went wrong when processing your request.";
-                        }
-                    } else {
-                        $json["msg_type"] = "ERR";
-                        $json["msg"] = $msg->validation_errors("numeric", "Service Price");
-                    }
+                $db_c = new Db_functions();
+                $save_service = $db_c->insert_data('services', $add_params);
+                if (!empty($save_service)) {
+                    $json["msg_type"] = "OK";
+                    $json["msg"] = "Successfully Saved the Service";
                 } else {
                     $json["msg_type"] = "ERR";
                     $json["msg"] = $msg->validation_errors("required", "Service Price");
@@ -82,7 +76,8 @@ class My_controller extends Core_controller {
         exit();
     }
 
-    function nr_nl_get_edit_details() {
+    function nr_nl_get_edit_details()
+    {
         $json = array();
         $item_id = (isset($_POST['item_id']) ? $_POST['item_id'] : '');
         $db_c = new Db_functions();
@@ -98,7 +93,8 @@ class My_controller extends Core_controller {
         exit();
     }
 
-    function nr_nl_update_services() {
+    function nr_nl_update_services()
+    {
         $json = array();
         $msg = new Massage_class();
         $item_id = (isset($_POST['item_id']) ? $_POST['item_id'] : '');
@@ -109,7 +105,7 @@ class My_controller extends Core_controller {
         $db_c = new Db_functions();
         if (!empty($item_id)) {
             if (!empty($service_name_sin)) {
-//                $validate_service_item = $this->validate_with_database();
+                //                $validate_service_item = $this->validate_with_database();
                 if (!empty($service_name_en)) {
                     if (!empty($service_price)) {
                         if (is_numeric($service_price)) {
@@ -155,7 +151,8 @@ class My_controller extends Core_controller {
         exit();
     }
 
-    function nr_nl_delete_service() {
+    function nr_nl_delete_service()
+    {
         $json = array();
         $item_id = (isset($_POST['item_id']) ? $_POST['item_id'] : '');
         if (!empty($item_id)) {
@@ -177,7 +174,8 @@ class My_controller extends Core_controller {
         exit();
     }
 
-    function nr_nl_save_astrologist() {
+    function nr_nl_save_astrologist()
+    {
         $json = array();
 
         $service_array = (isset($_POST['users']) ? $_POST['users'] : '');
@@ -230,8 +228,8 @@ class My_controller extends Core_controller {
                                                         $json["msg_type"] = "ERR";
                                                         $json["msg"] = $user_id->get_error_message();
                                                         //add into custom table
-//                                                        echo $user_id;
-//                                                        update_user_meta($user_id, "first_name", 'Nirosh');s
+                                                        //                                                        echo $user_id;
+                                                        //                                                        update_user_meta($user_id, "first_name", 'Nirosh');s
                                                     }
                                                 } else {
                                                     $json["msg_type"] = "ERR";
@@ -281,7 +279,8 @@ class My_controller extends Core_controller {
         exit();
     }
 
-    function send_welcome_email_to_new_user($user_id) {
+    function send_welcome_email_to_new_user($user_id)
+    {
         $user = get_userdata($user_id);
         $user_email = $user->user_email;
         // for simplicity, lets assume that user has typed their first and last name when they sign up
@@ -307,7 +306,8 @@ class My_controller extends Core_controller {
         }
     }
 
-    function my_save_extra_profile_fields($user_id) {
+    function my_save_extra_profile_fields($user_id)
+    {
 
         if (!current_user_can('edit_user', $user_id))
             return false;
@@ -341,16 +341,17 @@ class My_controller extends Core_controller {
     }
 
     //front end Funtions 
-    function nr_nl_get_astrologist() {
+    function nr_nl_get_astrologist()
+    {
         $json = array();
         $id_service = (isset($_POST['item_id']) ? $_POST['item_id'] : '');
         if (!empty($id_service)) {
             $db_c = new Db_functions();
             $get_atrology_primary = $db_c->get_astrologist_for_service($id_service);
             $get_sub_service = $db_c->get_sub_services($id_service);
-//            echo '<pre>';
-//            print_r($get_sub_service);
-//            echo '</pre>';
+            //            echo '<pre>';
+            //            print_r($get_sub_service);
+            //            echo '</pre>';
             $sub_services = "";
             if (!empty($get_sub_service)) {
                 foreach ($get_sub_service as $gss) {
@@ -358,14 +359,15 @@ class My_controller extends Core_controller {
                     $sub_service_english = (isset($gss->sub_service_english) ? $gss->sub_service_english : '');
                     $item_id = (isset($gss->id) ? $gss->id : '');
                     $image_path = plugins_url('/icons/keyboard-right-arrow-button.png', __DIR__);
+                    
                     $sub_services .= <<<MSG
                             <tr>
                                         <td><img src="$image_path"width="28%" ></td>
                                         <td><p>$sub_service_sinhala | $sub_service_english</p></td>
                                         <td class="pricetd"></p>
                                             <div class="form-check">
-                                                <input type="checkbox" value='$item_id'   class="form-check-input checkSub_Service" name="Subservice"  id="materialUnchecked_$item_id">
-                                                <label class="form-check-label" for="materialUnchecked_$item_id"></label>
+                                                <input type="checkbox" value='$item_id'   class="form-check-input checkSub_Service" name="Subservice"  id="materialUncheckedSub_$item_id">
+                                                <label class="form-check-label" for="materialUncheckedSub_$item_id"></label>
                                             </div>
 
                                         </td>
@@ -403,7 +405,8 @@ MSG;
                         $image_path = (!empty($image_array[0]) ? $image_array[0] : '');
                         $user_id = (isset($ps['id']) ? $ps['id'] : '');
                         $price_value = (isset($ps['price_item']) ? $ps['price_item'] : '');
-
+                        $count_all_orders = $this->rating_calculator($user_id);
+                        echo $count_all_orders;
                         $div .= <<<MSG
                         <div class="col-lg-4">
                         <div class="astrolger_div">
@@ -433,7 +436,8 @@ MSG;
         exit();
     }
 
-    function nr_nl_save_sub_services() {
+    function nr_nl_save_sub_services()
+    {
         $json = array();
         $msg = new Massage_class();
         $selected_service = (isset($_POST['service_select']) ? $_POST['service_select'] : '');
@@ -477,14 +481,15 @@ MSG;
         exit();
     }
 
-    public function nr_nl_get_service_astrologer() {
+    public function nr_nl_get_service_astrologer()
+    {
         $json = array();
         $item_id = (isset($_POST['item_id']) ? $_POST['item_id'] : '');
         $db_c = new Db_functions();
         $get_services_astrologer = $db_c->get_services_for_user($item_id);
-//        echo '<pre>';
-//        print_r($get_services_astrologer);
-//        echo '</pre>';
+        //        echo '<pre>';
+        //        print_r($get_services_astrologer);
+        //        echo '</pre>';
         $div_content = "";
         if (!empty($get_services_astrologer)) {
             $x = 0;
@@ -514,13 +519,14 @@ MSG;
         exit();
     }
 
-    public function nr_nl_submit_pricess() {
+    public function nr_nl_submit_pricess()
+    {
         $json = array();
         $service_array = ((isset($_POST['astrologer']["services"]) ? $_POST['astrologer']["services"] : ''));
-//        echo count($service_array);
+        //        echo count($service_array);
         $item_okay = false;
         if (!empty($service_array)) {
-//            echo 'nirosh';
+            //            echo 'nirosh';
             $x = 0;
             for ($i = 0; count($service_array) > $i; $i++) {
                 $x++;
@@ -556,7 +562,8 @@ MSG;
         exit();
     }
 
-    public function nr_nl_submit_astro_form() {
+    public function nr_nl_submit_astro_form()
+    {
         $json = array();
         //validating_form
         $msg = new Massage_class();
@@ -602,7 +609,7 @@ MSG;
                                                                         if ($birthPlace != "") {
                                                                             $need_partner = (isset($_POST['need_partner']) ? $_POST['need_partner'] : '');
                                                                             $_isneed_partner = false;
-                                                                            if ($need_partner != "" || $need_partner != "1") {
+                                                                            if ($need_partner != "" && $need_partner == "1") {
                                                                                 $Pname = (isset($_POST['pname']) ? $_POST['pname'] : '');
                                                                                 if ($Pname != "") {
                                                                                     $Pgender = (isset($_POST['pgender']) ? $_POST['pgender'] : '');
@@ -790,7 +797,8 @@ MSG;
         exit();
     }
 
-    public function nr_nl_get_single_order() {
+    public function nr_nl_get_single_order()
+    {
         $json = array();
         $item_id = (isset($_POST['item_value']) ? $_POST['item_value'] : '');
         if ($item_id != "") {
@@ -900,5 +908,4 @@ MSG;
         echo json_encode($json);
         exit();
     }
-
 }

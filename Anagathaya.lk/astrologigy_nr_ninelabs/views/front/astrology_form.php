@@ -303,7 +303,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="other_information">
+                <div id="other_information" style="display:none">
                     <div class="form-group row">
                         <div class="col-lg-12">
                             <label>වෙනත් විස්තර | Other Information</label>

@@ -1,13 +1,15 @@
 <?php
 
-class Core_controller {
+class Core_controller
+{
 
-    public function __construct() {
-        
+    public function __construct()
+    {
     }
 
-    function validate_email($email_custom = '', $custom_text = '') {
-//        echo $email_custom;
+    function validate_email($email_custom = '', $custom_text = '')
+    {
+        //        echo $email_custom;
         $cond = false;
         if (filter_var($email_custom, FILTER_VALIDATE_EMAIL)) {
             $cond = true;
@@ -20,7 +22,8 @@ class Core_controller {
         return $push_data;
     }
 
-    function match_emails($email_pri, $email_confirm) {
+    function match_emails($email_pri, $email_confirm)
+    {
         $cond = false;
         if ($email_pri == $email_confirm) {
             $cond = true;
@@ -36,7 +39,8 @@ class Core_controller {
         return $push_data;
     }
 
-    function validate_phone_number($phone = '', $custom_text = '') {
+    function validate_phone_number($phone = '', $custom_text = '')
+    {
         $cond = false;
         $msg_param = "";
         $filtered_phone_number = filter_var($phone, FILTER_SANITIZE_NUMBER_INT);
@@ -55,17 +59,16 @@ class Core_controller {
             "condt" => $cond,
             "msg_param" => $msg_param
         );
-        echo '<pre>';
-        print_r($array_name);
-        echo '</pre>';
+
         return $push_data;
     }
 
-    function validate_with_database() {
-        
+    function validate_with_database()
+    {
     }
 
-    function _nr_fis_destination_install() {
+    function _nr_fis_destination_install()
+    {
         global $table_name;
         global $table_name2;
         global $table_name3;
@@ -101,7 +104,7 @@ class Core_controller {
   `remark` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 	) CHARSET=utf8;CREATE TABLE $table_name3 (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `service_id` int(11) DEFAULT NULL,
   `sub_service_sinhala` text CHARACTER SET utf8 DEFAULT NULL ,
   `sub_service_english` text DEFAULT NULL,  
@@ -114,7 +117,7 @@ class Core_controller {
   `remark` text DEFAULT NULL,
   PRIMARY KEY (`id`)
 )CHARSET=utf8;CREATE TABLE $table_name4 (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `service_id` int(11) DEFAULT NULL,
   `sub_service_id` int(11) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -151,13 +154,26 @@ class Core_controller {
   PRIMARY KEY (`id`)
  ) CHARSET=utf8;)";
 
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
-//    dbDelta($sql2);
+        //    dbDelta($sql2);
         add_option('fis_db_version', $fis_db_version);
     }
 
-//    function validate_price
+    //    function validate_price
+
+    function rating_calculator($item_id)
+    {
+        echo $item_id;
+        $db_c = new Db_functions();
+        $get_all_orders = $db_c->get_all("customer_requests");
+        $get_all_user_orders = $db_c->get_all_order_user_count($item_id);
+        $percentage = ($get_all_user_orders / (count($get_all_orders))) * 100;
+        $return_array=array();
+        
+        // if($percentage <=100 && $percentage >=80)
+        // return 'hello'.$percentage;
+    }
 }
 
 //INSERT INTO wp_districts VALUES (1,'Ampara','අම්පාර','அம்பாறை'),(2,'Anuradhapura','අනුරාධපුරය','அனுராதபுரம்'),(3,'Badulla','බදුල්ල','பதுளை'),(4,'Batticaloa','මඩකලපුව','மட்டக்களப்பு'),(5,'Colombo','කොළඹ','கொழும்பு'),(6,'Galle','ගාල්ල','காலி'),(7,'Gampaha','ගම්පහ','கம்பஹா'),(8,'Hambantota','හම්බන්තොට','அம்பாந்தோட்டை'),(9,'Jaffna','යාපනය','யாழ்ப்பாணம்'),(10,'Kalutara','කළුතර','களுத்துறை'),(11,'Kandy','මහනුවර','கண்டி'),(12,'Kegalle','කෑගල්ල','கேகாலை'),(13,'Kilinochchi','කිලිනොච්චිය','கிளிநொச்சி'),(14,'Kurunegala','කුරුණෑගල','குருணாகல்'),(15,'Mannar','මන්නාරම','மன்னார்'),(16,'Matale','මාතලේ','மாத்தளை'),(17,'Matara','මාතර','மாத்தறை'),(18,'Monaragala','මොණරාගල','மொணராகலை'),(19,'Mullaitivu','මුලතිව්','முல்லைத்தீவு'),(20,'Nuwara Eliya','නුවර එළිය','நுவரேலியா'),(21,'Polonnaruwa','පොළොන්නරුව','பொலன்னறுவை'),(22,'Puttalam','පුත්තලම','புத்தளம்'),(23,'Ratnapura','රත්නපුර','இரத்தினபுரி'),(24,'Trincomalee','ත්‍රිකුණාමලය','திருகோணமலை'),(25,'Vavuniya','වව්නියාව','வவுனியா')
