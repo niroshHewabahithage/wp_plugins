@@ -217,7 +217,7 @@ class Db_functions extends My_controller
     function get_single_order($order_id)
     {
         global $wpdb;
-        $select_colomn = "s.service_name_en, s.service_name_si, ss.sub_service_english, ss.sub_service_sinhala, sm.service_price, cr.*";
+        $select_colomn = "s.service_name_en, s.service_name_si, ss.sub_service_english, ss.sub_service_sinhala, sm.service_price, cr.*,cr.active as uploaded";
         $row = $wpdb->get_row("SELECT $select_colomn FROM " . $wpdb->prefix . "customer_requests cr LEFT JOIN " . $wpdb->prefix . "services s ON cr.service_id = s.id LEFT JOIN " . $wpdb->prefix . "sub_services ss on cr.sub_service_id=ss.id LEFT JOIN " . $wpdb->prefix . "service_map sm on cr.service_id=sm.id_service where cr.id=$order_id group by cr.id");
         return $row;
     }
@@ -227,7 +227,6 @@ class Db_functions extends My_controller
         global $wpdb;
         $select_colomn = "*";
         $row = $wpdb->get_results("SELECT $select_colomn from " . $wpdb->prefix . "customer_requests where user_id=$id_user");
-        echo "SELECT $select_colomn from " . $wpdb->prefix . "customer_requests where user_id=$id_user";
         return count($row);
     }
 }

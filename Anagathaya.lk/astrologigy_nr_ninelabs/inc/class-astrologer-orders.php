@@ -1,13 +1,15 @@
 <?php
 
-require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+require_once(ABSPATH . 'wp-admin/includes/class-wp-list-table.php');
 require_once(plugin_dir_path(__FILE__) . 'Db_functions.php');
 
-class NineAstrologerOrdersSingle extends WP_List_Table {
+class NineAstrologerOrdersSingle extends WP_List_Table
+{
 
     //define dataset for worpress W_list =>data
     //prepare Items
-    public function prepare_items() {
+    public function prepare_items()
+    {
 
         $orderby = isset($_GET['orderby']) ? trim($_GET['orderby']) : '';
         $order = isset($_GET['order']) ? trim($_GET['order']) : '';
@@ -29,7 +31,8 @@ class NineAstrologerOrdersSingle extends WP_List_Table {
         $this->_column_headers = array($columns, $hidden, $sortable);
     }
 
-    public function wp_list_table_data($orderby = '', $order = '', $search_term = '') {
+    public function wp_list_table_data($orderby = '', $order = '', $search_term = '')
+    {
         $db_data = new Db_functions();
         $current_user = wp_get_current_user();
         $user_id = $current_user->ID;
@@ -54,7 +57,7 @@ class NineAstrologerOrdersSingle extends WP_List_Table {
             }
         }
 
-
+       
         $post_array = array();
         if (count($all_posts) > 0) {
             foreach ($all_posts as $index => $orders) {
@@ -68,25 +71,28 @@ class NineAstrologerOrdersSingle extends WP_List_Table {
                     "request_status" => (isset($orders->request_completed) ? (($orders->request_completed == "1") ? "Order Completed" : 'Order In Prograss') : ''),
                 );
 
-//               
+                //               
             }
         }
         return $post_array;
     }
 
-    public function get_hidden_columns() {
+    public function get_hidden_columns()
+    {
         return array("id");
     }
 
-    public function get_sortable_columns() {
-//        return array(
-//            "astrologer_name_sinhala" => array("service_name_si", false),
-//            "astrologer_name_english" => array("service_name_en", false),
-//            "astrologer_phone" => array("service_price", false),
-//        );
+    public function get_sortable_columns()
+    {
+        //        return array(
+        //            "astrologer_name_sinhala" => array("service_name_si", false),
+        //            "astrologer_name_english" => array("service_name_en", false),
+        //            "astrologer_phone" => array("service_price", false),
+        //        );
     }
 
-    public function get_columns() {
+    public function get_columns()
+    {
         $columns = array(
             "id" => "ID",
             "requested_service" => "Ordered Service",
@@ -98,7 +104,8 @@ class NineAstrologerOrdersSingle extends WP_List_Table {
         return $columns;
     }
 
-    public function column_default($item, $column_name) {
+    public function column_default($item, $column_name)
+    {
         switch ($column_name) {
             case 'id':
             case 'requested_service':
@@ -107,12 +114,13 @@ class NineAstrologerOrdersSingle extends WP_List_Table {
             case 'created_date':
             case 'request_status':
                 return $item[$column_name];
-            default :
+            default:
                 return 'No value';
         }
     }
 
-    public function column_requested_service($item) {
+    public function column_requested_service($item)
+    {
 
         $action = array(
             "edit" => "<button class='admin_list_button show-order' value='" . $item['id'] . "' >View Order</button>",
@@ -121,16 +129,16 @@ class NineAstrologerOrdersSingle extends WP_List_Table {
 
         return sprintf('%1$s %2$s', $item['requested_service'], $this->row_actions($action));
     }
-
 }
 
-function nr_list_table_layout() {
+function nr_list_table_layout()
+{
     $nr_wp_list_table = new NineAstrologerOrdersSingle();
-//prepare_items from class
+    //prepare_items from class
     $nr_wp_list_table->prepare_items();
-//    echo '<form method="post" name="frm_search_post" action="' . $_SERVER["PHP_SELF"] . '?page=parking-discount-codes">';
-//    $nr_wp_list_table->search_box("Search Codes", "search_box_id");
-//    echo '</form>';
+    //    echo '<form method="post" name="frm_search_post" action="' . $_SERVER["PHP_SELF"] . '?page=parking-discount-codes">';
+    //    $nr_wp_list_table->search_box("Search Codes", "search_box_id");
+    //    echo '</form>';
     $nr_wp_list_table->display();
 }
 

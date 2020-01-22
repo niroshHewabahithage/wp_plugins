@@ -14,6 +14,7 @@ global $table_name2;
 global $table_name3;
 global $table_name4;
 global $table_name5;
+global $table_name6;
 global $fis_db_version;
 $fis_db_version = '1.0.0';
 global $wpdb;
@@ -22,6 +23,7 @@ $table_name2 = $wpdb->prefix . "service_map";
 $table_name3 = $wpdb->prefix . "sub_services";
 $table_name4 = $wpdb->prefix . "customer_requests";
 $table_name5 = $wpdb->prefix . "districts";
+$table_name5 = $wpdb->prefix . "service_response";
 
 
 //inlcudes
@@ -38,7 +40,8 @@ register_activation_hook(__FILE__, array($cr_con, '_nr_fis_destination_install')
 
 //end includes
 
-function nr_nl_astrology_admin_menu() {
+function nr_nl_astrology_admin_menu()
+{
     $load_view = new View_controller();
     //##############################################################################################################################
     //add main menu for apartment and home attributes
@@ -49,18 +52,29 @@ function nr_nl_astrology_admin_menu() {
     add_submenu_page("services-manager", 'All Orders', "All Orders", 'manage_options', 'all-recived-orders', array($load_view, 'nr_nl_all_orders'));
     //##############################################################################################################################
     $current_user = wp_get_current_user();
-//    echo '<pre>';
-//    print_r($current_user);
-//    echo '</pre>';
+    //    echo '<pre>';
+    //    print_r($current_user);
+    //    echo '</pre>';
     if (is_user_logged_in()) {
         $user = wp_get_current_user();
         $roles = (array) $user->roles;
         if ($roles[0] == 'subscriber') {
             add_menu_page('Your Orders', 'Your Orders', 'subscriber', 'astrologer-orders', array($load_view, 'nr_nl_your_orders'), plugins_url('icons/customer.png', __FILE__));
             //attributes Sub Manu
-//            add_submenu_page("astrologer-orders", 'Add Sub Service', "Add Sub Service", 'subscriber', 'service-add-sub-service', array($load_view, 'nr_nl_service_sub_services'));
-//            add_submenu_page("astrologer-orders", 'Add Astrologer', "Add Astrologer", 'subscriber', 'service-add-astrologer', array($load_view, 'nr_nl_service_users'));
-//            add_submenu_page("astrologer-orders", 'All Orders', "All Orders", 'subscriber', 'all-recived-orders', array($load_view, 'nr_nl_all_orders'));
+            //            add_submenu_page("astrologer-orders", 'Add Sub Service', "Add Sub Service", 'subscriber', 'service-add-sub-service', array($load_view, 'nr_nl_service_sub_services'));
+            //            add_submenu_page("astrologer-orders", 'Add Astrologer', "Add Astrologer", 'subscriber', 'service-add-astrologer', array($load_view, 'nr_nl_service_users'));
+            //            add_submenu_page("astrologer-orders", 'All Orders', "All Orders", 'subscriber', 'all-recived-orders', array($load_view, 'nr_nl_all_orders'));
+
+
+            if (current_user_can('subscriber') && !current_user_can('upload_files')) {
+                add_action('admin_init', 'allow_contributor_uploads');
+            }
+
+            function allow_contributor_uploads()
+            {
+                $contributor = get_role('subscriber');
+                $contributor->add_cap('upload_files');
+            }
         }
         //return $roles; // This returns an array
         // Use this to return a single value
@@ -72,16 +86,17 @@ add_action('admin_menu', 'nr_nl_astrology_admin_menu');
 
 if (is_admin()) {
 
-    function am_enqueue_admin_styles() {
-//boostrap
+    function am_enqueue_admin_styles()
+    {
+        //boostrap
         wp_register_style('am_admin_bootstrap', plugins_url('assests/plugins/bootstrap/css/bootstrap.min.css', __FILE__));
         wp_enqueue_style('_nr_boostrap _select_picker', plugins_url('assests/plugins/select_picker/css/bootstrap-select.min.css', __FILE__));
         wp_enqueue_style('am_admin_bootstrap');
         wp_enqueue_style('_nr_custom_niroroo', plugins_url('assests/plugins/common/css/style.css', __FILE__));
         wp_enqueue_style('_nr_select2', plugins_url('assests/plugins/select2/select2.min.css', __FILE__));
         wp_enqueue_style('_nr_custom_main', plugins_url('assests/css/main_style.css', __FILE__));
-//
-//alerts
+        //
+        //alerts
         wp_enqueue_style('_nr_custom_alerts', plugins_url('assests/plugins/alerts/Notiflix-1.2.0/Minified/notiflix-1.2.0.min.css', __FILE__));
         wp_enqueue_script('_nr_customize_functions', plugins_url("assests/plugins/common/js/custom_functions.js", __FILE__), array('jquery'), 1.1, true);
         wp_enqueue_style('_nr_custom_sweet_alerts', plugins_url('assests/plugins/sweetalert/css/sweetalert2.min.css', __FILE__));
@@ -96,21 +111,21 @@ if (is_admin()) {
     add_action('admin_enqueue_scripts', 'am_enqueue_admin_styles');
 } else {
 
-//css============================
+    //css============================
     wp_register_style('am_admin_bootstrap', plugins_url('assests/plugins/bootstrap/css/bootstrap.min.css', __FILE__));
     wp_enqueue_style('am_admin_bootstrap');
     wp_enqueue_style('_nr_custom_main', plugins_url('assests/css/main_style.css', __FILE__));
     wp_enqueue_style('_nr_custom_niroroo', plugins_url('assests/plugins/common/css/style.css', __FILE__));
-//select picker css
+    //select picker css
     wp_enqueue_style('_nr_boostrap _select_picker', plugins_url('assests/plugins/select_picker/css/bootstrap-select.min.css', __FILE__));
-//    js================
+    //    js================
     wp_enqueue_script('_nr_jquesry_number', plugins_url("assests/plugins/jquery_number/jquery.number.min.js", __FILE__), array('jquery'), 1.1, true);
     wp_enqueue_script('_nr_customize_functions', plugins_url("assests/plugins/common/js/custom_functions.js", __FILE__), array('jquery'), 1.1, true);
-//alerts
+    //alerts
     wp_enqueue_style('_nr_custom_alerts', plugins_url('assests/plugins/alerts/Notiflix-1.2.0/Minified/notiflix-1.2.0.min.css', __FILE__));
     wp_enqueue_script('_nr_custom_trigger_alerts', plugins_url("assests/plugins/alerts/trigger/trigger_alert.js", __FILE__), array('jquery'), 1.1, true);
     wp_enqueue_script('_nr_custom_alerts_js', plugins_url("assests/plugins/alerts/Notiflix-1.2.0/Minified/notiflix-1.2.0.min.js", __FILE__), array('jquery'), 1.1, true);
-//select_picker
+    //select_picker
     wp_enqueue_script('_nr_select_picker_js', plugins_url("assests/plugins/select_picker/js/bootstrap-select.min.js", __FILE__), array('jquery'), 1.1, true);
 }
 
@@ -142,8 +157,8 @@ add_action("wp_ajax_nopriv_get_astrologist", array($myCon, "nr_nl_get_astrologis
 
 add_action("nr_custom_title", "nr_nl_custom_edit");
 
-function nr_nl_custom_edit() {
-    
+function nr_nl_custom_edit()
+{
 }
 
 //save-sub_services
@@ -162,3 +177,5 @@ add_action("wp_ajax_nopriv_submit_form_data", array($myCon, "nr_nl_submit_astro_
 
 //astrologer dashoard 
 add_action("wp_ajax_get_single_order", array($myCon, 'nr_nl_get_single_order'));
+add_action("wp_ajax_submit_respoonse", array($myCon, 'nr_nl_submit_respond'));
+add_action("wp_ajax_delete_attachement", array($myCon, 'nr_nl_delete_attachment'));

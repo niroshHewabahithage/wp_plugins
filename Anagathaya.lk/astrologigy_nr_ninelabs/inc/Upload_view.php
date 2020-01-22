@@ -1,14 +1,16 @@
 <?php
 
-class Upload_view {
+class Upload_view
+{
 
-    public function __construct() {
-        
+    public function __construct()
+    {
     }
 
-    function nr_fixel_it_wprss_uploader($name, $width, $height, $image_item = '', $attachment_id = '') {
+    function nr_fixel_it_wprss_uploader($name, $width, $height, $image_item = '', $attachment_id = '')
+    {
         // Set variables
-       
+
         $options = get_option('RssFeedIcon_settings');
 
         if (!empty($image_item)) {
@@ -44,8 +46,49 @@ class Upload_view {
         </div>
     ';
     }
+    function nr_fixel_it_wprss_uploader_media($name, $width, $height, $image_item = '', $attachment_id = '')
+    {
+        // Set variables
 
-    function nr_fixel_it_wprss_uploader_multi($name, $width, $height, $custom_src = false, $value_new = false) {
+        $options = get_option('RssFeedIcon_settings');
+        echo '<pre>';
+        print_r($options);
+        echo '</pre>';
+        if (!empty($image_item)) {
+            $default_image = $image_item;
+        } else {
+            $default_image = plugins_url('../images/no-image-available-icon-6.jpg', __FILE__);
+        }
+
+        if (!empty($options[$name])) {
+            $image_attributes = wp_get_attachment_image_src($options[$name], array($width, $height));
+            $src = $image_attributes[0];
+            $value = $options[$name];
+        } else {
+            $src = $default_image;
+            if ($attachment_id != "") {
+                $value = $attachment_id;
+            } else {
+                $value = '';
+            }
+        }
+
+        $text = __('Upload Your Respond (You can Upload mp3/pdf)', 'RSSFI_TEXT');
+
+        // Print HTML field
+        echo '
+        <div class="upload" >
+             <div>               
+                <input type="hidden" name="' . $name . '" id="' . $name . '" class="' . $name . '_down" value="' . $value . '" />
+                <button type="submit" class="upload_image_button button btn btn-primary btn-lg custom_uploader">' . $text . '</button>
+                <button type="submit" class="remove_image_button button custom_close">&times;</button>
+            </div>
+        </div>
+    ';
+    }
+
+    function nr_fixel_it_wprss_uploader_multi($name, $width, $height, $custom_src = false, $value_new = false)
+    {
 
         // Set variables
         $options = get_option('RssFeedIcon_settings');
@@ -85,5 +128,4 @@ class Upload_view {
         </div>
     ';
     }
-
 }

@@ -359,7 +359,7 @@ class My_controller extends Core_controller
                     $sub_service_english = (isset($gss->sub_service_english) ? $gss->sub_service_english : '');
                     $item_id = (isset($gss->id) ? $gss->id : '');
                     $image_path = plugins_url('/icons/keyboard-right-arrow-button.png', __DIR__);
-                    
+
                     $sub_services .= <<<MSG
                             <tr>
                                         <td><img src="$image_path"width="28%" ></td>
@@ -405,8 +405,8 @@ MSG;
                         $image_path = (!empty($image_array[0]) ? $image_array[0] : '');
                         $user_id = (isset($ps['id']) ? $ps['id'] : '');
                         $price_value = (isset($ps['price_item']) ? $ps['price_item'] : '');
-                        $count_all_orders = $this->rating_calculator($user_id);
-                        echo $count_all_orders;
+                        $getStarCount = $this->rating_calculator($user_id);
+
                         $div .= <<<MSG
                         <div class="col-lg-4">
                         <div class="astrolger_div">
@@ -417,6 +417,9 @@ MSG;
                             <img src="$image_path">
                             <h5 class='text-center'>$name_in_sinhala</h5>
                             <h5 class='text-center'>$name_in_english</h5>
+                            <div style='text-align:center'>
+                            $getStarCount
+                            </div>
                             <div>
                             </div>
                         </div>
@@ -804,7 +807,9 @@ MSG;
         if ($item_id != "") {
             $db_c = new Db_functions();
             $get_single_item = $db_c->get_single_order($item_id);
+            // uploaded
             if (!empty($get_single_item)) {
+                $request_id = $get_single_item->id;
                 $service_name = (isset($get_single_item->service_name_en) ? (($get_single_item->service_name_en != "") ? $get_single_item->service_name_en : '') : '') . " " . (isset($get_single_item->service_name_si) ? (($get_single_item->service_name_si != "") ? "| " . $get_single_item->service_name_si : '') : '');
                 $sub_service_name = (isset($get_single_item->sub_service_english) ? (($get_single_item->sub_service_english != "") ? $get_single_item->sub_service_english : '') : '') . " " . (isset($get_single_item->sub_service_sinhala) ? (($get_single_item->sub_service_sinhala != "") ? "| " . $get_single_item->sub_service_sinhala : '') : '');
                 $price_value = (isset($get_single_item->service_price) ? (($get_single_item->service_price != "") ? "LKR " . number_format($get_single_item->service_price, 2) : '') : '');
@@ -818,6 +823,7 @@ MSG;
                 $birth_place = (isset($get_single_item->birth_place) ? (($get_single_item->birth_place != "") ? $get_single_item->birth_place : "") : '');
                 $table_view = "";
                 $parner_values = "";
+                $uploaded = (isset($get_single_item->uploaded) ? (($get_single_item->uploaded == 1) ? $get_single_item->uploaded : '') : '');
                 //partner_values
                 if ($get_single_item->need_partner == 1) {
                     $pname = (isset($get_single_item->par_name) ? ($get_single_item->par_name != "") ? $get_single_item->par_name : '' : '');
@@ -850,6 +856,24 @@ MSG;
                                     <td>Birth Place</td>
                                     <td>$pbirth_place</td>
                                 </tr>
+MSG;
+                }
+                $upload_div = "";
+                $uplo = 0;
+                if ($uploaded == 1) {
+                    $uplo = 1;
+                    $get_attachement = $db_c->get_by("service_response", "request_id", $item_id, 1);
+                    $attachement_id = (isset($get_attachement) ? (($get_attachement->attachement_id != "") ? $get_attachement->attachement_id : '') : '');
+                    $attachment_url = wp_get_attachment_url($attachement_id);
+
+                    $upload_div = <<<MSG
+                    <tr>
+                    <td>Uploaded Item</td>
+                    <td><center>
+                    <a href="$attachment_url" download>Download</a>
+                    <button id="btn_delete_value" type="button" value="$item_id">Delete</button>
+                    </center></td>
+                    </tr>
 MSG;
                 }
                 $table_view = <<<MSG
@@ -889,14 +913,18 @@ MSG;
                                     <td>$birth_place</td>
                                 </tr>
                                     $parner_values
+                                     
                                 <tr>
                                     <td>Other Information</td>
                                     <td>$other_infp</td>
                                 </tr>
+                                $upload_div
 MSG;
                 $json['msg_type'] = "OK";
                 $json['return_div'] = $table_view;
                 $json['return_array'] = $get_single_item;
+                $json['request_id'] = $request_id;
+                $json['uplo'] = $uplo;
             } else {
                 $json["msg_type"] = "ERR";
                 $json["msg"] = "Something went wrong when processing your request.";
@@ -904,6 +932,62 @@ MSG;
         } else {
             $json['msg_type'] = "ERR";
             $json['msg'] = "Sorry Something Went Wrong Try Again";
+        }
+        echo json_encode($json);
+        exit();
+    }
+
+    public function nr_nl_submit_respond()
+    {
+        $json = array();
+        $attachement_id = (isset($_POST['attachement_id']) ? $_POST['attachement_id'] : '');
+        // echo $attachement_id;
+        if ($attachement_id != "") {
+            $db_c = new Db_functions();
+            $add_items = $db_c->insert_data("service_response", array(
+                "request_id" => (isset($_POST['requestId']) ? $_POST['requestId'] : ''),
+                "attachement_id" => (isset($_POST['attachement_id']) ? $_POST['attachement_id'] : ''),
+                "active" => 1
+            ));
+            if (!empty($add_items)) {
+                $requiest_id = (isset($_POST['requestId']) ? $_POST['requestId'] : '');
+                $update_item = $db_c->update_items("customer_requests", "id", $requiest_id, array(
+                    "active" => 1
+                ));
+                $json['msg_type'] = "OK";
+                $json['msg'] = "Successfully Submitted";
+            } else {
+                $json['msg_type'] = "ERR";
+                $json['msg'] = "Sorry Something Went Wrong with your request";
+            }
+        } else {
+            $json['msg_type'] = "ERR";
+            $json['msg'] = "Sorry you have to upload a file before you proceed";
+        }
+        echo json_encode($json);
+        exit();
+    }
+
+    public function nr_nl_delete_attachment()
+    {
+        $json = array();
+        $item_value = (isset($_POST['item_value']) ? $_POST['item_value'] : '');
+        if (!empty($item_value)) {
+            $db_c = new Db_functions();
+            $delete_item = $db_c->delete_item("service_response", "request_id", $item_value);
+            if ($delete_item) {
+                $update_item = $db_c->update_items("customer_requests", "id", $item_value, array(
+                    "active" => 0
+                ));
+                $json['msg_type'] = "OK";
+                $json['msg'] = "Successfully Removed";
+            } else {
+                $json['msg_type'] = "ERR";
+                $json['msg'] = "Sorry Something Went Wrong";
+            }
+        } else {
+            $json['msg_type'] = "ERR";
+            $json['msg'] = "Sprry Something Went Wrong";
         }
         echo json_encode($json);
         exit();

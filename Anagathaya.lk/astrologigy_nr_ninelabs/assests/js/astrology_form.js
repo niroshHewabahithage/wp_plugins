@@ -1,5 +1,6 @@
 (function ($) {
     $(document).ready(function () {
+        
         $(".checkService").attr("checked", false);
         $(".checkUser").attr("checked", false);
         $("#other_information").slideUp(800);
@@ -116,7 +117,7 @@
             Notiflix.Loading.Merge({
                 messageMaxLength: 700,
             });
-            Notiflix.Loading.Pulse('මොහොතක් රැදීසිටින්න |Process in prograss');
+            // Notiflix.Loading.Pulse('මොහොතක් රැදීසිටින්න |Process in prograss');
             var data = $("#astrology_data").serializeArray();
             data.push({
                 name: "action",
@@ -128,7 +129,7 @@
                     Notiflix.Notify.Success(res.msg);
                     //                    WL.generate_function_messages("errorId", "alert-success", res.msg, "3000");
                     setTimeout(function () {
-                        location.reload();
+                        // location.reload();
                     }, 2500);
                 } else {
                     Notiflix.Notify.Failure(res.msg);

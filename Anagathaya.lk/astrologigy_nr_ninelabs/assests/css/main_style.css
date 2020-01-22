@@ -347,12 +347,17 @@ p.infoTextCheckout {
     border: 1px solid #bf6c23;
     padding: 10px;
     border-radius: 9px;
-    max-height: 212px;
-    min-height: 212px;
+    max-height: 243px;
+    min-height: 243px;
+}
+
+.raditing_star{
+    font-size: 20px !important;
 }
 
 .astrolger_div h5{
     line-height: 21px;
+    margin: 3px !important;
 }
 
 .astrolger_div .form-check{
@@ -405,4 +410,19 @@ p.infoTextCheckout {
 
 .center_item{
     text-align: center;
+}
+
+.custom_uploader{
+    background: #5cef90 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: #000 !important;
+}
+
+.custom_close{
+    background: none !important;
+    color: #de3f3f !important;
+    font-size: 26px !important;
+    border: none !important;
+    box-shadow: none !important;
 }

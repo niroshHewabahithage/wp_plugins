@@ -74,6 +74,7 @@ class Core_controller
         global $table_name3;
         global $table_name4;
         global $table_name5;
+        global $table_name6;
         global $fis_db_version;
         global $wpdb;
 
@@ -152,7 +153,17 @@ class Core_controller
   `name_si` varchar(45) DEFAULT NULL,
   `name_ta` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
- ) CHARSET=utf8;)";
+ ) CHARSET=utf8;CREATE TABLE $table_name6 (
+  `id` int(11) NOT NULL,
+  `request_id` int(11) DEFAULT NULL,
+  `attachement_id` int(11) DEFAULT NULL,
+  `active` int(11) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `created_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `edited_by` int(11) DEFAULT NULL,
+  `edited_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `remark` text
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;)";
 
         require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
         dbDelta($sql);
@@ -164,15 +175,42 @@ class Core_controller
 
     function rating_calculator($item_id)
     {
-        echo $item_id;
         $db_c = new Db_functions();
         $get_all_orders = $db_c->get_all("customer_requests");
         $get_all_user_orders = $db_c->get_all_order_user_count($item_id);
         $percentage = ($get_all_user_orders / (count($get_all_orders))) * 100;
-        $return_array=array();
-        
-        // if($percentage <=100 && $percentage >=80)
-        // return 'hello'.$percentage;
+        $starCount = "";
+
+        if ($percentage <= 100 && $percentage >= 80) {
+            $starCount = 5;
+        } else if ($percentage <= 79 && $percentage >= 60) {
+            $starCount = 4;
+        } else if ($percentage <= 59 && $percentage >= 40) {
+            $starCount = 3;
+        } else if ($percentage <= 39 && $percentage >= 20) {
+            $starCount = 2;
+        } else if ($percentage <= 19 && $percentage >= 0) {
+            $starCount = 1;
+        }
+
+        $checked_stars = "";
+        $unchecked_stars = "";
+        $merged_star = "";
+        if ($starCount != "") {
+            $unchecked = (5 - $starCount);
+            for ($i = 0; $starCount > $i; $i++) {
+                $checked_stars .= <<<MSG
+                <span class="fa fa-star checked raditing_star"></span>
+MSG;
+            }
+            for ($i = 0; $unchecked > $i; $i++) {
+                $unchecked_stars .= <<<MSG
+                <span class="fa fa-star raditing_star"></span>
+MSG;
+            }
+        }
+        $merged_star = $checked_stars . $unchecked_stars;
+        return $merged_star;
     }
 }
 
