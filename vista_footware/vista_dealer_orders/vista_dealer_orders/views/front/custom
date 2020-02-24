@@ -1,0 +1,33 @@
+<input type="time" name="time" id="time" class="form-control">
+                            <!-- <input class="timepicker" type="text"> -->
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <!-- <input type="text" name="hours" id="hourse" class="form-control" placeholder="00"> -->
+                                    <select class="form-control" name="hours" id="hourse">
+                                        <option selected="" disabled="">00</option>
+                                        <?php
+                                        for ($m = 1; $m <= 23; ++$m) {
+                                        ?>
+                                            <option class="<?php echo $m; ?>"><?php echo $m; ?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="col-lg-1">
+                                    <h3>:</h3>
+                                </div>
+                                <div class="col-lg-5">
+                                    <select class="form-control" name="minutes" id="minutes">
+                                        <option selected="" disabled="">00</option>
+                                        <?php
+                                        for ($m = 1; $m <= 59; ++$m) {
+                                        ?>
+                                            <option class="<?php echo $m; ?>"><?php echo $m; ?></option>
+                                        <?php
+                                        }
+                                        ?>
+                                    </select>
+                                    <!-- <input type="text" name="minutes" id="minutes" class="form-control" placeholder="00"> -->
+                                </div>
+                            </div>

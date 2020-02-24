@@ -1,0 +1,481 @@
+.content-holder {
+    background: #fff;
+    padding: 25px 10px;
+}
+
+.admin_list_button {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+
+.admin_list_button:hover {
+    color: #2279e6;
+    text-decoration: underline;
+}
+
+.tablenav-pages-navspan {
+    height: 28px;
+}
+
+.fnt_search_value_div {
+    background: #04355d;
+    padding: 5% 5%;
+}
+
+.price_description {
+    text-align: right;
+    font-size: 18px;
+}
+
+.price_value {
+    font-size: 18px;
+    text-align: right;
+}
+
+#price_tbl span {
+    color: #000;
+}
+
+#price_tbl td {
+    padding: 10px 9px;
+}
+
+.price_show_div {
+    background: #ffffffad;
+    padding: 10px 10px;
+}
+
+.discount_code_input {
+    border: none !important;
+    background: none;
+    width: 100% !important;
+    border-bottom: 1px solid #000 !important;
+    border-radius: 0;
+}
+
+.discount_code_input:focus {
+    border: none !important;
+    background: none !important;
+    width: 100% !important;
+    border-bottom: 1px solid #000 !important;
+    border-radius: 0;
+    box-shadow: none !important;
+}
+
+#error_code {
+    font-size: 13px;
+    text-align: center;
+}
+
+.success_font {
+    color: #048402 !important;
+}
+
+.error_font {
+    color: #ff0000 !important;
+}
+
+.header-checkout {
+    background: #fff;
+    padding: 10px;
+}
+
+.header-checkout h4 {
+    text-align: center;
+}
+
+.header-checkout h4 span {
+    color: #E64F25;
+}
+
+.checkout-head {
+    background: #fff;
+    padding-bottom: 1%;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.item_box_kan {
+    border: 1px solid #f1f1f1;
+    min-height: 201px !important;
+    padding: 10px;
+}
+
+.item_box_kan span {
+    color: #E64F25;
+    text-align: left;
+}
+
+.price_div {
+    text-align: center;
+    padding: 7%;
+}
+
+.price_div_no_dis {
+    text-align: center;
+    padding: 10%;
+}
+
+.price_div p {
+    font-size: 13px;
+    color: #000;
+    font-weight: 500;
+    font-style: italic;
+    text-decoration: underline;
+}
+
+.link_value {
+    cursor: pointer;
+    display: inline-block;
+    padding-bottom: 5px !important;
+    border-bottom: 2px solid transparent;
+    transition: all 0.5s ease;
+}
+
+.link_value:hover {
+    color: #0e11b0;
+    border-bottom: 2px solid #fecd06;
+    transition: all 0.5s ease;
+}
+
+.h4-setting {
+    margin: 12px 0 0;
+    text-decoration: underline;
+}
+
+.h4-setting span {
+    color: #E64F25;
+}
+
+.customWLF {
+    background: #fff;
+    padding-bottom: 1%;
+    padding-top: 1%;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.customWLF form {
+    border: 2px solid #f1f1f1;
+    padding: 17px;
+}
+
+#BuyForm span {
+    color: #E64F25;
+}
+
+.form-header {}
+
+#BuyForm input[type=text],
+input[type=password],
+input[type=search],
+input[type=email],
+input[type=url],
+input[type=tel] {
+    width: 100% !important;
+    border: 1px solid #f1f1f1 !important;
+    height: 42px;
+}
+
+#BuyForm label {
+    font-weight: 500;
+    font-size: 15px;
+}
+
+#BuyForm select.form-control:not([size]):not([multiple]) {
+    height: 42px;
+    border: 1px solid #f1f1f1;
+}
+
+.footer-widgets-wrap td {
+    color: #fff;
+}
+
+.alert {
+    padding: 25px 15px !important;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 0 !important;
+}
+
+.alert-danger {
+    color: #ffffff !important;
+    background-color: #f44336 !important;
+    border-color: #ebccd1;
+}
+
+.alert-success {
+    color: #ffffff !important;
+    background-color: #00b462 !important;
+    border-color: #d6e9c6;
+}
+
+.alert-text {
+    font-size: 15px;
+}
+
+.payment_page_clearfix {
+    background: #f5f5f5;
+    /*padding: 4% 1%;*/
+    margin: 5% 0;
+}
+
+.item_gateway_title {
+    color: #000;
+    font-size: 18px;
+    text-align: center;
+    position: static;
+}
+
+h4.item_price_checkout {
+    color: #000;
+    text-align: center;
+    font-size: 4em;
+    padding: 2% 0px 0;
+    text-decoration: underline;
+}
+
+p.infoTextCheckout {
+    color: #000;
+    text-align: center;
+    font-size: 18px;
+}
+
+.white-bg {
+    background: #fff;
+}
+
+.text-section {
+    padding: 4% 0;
+}
+
+.img_checkout {
+    margin: 7% 0;
+}
+
+.discount_show_span {
+    color: #0b85dc;
+    font-size: 11px;
+}
+
+.myCustomOveride {
+    width: 100% !important;
+}
+
+.table td,
+.table th {
+    border-top: none !important;
+}
+
+#basic-addon2-view_pass {
+    cursor: pointer;
+}
+
+
+/*//astrology_main services*/
+
+#astrology_services tr {
+    border: 1px solid #000;
+}
+
+#astrology_services tr:hover {
+    background: #c8961f;
+}
+
+#astrology_services .pricetd {
+    display: flow-root;
+    border-left: 1px solid #000;
+    width: 100%;
+}
+
+#astrology_services .pricetd:hover {
+    background: #c4822d;
+    color: #fff;
+}
+
+#astrology_services input[type="checkbox"]+label {
+    padding-left: 0;
+    margin-right: 0;
+}
+
+#astrology_services {
+    width: 100%;
+}
+
+#astrology_services tr td {
+    /*padding: 0;*/
+    padding: 5px 6px;
+    text-align: left;
+}
+
+#astrology_services p {
+    font-size: 15px !important;
+}
+
+
+/*astrologer sub services*/
+
+#astrology_sub_services tr {
+    border: 1px solid #000;
+}
+
+#astrology_sub_services tr:hover {
+    background: #c8961f;
+}
+
+#astrology_sub_services .pricetd {
+    display: flow-root;
+    border-left: 1px solid #000;
+    width: 100%;
+}
+
+#astrology_sub_services .pricetd:hover {
+    background: #c4822d;
+    color: #fff;
+}
+
+#astrology_sub_services input[type="checkbox"]+label {
+    padding-left: 0;
+    margin-right: 0;
+}
+
+#astrology_sub_services {
+    width: 100%;
+}
+
+#astrology_sub_services tr td {
+    /*padding: 0;*/
+    padding: 5px 6px;
+    text-align: left;
+}
+
+#astrology_sub_services p {
+    font-size: 15px !important;
+}
+
+.astrolger_div {
+    border: 1px solid #bf6c23;
+    padding: 10px;
+    border-radius: 9px;
+    max-height: 243px;
+    min-height: 243px;
+}
+
+.raditing_star {
+    font-size: 20px !important;
+}
+
+.astrolger_div h5 {
+    line-height: 21px;
+    margin: 3px !important;
+}
+
+.astrolger_div .form-check {
+    position: absolute;
+    right: 5%;
+}
+
+.astrolger_div img {
+    height: 150px;
+    width: 100%;
+}
+
+.light-yellow {
+    background: #c8961f;
+    padding: 10px 10px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    color: #fff !important;
+}
+
+.light-dark-yellow {
+    background: #c4822d;
+    padding: 10px 10px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: #fff !important;
+}
+
+.light-yellow h5,
+.light-dark-yellow h5 {
+    color: #fff;
+}
+
+.border-radius {
+    border-radius: 5px;
+}
+
+.border-radius h5 {
+    text-align: center;
+}
+
+.checked {
+    color: orange;
+}
+
+.cursor_view {
+    cursor: pointer;
+}
+
+#custom-show-table td {
+    border: 1px solid #000;
+    padding: 10px;
+}
+
+.center_item {
+    text-align: center;
+}
+
+.custom_uploader {
+    background: #5cef90 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: #000 !important;
+}
+
+.custom_close {
+    background: none !important;
+    color: #de3f3f !important;
+    font-size: 26px !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.error_glow {
+    border: 2px solid #ff0000;
+    padding: 10px 0 12px;
+    box-shadow: 3px 2px 10px 5px #ffaaaa;
+}
+
+.size_box {
+    background: #f9f9f9;
+    box-shadow: 3px 2px 10px 5px #e0e0e0;
+    padding: 10px 5px 15px;
+}
+
+.delete-items:hover {
+    color: #ff0000;
+}
+
+.size_box_front {
+    background: #f9f9f9;
+    box-shadow: -5px 3px 4px 0px #e0e0e0;
+    padding: 10px 5px 15px;
+    margin: 10px 0px;
+    border-bottom: 1px solid #000;
+}
+
+.heading_box {
+    background: #9d7a66;
+    padding: 10px 5px 10px;
+    color: #fff;
+}
+
+.heading_box i {
+    float: right;
+    margin-right: 12px;
+}
+
+.sub_list {
+    display: inherit;
+}
